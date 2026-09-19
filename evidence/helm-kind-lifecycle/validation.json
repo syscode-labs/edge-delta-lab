@@ -1,0 +1,188 @@
+{
+  "observed_at_utc": "2026-09-19T23:53:18.378152+00:00",
+  "environment": {
+    "go": "1.25.8",
+    "python": "3.11.15",
+    "openspec": "1.6.0"
+  },
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s scripts -p helm_kind_lifecycle_test.py -v",
+      "exit_code": 0,
+      "output": "test_proof_pod_has_no_ambient_credentials_or_extra_mounts (helm_kind_lifecycle_test.SignedProofTests.test_proof_pod_has_no_ambient_credentials_or_extra_mounts) ... ok\ntest_staged_requires_expected_release_sequence_and_safe_artifact (helm_kind_lifecycle_test.SignedProofTests.test_staged_requires_expected_release_sequence_and_safe_artifact) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": "python3 -m py_compile scripts/helm_kind_lifecycle.py scripts/helm_kind_lifecycle_test.py",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": "helm lint deploy/helm/edgelab-hub",
+      "exit_code": 0,
+      "output": "==> Linting deploy/helm/edgelab-hub\n[INFO] Chart.yaml: icon is recommended\n\n1 chart(s) linted, 0 chart(s) failed\n"
+    },
+    {
+      "command": "python3 scripts/helm_contract_test.py",
+      "exit_code": 0,
+      "output": "PASS helm lint/render: exporter=False events=True rate=0 (defaults)\nPASS helm lint/render: exporter=False events=False rate=0\nPASS helm lint/render: exporter=False events=False rate=7500\nPASS helm lint/render: exporter=False events=True rate=0\nPASS helm lint/render: exporter=False events=True rate=7500\nPASS helm lint/render: exporter=True events=False rate=0\nPASS helm lint/render: exporter=True events=False rate=7500\nPASS helm lint/render: exporter=True events=True rate=0\nPASS helm lint/render: exporter=True events=True rate=7500\nBuilding actual Dockerfile daemon target...\nPASS Docker daemon image: rendered exporter invocation serves /metrics; missing admin socket reports source_up=0\n"
+    },
+    {
+      "command": "make -j1 check",
+      "exit_code": 0,
+      "summary": [
+        "go vet ./...",
+        "go test -count=1 ./...",
+        "Ran 50 tests in 4.784s",
+        "OK",
+        "go test -race -count=1 ./..."
+      ],
+      "final_output_excerpt": "Ran 50 tests in 4.784s\n\nOK\ngo test -race -count=1 ./...\n?   \texample.com/edge-delta-lab/cmd/edgelab\t[no test files]\n?   \texample.com/edge-delta-lab/cmd/edgelab-exporter\t[no test files]\n?   \texample.com/edge-delta-lab/cmd/edgelab-tui\t[no test files]\nok  \texample.com/edge-delta-lab/cmd/v3e2e\t28.020s\nok  \texample.com/edge-delta-lab/internal/admin\t3.275s\nok  \texample.com/edge-delta-lab/internal/clientconf\t10.887s\nok  \texample.com/edge-delta-lab/internal/exporter\t4.494s\nok  \texample.com/edge-delta-lab/internal/hub\t3.970s\nok  \texample.com/edge-delta-lab/internal/lab\t99.720s\nok  \texample.com/edge-delta-lab/internal/notify\t6.019s\nok  \texample.com/edge-delta-lab/internal/push\t16.391s\nok  \texample.com/edge-delta-lab/internal/registry\t9.942s"
+    },
+    {
+      "command": "make openspec-check",
+      "exit_code": 0,
+      "output": "python3 scripts/check_specs.py\nLocal structural checks passed: 42 requirements and 3 editable scenes. Official OpenSpec CLI validation is separate.\n"
+    },
+    {
+      "command": "openspec validate docker-e2e-sender-observability --strict --json --no-interactive",
+      "exit_code": 0,
+      "result": {
+        "items": [
+          {
+            "id": "docker-e2e-sender-observability",
+            "type": "change",
+            "valid": true,
+            "issues": [],
+            "durationMs": 60
+          }
+        ],
+        "summary": {
+          "totals": {
+            "items": 1,
+            "passed": 1,
+            "failed": 0
+          },
+          "byType": {
+            "change": {
+              "items": 1,
+              "passed": 1,
+              "failed": 0
+            }
+          }
+        },
+        "version": "1.0",
+        "root": {
+          "path": "<repo>",
+          "source": "nearest"
+        }
+      }
+    },
+    {
+      "command": "openspec validate registry-watcher-hub-spoke --strict --json --no-interactive",
+      "exit_code": 0,
+      "result": {
+        "items": [
+          {
+            "id": "registry-watcher-hub-spoke",
+            "type": "change",
+            "valid": true,
+            "issues": [],
+            "durationMs": 60
+          }
+        ],
+        "summary": {
+          "totals": {
+            "items": 1,
+            "passed": 1,
+            "failed": 0
+          },
+          "byType": {
+            "change": {
+              "items": 1,
+              "passed": 1,
+              "failed": 0
+            }
+          }
+        },
+        "version": "1.0",
+        "root": {
+          "path": "<repo>",
+          "source": "nearest"
+        }
+      }
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "output": ""
+    }
+  ],
+  "cleanup": {
+    "checks": [
+      {
+        "command": "kind get clusters",
+        "stdout": "",
+        "stderr": "No kind clusters found.\n",
+        "exit_code": 0
+      },
+      {
+        "command": "docker ps -a --filter name=edgelab-helm --format {{.Names}}",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      },
+      {
+        "command": "docker image ls edgelab-helm-lifecycle --format {{.Repository}}:{{.Tag}}",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      },
+      {
+        "command": "pgrep -fl helm_kind_lifecycle.py",
+        "exit_code": 1,
+        "meaning": "no lifecycle process"
+      }
+    ],
+    "owned_temp_directories": [],
+    "observed_at_utc": "2026-09-19T23:58:06.204855+00:00"
+  },
+  "privacy_review": {
+    "passed": true,
+    "scanned_files": [
+      "README.md",
+      "cleanup.log",
+      "initial-failures/install-original.log",
+      "initial-failures/install-rwo.log",
+      "initial-failures/original-events.log",
+      "initial-failures/rwo-events.log",
+      "render.log",
+      "signed-run-3/result.json",
+      "signed-run-3/transcript.log",
+      "unit.log"
+    ],
+    "findings": [],
+    "manual_review": "Only published origin objects and publisher public key enter Kubernetes. Private signing key and kubeconfig stay in owned host temp directory; neither contents retained. Disposable cluster addresses/UIDs retained; home/temp paths and Docker context identifier redacted."
+  },
+  "lifecycle": {
+    "result": "signed-run-3/result.json",
+    "passed": true,
+    "origin_hash_checks": 4,
+    "staged_sha256": "eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea",
+    "staged_bytes": 2104832
+  },
+  "tested_harness_and_chart_sha256": {
+    "Dockerfile": "38bf0c2b37562b8d4564ac53978415171bd3e5681d62772a71950708f4ae7e20",
+    "deploy/helm/edgelab-hub/Chart.yaml": "009e28243f03cefea73b263f9c7ee45df83b1819752633254a573abf279e08d0",
+    "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json": "c9cae1dba48df098437055bdde4a0d40ceb36a113787766df4a7c7cf65cf4b7b",
+    "deploy/helm/edgelab-hub/edgelab-proof.alloy": "2ca4445d8e8add0143118254d502ec272daf1512ff8f296a9e975f17ca0c651b",
+    "deploy/helm/edgelab-hub/templates/NOTES.txt": "65dfef0c173ce9d772574fb3ab7a035f970312d7fedf88057efea1e98d6d6500",
+    "deploy/helm/edgelab-hub/templates/_helpers.tpl": "2cf5a6a2add5b59df1bd89bbafafb8e9f5facd8cdea5dd2198e0ae957b5ea635",
+    "deploy/helm/edgelab-hub/templates/deployment.yaml": "d98a7cc616c7884fafed60199c9fc03f76b7d5fbf6e8399b99f58b445e59c1cd",
+    "deploy/helm/edgelab-hub/templates/pvc.yaml": "96ebba9ff130c015a943fb00a9032625e0e42e8d27e95cc11244e816d7a3b3be",
+    "deploy/helm/edgelab-hub/templates/service.yaml": "d85dbcf7615da44063c858ac27da2432204ecd483f3f0ff3c6c3e0212d8e8c26",
+    "deploy/helm/edgelab-hub/values.yaml": "28800fbb3604dd125d0fb699d0232927ca867661db87cca70e340fbda48ae754",
+    "scripts/helm_contract_test.py": "9d52b14b215b0e773f70663516a36b406d934bcc35f0ae035786392150d85996",
+    "scripts/helm_kind_lifecycle.py": "d7fd61e454359b4b431969341ecabf8dd62ae59dc10fd1a4b699400dc27e84cf",
+    "scripts/helm_kind_lifecycle_test.py": "73104998c28684c1327a93aba60556876daeda34df5e249db1e83cbe438e9811"
+  }
+}

@@ -5,7 +5,8 @@ metadata:
   labels:
     {{- include "edgelab-hub.labels" . | nindent 4 }}
 spec:
-  accessModes: ["ReadOnlyMany"]
+  # The mount is read-only, but the publisher needs a writable claim.
+  accessModes: ["ReadWriteOnce"]
   {{- if .Values.origin.storageClass }}
   storageClassName: {{ .Values.origin.storageClass }}
   {{- end }}

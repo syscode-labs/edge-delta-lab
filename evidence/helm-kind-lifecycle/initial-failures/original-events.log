@@ -1,0 +1,11 @@
+LAST SEEN   TYPE      REASON                  OBJECT                                               MESSAGE
+85s         Normal    SuccessfulCreate        replicaset/lifecycle-edgelab-hub-b54c5896b           Created pod: lifecycle-edgelab-hub-b54c5896b-lfll4
+85s         Normal    WaitForFirstConsumer    persistentvolumeclaim/lifecycle-edgelab-hub-origin   waiting for first consumer to be created before binding
+85s         Normal    WaitForFirstConsumer    persistentvolumeclaim/lifecycle-edgelab-hub-state    waiting for first consumer to be created before binding
+85s         Normal    ExternalProvisioning    persistentvolumeclaim/lifecycle-edgelab-hub-state    Waiting for a volume to be created either by the external provisioner 'rancher.io/local-path' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+85s         Normal    Provisioning            persistentvolumeclaim/lifecycle-edgelab-hub-state    External provisioner is provisioning volume for claim "lifecycle/lifecycle-edgelab-hub-state"
+85s         Normal    ScalingReplicaSet       deployment/lifecycle-edgelab-hub                     Scaled up replica set lifecycle-edgelab-hub-b54c5896b from 0 to 1
+81s         Normal    ProvisioningSucceeded   persistentvolumeclaim/lifecycle-edgelab-hub-state    Successfully provisioned volume pvc-348b9729-2bbc-4b39-8235-6235c1fb3503
+40s         Normal    Provisioning            persistentvolumeclaim/lifecycle-edgelab-hub-origin   External provisioner is provisioning volume for claim "lifecycle/lifecycle-edgelab-hub-origin"
+40s         Warning   ProvisioningFailed      persistentvolumeclaim/lifecycle-edgelab-hub-origin   failed to provision volume with StorageClass "standard": NodePath only supports ReadWriteOnce and ReadWriteOncePod (1.22+) access modes
+10s         Normal    ExternalProvisioning    persistentvolumeclaim/lifecycle-edgelab-hub-origin   Waiting for a volume to be created either by the external provisioner 'rancher.io/local-path' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.

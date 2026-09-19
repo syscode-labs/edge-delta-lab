@@ -62,6 +62,8 @@ tolerations: []
 affinity: {}
 podSecurityContext:
   runAsNonRoot: true
+  # Numeric UID of the daemon image's edgelab user: kubelet cannot verify a name.
+  runAsUser: 100
 securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true

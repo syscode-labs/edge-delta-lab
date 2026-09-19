@@ -173,15 +173,15 @@ No Docker socket is mounted into the hub. The client image has no Docker CLI and
 
 ## 7. Deploy the hub with Helm instead
 
-Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. This is a deployment template, **not a verified turnkey cluster installation**.
+Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. Its install, upgrade, pod restart, rollback and uninstall lifecycle has been [verified on disposable Kind with local-path storage](../evidence/helm-kind-lifecycle/README.md). This is not proof of production storage portability or signed delivery through Kubernetes.
 
 Before installing, arrange:
 
 - Helm and access to your Kubernetes cluster.
 - A built hub image available to the cluster. Replace `YOUR_REPOSITORY` and `YOUR_TAG` below with that image.
-- Compatible persistent storage. The chart requests a 5 GiB origin volume with `ReadOnlyMany` access and a 1 GiB state volume with `ReadWriteOnce` access. These are Kubernetes persistent volume claims (PVCs).
+- Compatible persistent storage. The chart requests a 5 GiB origin volume and a 1 GiB state volume, both with `ReadWriteOnce` access. These are Kubernetes persistent volume claims (PVCs). The origin claim must be writable for a separate publisher to populate it; the hub's mount remains read-only. `ReadWriteOnce` restricts mounting to one node, not one pod.
 - A way to populate the origin volume with signed releases. The hub mounts it read-only; publishing or copying files into it is your responsibility.
-- Permissions for the non-root process to read origin data and write state. The image uses a named user; your cluster may require numeric `podSecurityContext` or `securityContext` overrides.
+- Permissions for the non-root process to read origin data and write state. The chart explicitly selects UID 100, the supplied daemon image's `edgelab` user, so kubelet can enforce `runAsNonRoot`. Custom images or storage providers may require security-context overrides or pre-provisioned ownership; this does not prove permissions on every CSI driver.
 
 Once those requirements are satisfied, install one hub replica with an internal-only ClusterIP service on port 8080:
 
@@ -197,6 +197,18 @@ helm upgrade --install edgelab-hub deploy/helm/edgelab-hub \
 Arrange a secure path to that service before pointing external clients at it. The chart always enables caching with `--hub`. Setting `hub.events=false` disables WebSocket hints without disabling caching. The default `hub.rateKbit=0` means unlimited response-body traffic; the command above explicitly limits it.
 
 Metrics are disabled by default. To enable them, set `exporter.enabled=true` and set both `exporter.image.repository` and `exporter.image.tag` to your built hub image; they are independent of `image.*`. The exporter is a second container that reads the admin socket and exposes metrics on service port 9108. It explicitly starts `/usr/local/bin/edgelab-exporter` instead of the image's normal entrypoint. No ServiceMonitor or PodMonitor scraper configuration is supplied. See the [Grafana setup and troubleshooting guide](GRAFANA.md).
+
+### Run the real disposable cluster test
+
+With a local Docker daemon, Kind, Helm and kubectl installed:
+
+```sh
+python3 scripts/helm_kind_lifecycle.py --evidence work/helm-kind-run
+```
+
+Choose a new evidence directory for each run. The test builds the daemon and host CLI from source, generates a small signed synthetic release with `keygen`, `fixtures`, `publish` and `promote`, and loads only published objects into the chart-managed origin PVC through a separate short-lived writable loader pod. The hub mount stays read-only. A real in-cluster `edgelab watch` client uses only the publisher public key against the Helm Service; the gate requires `phase: staged` and a reconstructed archive SHA-256 and size matching the host fixture. The private signing key never enters Kubernetes. All origin objects are checked over HTTP again after upgrade, restart and rollback, alongside exporter metrics and state persistence. Finally it uninstalls the release and deletes its uniquely owned cluster, image and temporary host state. It uses a private temporary kubeconfig, not your current Kubernetes context. This proves signed synthetic archive delivery, not Docker import/activation, an image-version upgrade, or production CSI/multi-node durability. Go is also required for the host CLI build; its executable and `GOROOT` must refer to the same toolchain.
+
+**Storage and upgrade warning:** Helm uninstall deletes both chart-managed PVCs; with a `Delete` reclaim policy this also deletes their data. Back up origin and state before uninstalling a real deployment. PVCs survive the tested upgrade, restart and rollback, not uninstall. Existing installations of the older `ReadOnlyMany` origin claim cannot change that immutable access mode in place: plan a backed-up volume migration/recreation, rather than forcing a Helm upgrade or deleting live data. The default claim now uses `ReadWriteOnce`.
 
 ### Check the chart without installing it
 

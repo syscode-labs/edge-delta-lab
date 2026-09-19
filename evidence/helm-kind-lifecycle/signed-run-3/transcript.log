@@ -1,0 +1,1219 @@
+$ go build -trimpath -o <owned-temp>/edgelab ./cmd/edgelab
+
+[exit 0]
+$ <owned-temp>/edgelab keygen --out <owned-temp>/keys
+
+[exit 0]
+$ <owned-temp>/edgelab fixtures --out <owned-temp>/fixtures --size-mib 2
+{
+  "app-a-v1": {
+    "file": "<owned-temp>/fixtures/app-a-v1.tar",
+    "tag": "edge-delta-lab/app-a-v1:fixture",
+    "image_id": "sha256:f07d1c7634e39e5d155b3933f28f2b11a2482185ad54425d1f09f015185c5c7c",
+    "layers": [
+      {
+        "sha256": "6502f79f00d4f9343a7b5bbca86ff05c1eab4cd35833b74c2701616cddc62ede",
+        "raw_bytes": 1260032,
+        "gzip_bytes": 1258852
+      },
+      {
+        "sha256": "e20906b677d40246d5bf4344aa96b573e32f089a122de2373d04018c8e5f3623",
+        "raw_bytes": 840704,
+        "gzip_bytes": 839305
+... 48 lines omitted ...
+      {
+        "sha256": "6502f79f00d4f9343a7b5bbca86ff05c1eab4cd35833b74c2701616cddc62ede",
+        "raw_bytes": 1260032,
+        "gzip_bytes": 1258852
+      },
+      {
+        "sha256": "44ec734035f4292e31755521c0c87d2a9f4c6e31fe227d6540bc0a9b19f3946d",
+        "raw_bytes": 840704,
+        "gzip_bytes": 839309
+      }
+    ],
+    "artifact_bytes": 2104832,
+    "changed_payload_bytes": 0
+  }
+}
+[exit 0]
+$ <owned-temp>/edgelab publish --input <owned-temp>/fixtures/app-a-v1.tar --root <owned-temp>/origin --key <owned-temp>/keys/publisher.key --release signed-lifecycle --sequence 1
+{
+  "version": 1,
+  "release": "signed-lifecycle",
+  "sequence": 1,
+  "kind": "raw",
+  "artifact_sha256": "eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea",
+  "artifact_size": 2104832,
+  "chunker": "gear64-lab-v1",
+  "min_chunk_bytes": 16384,
+  "target_chunk_bytes": 65536,
+  "max_chunk_bytes": 262144,
+  "chunks": [
+    {
+      "sha256": "e2c84d1756f273c0604d37456c13acea67de9dbe467c2e766b9287ccd1306ccc",
+      "size": 76698,
+... 158 lines omitted ...
+    },
+    {
+      "sha256": "b75b859969f9756bc62075b4beff91634e768a1e0d8e7d4521e998153818581c",
+      "size": 24277,
+      "encoded_sha256": "ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e",
+      "encoded_size": 24305
+    },
+    {
+      "sha256": "bdc640f7823d6a2492c8a2595af34cc2b5653779c06dd2866e124820ab1656d0",
+      "size": 68224,
+      "encoded_sha256": "bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8",
+      "encoded_size": 65969
+    }
+  ]
+}
+[exit 0]
+$ <owned-temp>/edgelab promote --root <owned-temp>/origin --release signed-lifecycle
+
+[exit 0]
+$ docker context inspect
+[
+    {
+        "Name": "orbstack",
+        "Metadata": {
+            "Description": "OrbStack"
+        },
+        "Endpoints": {
+            "docker": {
+                "Host": "unix://<home>/.orbstack/run/docker.sock",
+                "SkipTLSVerify": false
+            }
+        },
+        "TLSMaterial": {},
+        "Storage": {
+            "MetadataPath": "<home>/.docker/contexts/meta/<docker-context-id>",
+            "TLSPath": "<home>/.docker/contexts/tls/<docker-context-id>"
+        }
+    }
+]
+[exit 0]
+$ git rev-parse HEAD
+8d9ccc819579b620e79d4bfffc3bfe324d0a3c29
+[exit 0]
+$ git diff -- deploy/helm/edgelab-hub
+
+[exit 0]
+$ kind version
+kind v0.32.0 go1.26.3 darwin/amd64
+[exit 0]
+$ helm version --short
+v4.2.3+g43e8b7f
+[exit 0]
+$ docker version
+Client:
+ Version:           29.4.0
+ API version:       1.54
+ Go version:        go1.26.4
+ Git commit:        9d7ad9f
+ Built:             Fri Aug  7 04:39:31 2026
+ OS/Arch:           darwin/amd64
+ Context:           orbstack
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          29.4.0
+  API version:      1.54 (minimum version 1.40)
+  Go version:       go1.26.1
+  Git commit:       daa0cb7f
+  Built:            Tue Apr  7 08:36:58 2026
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v2.2.2
+  GitCommit:        301b2dac98f15c27117da5c8af12118a041a31d9
+ runc:
+  Version:          1.5.1
+  GitCommit:        bb14dabeb7185bb72c8c86735d090dcb20f36587
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+[exit 0]
+$ docker build --target daemon -t edgelab-helm-lifecycle:05572eac37 .
+#0 building with "orbstack" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.29kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.8s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#3 resolve docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/alpine:3.20
+#4 DONE 0.6s
+... 56 lines omitted ...
+#22 [daemon 6/6] WORKDIR /state
+#22 CACHED
+
+#23 exporting to image
+#23 exporting layers done
+#23 exporting manifest sha256:6c2f5e1ccd353bd11f7e195a10f20d362d26f3a98937b1a8d3d153505a123d31 0.0s done
+#23 exporting config sha256:4c6253fdd14e00604291fbed054ab7d9880e717e25a79972252d1f1bc5161721 0.0s done
+#23 exporting attestation manifest sha256:661a01f325b32383fb186f7ad447b84fa599e8e4473fc6afe98fb0a5b3f6366f
+#23 exporting attestation manifest sha256:661a01f325b32383fb186f7ad447b84fa599e8e4473fc6afe98fb0a5b3f6366f 0.1s done
+#23 exporting manifest list sha256:7fb782fdeb14c033ef385dfdad5110678eac111279ae864b1e4e0b9e3e197093 0.0s done
+#23 naming to docker.io/library/edgelab-helm-lifecycle:05572eac37
+#23 naming to docker.io/library/edgelab-helm-lifecycle:05572eac37 done
+#23 unpacking to docker.io/library/edgelab-helm-lifecycle:05572eac37
+#23 unpacking to docker.io/library/edgelab-helm-lifecycle:05572eac37 0.4s done
+#23 DONE 0.6s
+[exit 0]
+$ kind create cluster --name edgelab-helm-05572eac37 --kubeconfig <owned-temp>/kubeconfig --wait 120s
+Creating cluster "edgelab-helm-05572eac37" ...
+ • Ensuring node image (kindest/node:v1.36.1) 🖼  ...
+ ✓ Ensuring node image (kindest/node:v1.36.1) 🖼
+ • Preparing nodes 📦   ...
+ ✓ Preparing nodes 📦
+ • Writing configuration 📜  ...
+ ✓ Writing configuration 📜
+ • Starting control-plane 🕹️  ...
+ ✓ Starting control-plane 🕹️
+ • Installing CNI 🔌  ...
+ ✓ Installing CNI 🔌
+ • Installing StorageClass 💾  ...
+ ✓ Installing StorageClass 💾
+ • Waiting ≤ 2m0s for control-plane = Ready ⏳  ...
+ ✓ Waiting ≤ 2m0s for control-plane = Ready ⏳
+ • Ready after 19s 💚
+Set kubectl context to "kind-edgelab-helm-05572eac37"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-edgelab-helm-05572eac37 --kubeconfig <owned-temp>/kubeconfig
+
+Thanks for using kind! 😊
+[exit 0]
+$ kind load docker-image edgelab-helm-lifecycle:05572eac37 --name edgelab-helm-05572eac37
+Image: "edgelab-helm-lifecycle:05572eac37" with ID "sha256:7fb782fdeb14c033ef385dfdad5110678eac111279ae864b1e4e0b9e3e197093" not yet present on node "edgelab-helm-05572eac37-control-plane", loading...
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle version -o json
+{
+  "clientVersion": {
+    "major": "1",
+    "minor": "36",
+    "gitVersion": "v1.36.3",
+    "gitCommit": "0f29094e5b73085e3802ecc1298ecae13866bfe6",
+    "gitTreeState": "clean",
+    "buildDate": "2026-07-22T18:07:38Z",
+    "goVersion": "go1.26.5",
+    "compiler": "gc",
+    "platform": "darwin/amd64"
+  },
+  "kustomizeVersion": "v5.8.1",
+  "serverVersion": {
+    "major": "1",
+    "minor": "36",
+    "emulationMajor": "1",
+    "emulationMinor": "36",
+    "minCompatibilityMajor": "1",
+    "minCompatibilityMinor": "35",
+    "gitVersion": "v1.36.1",
+    "gitCommit": "756939600b9a7180fc2df6550a4585b638875e67",
+    "gitTreeState": "clean",
+    "buildDate": "2026-05-12T09:51:34Z",
+    "goVersion": "go1.26.2",
+    "compiler": "gc",
+    "platform": "linux/amd64"
+  }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get nodes -o wide
+NAME                                    STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                       KERNEL-VERSION                                CONTAINER-RUNTIME
+edgelab-helm-05572eac37-control-plane   Ready    control-plane   72s   v1.36.1   <disposable-node-ip>   <none>        Debian GNU/Linux 13 (trixie)   7.0.14-orbstack-00380-ga7e0a2dc9535 (amd64)   containerd://2.3.1
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get storageclass
+NAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+standard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  67s
+[exit 0]
+$ helm install lifecycle <repo>/deploy/helm/edgelab-hub --create-namespace --set image.repository=edgelab-helm-lifecycle,image.tag=05572eac37,image.pullPolicy=Never --wait --timeout 90s --kube-context kind-edgelab-helm-05572eac37 -n lifecycle
+NAME: lifecycle
+LAST DEPLOYED: Sun Sep 20 00:47:58 2026
+NAMESPACE: lifecycle
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+NOTES:
+edgelab-hub 0.1.0 deployed as lifecycle-edgelab-hub
+
+1. Populate the origin PVC with signed releases (from a machine that has the
+   publisher key), e.g.:
+
+   kubectl exec deploy/lifecycle-edgelab-hub -it -- sh -c "edgelab publish --help"
+   # or copy objects: kubectl cp work/origin/. deploy/lifecycle-edgelab-hub:/origin/
+
+   The origin is mounted READ-ONLY in the hub pod; publish from elsewhere or
+   via a separate publisher pod that owns the same PVC read-write.
+
+2. Notifier credentials come from the secret "edgelab-notifiers"
+   (keys: telegram-token, telegram-chat, slack-webhook). Create it only when
+   you have real credentials; without it the hub runs with notifications off:
+
+   kubectl create secret generic edgelab-notifiers \
+     --from-literal=telegram-token=... --from-literal=telegram-chat=... \
+     --from-literal=slack-webhook=...
+
+3. Admin plane: unix socket at /state/admin.sock (under /state):
+
+   kubectl exec deploy/lifecycle-edgelab-hub -- \
+     edgelab-tui --admin /state/admin.sock --json
+
+4. Health: kubectl get pods -l app.kubernetes.io/name=edgelab-hub
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle rollout status deployment/lifecycle-edgelab-hub --timeout=90s
+deployment "lifecycle-edgelab-hub" successfully rolled out
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- wget -qO- http://lifecycle-edgelab-hub:8080/healthz
+ok
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -S /state/admin.sock
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+command terminated with exit code 1
+[exit 1]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+command terminated with exit code 1
+[exit 1]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+command terminated with exit code 1
+[exit 1]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- id -u
+100
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pvc -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+                "annotations": {
+                    "meta.helm.sh/release-name": "lifecycle",
+                    "meta.helm.sh/release-namespace": "lifecycle",
+                    "pv.kubernetes.io/bind-completed": "yes",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "volume.beta.kubernetes.io/storage-provisioner": "rancher.io/local-path",
+                    "volume.kubernetes.io/selected-node": "edgelab-helm-05572eac37-control-plane",
+                    "volume.kubernetes.io/storage-provisioner": "rancher.io/local-path"
+... 83 lines omitted ...
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/events.jsonl
+{"seq":1,"time":"2026-09-19T23:48:36.627726491Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -c 'printf '"'"'%s\n'"'"' 05572eac37 > /state/lifecycle-marker'
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- touch /origin/must-not-write
+touch: /origin/must-not-write: Read-only file system
+command terminated with exit code 1
+[exit 1]
+PASS install: Ready, both PVCs Bound, service health, non-root UID, admin socket/event log, origin read-only
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle create -f <owned-temp>/origin-loader.json
+pod/origin-loader created
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle wait --for=condition=Ready pod/origin-loader --timeout=60s
+pod/origin-loader condition met
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle cp <owned-temp>/origin/. origin-loader:/origin
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle delete pod origin-loader --wait=true
+pod "origin-loader" deleted from lifecycle namespace
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/07/07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66.gz; sha256sum /state/proof-object'
+07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/10/1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814.gz; sha256sum /state/proof-object'
+1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/14/14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67.gz; sha256sum /state/proof-object'
+14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/18/18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f.gz; sha256sum /state/proof-object'
+18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/19/190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a.gz; sha256sum /state/proof-object'
+190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/25/254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326.gz; sha256sum /state/proof-object'
+254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/26/26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178.gz; sha256sum /state/proof-object'
+26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/32/3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09.gz; sha256sum /state/proof-object'
+3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/40/40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef.gz; sha256sum /state/proof-object'
+40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5a/5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d.gz; sha256sum /state/proof-object'
+5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5d/5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983.gz; sha256sum /state/proof-object'
+5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/66/66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75.gz; sha256sum /state/proof-object'
+66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/6c/6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90.gz; sha256sum /state/proof-object'
+6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/74/744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960.gz; sha256sum /state/proof-object'
+744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/81/81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9.gz; sha256sum /state/proof-object'
+81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/89/8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1.gz; sha256sum /state/proof-object'
+8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/8e/8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac.gz; sha256sum /state/proof-object'
+8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/94/94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7.gz; sha256sum /state/proof-object'
+94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/a0/a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824.gz; sha256sum /state/proof-object'
+a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ac/ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e.gz; sha256sum /state/proof-object'
+ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/bf/bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8.gz; sha256sum /state/proof-object'
+bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c5/c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8.gz; sha256sum /state/proof-object'
+c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c9/c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9.gz; sha256sum /state/proof-object'
+c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ca/cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018.gz; sha256sum /state/proof-object'
+cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/cb/cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31.gz; sha256sum /state/proof-object'
+cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/d0/d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4.gz; sha256sum /state/proof-object'
+d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73.gz; sha256sum /state/proof-object'
+f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2.gz; sha256sum /state/proof-object'
+f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/fa/fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259.gz; sha256sum /state/proof-object'
+fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/desired.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/signed-lifecycle.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+PASS PVC origin: desired signed manifest and all content objects match host SHA-256 via Service
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle create configmap publisher-public --from-file=publisher.pub=<owned-temp>/keys/publisher.pub
+configmap/publisher-public created
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle create -f <owned-temp>/signed-client.json
+pod/signed-client created
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle wait --for=condition=Ready pod/signed-client --timeout=60s
+pod/signed-client condition met
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec signed-client -- cat /state/state.json
+{
+  "accepted_sequence": 1,
+  "accepted_manifest_sha256": "62312d45d913aa7e19ef1c793891f88efa1ea3af6c9880703579cce8fb451b1f",
+  "manifest_url": "http://lifecycle-edgelab-hub:8080/releases/desired.json",
+  "release": "signed-lifecycle",
+  "phase": "fetching",
+  "artifact": "/state/staged/eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea.tar",
+  "updated": "2026-09-19T23:49:19.351267096Z"
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec signed-client -- cat /state/state.json
+{
+  "accepted_sequence": 1,
+  "accepted_manifest_sha256": "62312d45d913aa7e19ef1c793891f88efa1ea3af6c9880703579cce8fb451b1f",
+  "manifest_url": "http://lifecycle-edgelab-hub:8080/releases/desired.json",
+  "release": "signed-lifecycle",
+  "phase": "staged",
+  "artifact": "/state/staged/eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea.tar",
+  "updated": "2026-09-19T23:49:20.619725246Z"
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec signed-client -- sha256sum /state/staged/eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea.tar
+eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea  /state/staged/eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea.tar
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec signed-client -- stat -c %s /state/staged/eb3f673fd08a5906154808290c5c964dd2d40da8178c7d556cd7647e552e01ea.tar
+2104832
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle logs signed-client
+{"event":"plan","missing_chunks":29,"missing_raw_bytes":2104832,"release":"signed-lifecycle","reused_chunks":0,"time":"2026-09-19T23:49:19.351213126Z","unique_chunks":29}
+{"chunk":"7695bc5c7d778ca23220a12d9044066b1950c0d0ad33b51d281dfdf314df6e5b","encoded_bytes":55056,"event":"chunk_committed","raw_bytes":55028,"time":"2026-09-19T23:49:19.368393904Z"}
+{"chunk":"e2c84d1756f273c0604d37456c13acea67de9dbe467c2e766b9287ccd1306ccc","encoded_bytes":76731,"event":"chunk_committed","raw_bytes":76698,"time":"2026-09-19T23:49:19.370277207Z"}
+{"chunk":"08d5ebd13b95d84e268d419b429d86d58b4f6b81b486be13b77f1cb9de0aaf6b","encoded_bytes":130571,"event":"chunk_committed","raw_bytes":130538,"time":"2026-09-19T23:49:19.380457916Z"}
+{"chunk":"cd640abfdb10996f4a40044ba672c528dbebb800de7f371379c233fe17c87583","encoded_bytes":47108,"event":"chunk_committed","raw_bytes":47080,"time":"2026-09-19T23:49:19.382296493Z"}
+{"chunk":"81e62e8dacac09ed57798f0a32eba0e4fbd071cd876dcebc13eae72eb641e4b2","encoded_bytes":49795,"event":"chunk_committed","raw_bytes":49767,"time":"2026-09-19T23:49:19.388546478Z"}
+{"chunk":"c939158794b488adb0d4531858f6bd4eeb3371c0d853ac108c8bda7fa6ee01b8","encoded_bytes":74447,"event":"chunk_committed","raw_bytes":74414,"time":"2026-09-19T23:49:19.396297037Z"}
+{"chunk":"29d8747dafd05cfe7eee9b7eb73ec6a5e7eca4b0725425427457b0bdb1288972","encoded_bytes":137252,"event":"chunk_committed","raw_bytes":137214,"time":"2026-09-19T23:49:19.403601254Z"}
+{"chunk":"b768032c2fab2662b5f90b720b78ef0782e014af43e970c789a3bbbf52df93ad","encoded_bytes":35512,"event":"chunk_committed","raw_bytes":35484,"time":"2026-09-19T23:49:19.410380103Z"}
+{"chunk":"9bd84e1d8fac2a87d92a198df515b5b3c0d5911e3e685ea7688a177f120e90d8","encoded_bytes":27163,"event":"chunk_committed","raw_bytes":27135,"time":"2026-09-19T23:49:19.415128961Z"}
+{"chunk":"7f34bc3d34f3630c016d8a2f4414fc5e1415ef5c68725b8b387826dee96f4c1c","encoded_bytes":40571,"event":"chunk_committed","raw_bytes":40543,"time":"2026-09-19T23:49:19.423311828Z"}
+{"chunk":"fbaa17b0591ae48e7fc4eaeff6cd0ada380a493e136f3227afbb9cf73314f59f","encoded_bytes":40239,"event":"chunk_committed","raw_bytes":40211,"time":"2026-09-19T23:49:19.4287254Z"}
+{"chunk":"ee3c11f5ae77cf91236595ebc13a80776d20d2dc68ca27866a2f48fd1666a9ba","encoded_bytes":137057,"event":"chunk_committed","raw_bytes":137019,"time":"2026-09-19T23:49:19.440416807Z"}
+{"chunk":"b498982f0c612720a01bd1aef91e544514b7e6f7d10fb5d820f48ae7dc4dbc57","encoded_bytes":25478,"event":"chunk_committed","raw_bytes":25450,"time":"2026-09-19T23:49:19.442166065Z"}
+{"chunk":"34b4d2168dec9efc814bbc26b6c21c3a88a0bd4c8d1c7a0982dc266004f02e6f","encoded_bytes":81085,"event":"chunk_committed","raw_bytes":81052,"time":"2026-09-19T23:49:19.455828767Z"}
+... 47 lines omitted ...
+  "unique_chunks": 29,
+  "reused_chunks": 29,
+  "reused_raw_bytes": 2104832,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.044425138
+}
+[exit 0]
+PASS in-cluster watch: public-key verification, phase=staged, reconstructed archive SHA-256 and size match host
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle delete pod signed-client --wait=true
+pod "signed-client" deleted from lifecycle namespace
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle delete configmap publisher-public
+configmap "publisher-public" deleted from lifecycle namespace
+[exit 0]
+$ helm upgrade lifecycle <repo>/deploy/helm/edgelab-hub --set image.repository=edgelab-helm-lifecycle,image.tag=05572eac37,image.pullPolicy=Never --set exporter.enabled=true,exporter.image.repository=edgelab-helm-lifecycle,exporter.image.tag=05572eac37,exporter.image.pullPolicy=Never,hub.events=false,hub.rateKbit=7500 --wait --timeout 90s --kube-context kind-edgelab-helm-05572eac37 -n lifecycle
+Release "lifecycle" has been upgraded. Happy Helming!
+NAME: lifecycle
+LAST DEPLOYED: Sun Sep 20 00:49:21 2026
+NAMESPACE: lifecycle
+STATUS: deployed
+REVISION: 2
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+NOTES:
+edgelab-hub 0.1.0 deployed as lifecycle-edgelab-hub
+
+1. Populate the origin PVC with signed releases (from a machine that has the
+   publisher key), e.g.:
+
+   kubectl exec deploy/lifecycle-edgelab-hub -it -- sh -c "edgelab publish --help"
+   # or copy objects: kubectl cp work/origin/. deploy/lifecycle-edgelab-hub:/origin/
+
+   The origin is mounted READ-ONLY in the hub pod; publish from elsewhere or
+   via a separate publisher pod that owns the same PVC read-write.
+
+2. Notifier credentials come from the secret "edgelab-notifiers"
+   (keys: telegram-token, telegram-chat, slack-webhook). Create it only when
+   you have real credentials; without it the hub runs with notifications off:
+
+   kubectl create secret generic edgelab-notifiers \
+     --from-literal=telegram-token=... --from-literal=telegram-chat=... \
+     --from-literal=slack-webhook=...
+
+3. Admin plane: unix socket at /state/admin.sock (under /state):
+
+   kubectl exec deploy/lifecycle-edgelab-hub -- \
+     edgelab-tui --admin /state/admin.sock --json
+
+4. Health: kubectl get pods -l app.kubernetes.io/name=edgelab-hub
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle rollout status deployment/lifecycle-edgelab-hub --timeout=90s
+deployment "lifecycle-edgelab-hub" successfully rolled out
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- wget -qO- http://lifecycle-edgelab-hub:8080/healthz
+ok
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -S /state/admin.sock
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- id -u
+100
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pvc -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+                "annotations": {
+                    "meta.helm.sh/release-name": "lifecycle",
+                    "meta.helm.sh/release-namespace": "lifecycle",
+                    "pv.kubernetes.io/bind-completed": "yes",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "volume.beta.kubernetes.io/storage-provisioner": "rancher.io/local-path",
+                    "volume.kubernetes.io/selected-node": "edgelab-helm-05572eac37-control-plane",
+                    "volume.kubernetes.io/storage-provisioner": "rancher.io/local-path"
+... 83 lines omitted ...
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/lifecycle-marker
+05572eac37
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/events.jsonl
+{"seq":1,"time":"2026-09-19T23:48:36.627726491Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":2,"time":"2026-09-19T23:48:46.627838279Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":3,"time":"2026-09-19T23:48:56.627742708Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":4,"time":"2026-09-19T23:49:06.627652382Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":5,"time":"2026-09-19T23:49:16.627521026Z","kind":"stats-snapshot","detail":"requests=19 chunk_requests=19 bytes=1370651"}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/07/07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66.gz; sha256sum /state/proof-object'
+07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/10/1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814.gz; sha256sum /state/proof-object'
+1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/14/14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67.gz; sha256sum /state/proof-object'
+14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/18/18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f.gz; sha256sum /state/proof-object'
+18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/19/190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a.gz; sha256sum /state/proof-object'
+190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/25/254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326.gz; sha256sum /state/proof-object'
+254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/26/26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178.gz; sha256sum /state/proof-object'
+26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/32/3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09.gz; sha256sum /state/proof-object'
+3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/40/40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef.gz; sha256sum /state/proof-object'
+40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5a/5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d.gz; sha256sum /state/proof-object'
+5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5d/5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983.gz; sha256sum /state/proof-object'
+5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/66/66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75.gz; sha256sum /state/proof-object'
+66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/6c/6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90.gz; sha256sum /state/proof-object'
+6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/74/744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960.gz; sha256sum /state/proof-object'
+744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/81/81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9.gz; sha256sum /state/proof-object'
+81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/89/8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1.gz; sha256sum /state/proof-object'
+8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/8e/8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac.gz; sha256sum /state/proof-object'
+8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/94/94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7.gz; sha256sum /state/proof-object'
+94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/a0/a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824.gz; sha256sum /state/proof-object'
+a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ac/ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e.gz; sha256sum /state/proof-object'
+ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/bf/bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8.gz; sha256sum /state/proof-object'
+bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c5/c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8.gz; sha256sum /state/proof-object'
+c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c9/c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9.gz; sha256sum /state/proof-object'
+c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ca/cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018.gz; sha256sum /state/proof-object'
+cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/cb/cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31.gz; sha256sum /state/proof-object'
+cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/d0/d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4.gz; sha256sum /state/proof-object'
+d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73.gz; sha256sum /state/proof-object'
+f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2.gz; sha256sum /state/proof-object'
+f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/fa/fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259.gz; sha256sum /state/proof-object'
+fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/desired.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/signed-lifecycle.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+PASS PVC origin: desired signed manifest and all content objects match host SHA-256 via Service
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get deployment lifecycle-edgelab-hub -o json
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+        "annotations": {
+            "deployment.kubernetes.io/revision": "2",
+            "meta.helm.sh/release-name": "lifecycle",
+            "meta.helm.sh/release-namespace": "lifecycle"
+        },
+        "creationTimestamp": "2026-09-19T23:48:00Z",
+        "generation": 2,
+        "labels": {
+            "app.kubernetes.io/instance": "lifecycle",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/name": "edgelab-hub",
+... 244 lines omitted ...
+                "lastTransitionTime": "2026-09-19T23:48:01Z",
+                "lastUpdateTime": "2026-09-19T23:49:28Z",
+                "message": "ReplicaSet \"lifecycle-edgelab-hub-768bfd4b8c\" has successfully progressed.",
+                "reason": "NewReplicaSetAvailable",
+                "status": "True",
+                "type": "Progressing"
+            }
+        ],
+        "observedGeneration": 2,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0,
+        "updatedReplicas": 1
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- wget -qO- http://lifecycle-edgelab-hub:9108/metrics
+edgelab_source_up{job="edgelab",instance="edgelab-hub",role="hub"} 1
+edgelab_process_start_time_seconds{job="edgelab",instance="edgelab-hub",role="hub"} 1789861763.185
+edgelab_snapshot_last_success_timestamp_seconds{job="edgelab",instance="edgelab-hub",role="hub"} 1789861777.518
+edgelab_hub_requests_total{job="edgelab",instance="edgelab-hub",role="hub",kind="chunk"} 29.000000
+edgelab_hub_requests_total{job="edgelab",instance="edgelab-hub",role="hub",kind="metadata"} 2.000000
+edgelab_hub_response_body_bytes_total{job="edgelab",instance="edgelab-hub",role="hub",kind="chunk"} 2103446.000000
+edgelab_hub_response_body_bytes_total{job="edgelab",instance="edgelab-hub",role="hub",kind="metadata"} 16202.000000
+edgelab_hub_cache_bytes{job="edgelab",instance="edgelab-hub",role="hub"} 2119648.000000
+edgelab_hub_cache_capacity_bytes{job="edgelab",instance="edgelab-hub",role="hub"} 134217728.000000
+edgelab_hub_cache_objects{job="edgelab",instance="edgelab-hub",role="hub"} 31.000000
+edgelab_hub_inflight_reads{job="edgelab",instance="edgelab-hub",role="hub"} 0.000000
+edgelab_hub_disk_reads_total{job="edgelab",instance="edgelab-hub",role="hub"} 31.000000
+edgelab_hub_cache_hits_total{job="edgelab",instance="edgelab-hub",role="hub"} 0.000000
+edgelab_hub_coalesced_requests_total{job="edgelab",instance="edgelab-hub",role="hub"} 0.000000
+edgelab_hub_cache_evictions_total{job="edgelab",instance="edgelab-hub",role="hub"} 0.000000
+[exit 0]
+PASS upgrade: exporter serves service metrics with source_up=1; events=false/rate=7500; PVC/state retained
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pods -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2026-09-19T23:49:22Z",
+                "generateName": "lifecycle-edgelab-hub-768bfd4b8c-",
+                "generation": 1,
+                "labels": {
+                    "app.kubernetes.io/instance": "lifecycle",
+                    "app.kubernetes.io/name": "edgelab-hub",
+                    "pod-template-hash": "768bfd4b8c"
+                },
+... 453 lines omitted ...
+                    },
+                    "requests": {
+                        "cpu": "181m",
+                        "memory": "256Mi"
+                    }
+                },
+                "startTime": "2026-09-19T23:49:22Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle rollout restart deployment/lifecycle-edgelab-hub
+deployment.apps/lifecycle-edgelab-hub restarted
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle rollout status deployment/lifecycle-edgelab-hub --timeout=90s
+Waiting for deployment "lifecycle-edgelab-hub" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "lifecycle-edgelab-hub" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "lifecycle-edgelab-hub" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "lifecycle-edgelab-hub" rollout to finish: 0 of 1 updated replicas are available...
+deployment "lifecycle-edgelab-hub" successfully rolled out
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- wget -qO- http://lifecycle-edgelab-hub:8080/healthz
+ok
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -S /state/admin.sock
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- id -u
+100
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pods -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/restartedAt": "2026-09-20T00:49:37+01:00"
+                },
+                "creationTimestamp": "2026-09-19T23:49:38Z",
+                "generateName": "lifecycle-edgelab-hub-6c9c9689b8-",
+                "generation": 1,
+                "labels": {
+                    "app.kubernetes.io/instance": "lifecycle",
+... 456 lines omitted ...
+                    },
+                    "requests": {
+                        "cpu": "181m",
+                        "memory": "256Mi"
+                    }
+                },
+                "startTime": "2026-09-19T23:49:38Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pvc -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+                "annotations": {
+                    "meta.helm.sh/release-name": "lifecycle",
+                    "meta.helm.sh/release-namespace": "lifecycle",
+                    "pv.kubernetes.io/bind-completed": "yes",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "volume.beta.kubernetes.io/storage-provisioner": "rancher.io/local-path",
+                    "volume.kubernetes.io/selected-node": "edgelab-helm-05572eac37-control-plane",
+                    "volume.kubernetes.io/storage-provisioner": "rancher.io/local-path"
+... 83 lines omitted ...
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/lifecycle-marker
+05572eac37
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/events.jsonl
+{"seq":1,"time":"2026-09-19T23:48:36.627726491Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":2,"time":"2026-09-19T23:48:46.627838279Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":3,"time":"2026-09-19T23:48:56.627742708Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":4,"time":"2026-09-19T23:49:06.627652382Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":5,"time":"2026-09-19T23:49:16.627521026Z","kind":"stats-snapshot","detail":"requests=19 chunk_requests=19 bytes=1370651"}
+{"seq":6,"time":"2026-09-19T23:49:33.074133986Z","kind":"stats-snapshot","detail":"requests=12 chunk_requests=12 bytes=995788"}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/07/07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66.gz; sha256sum /state/proof-object'
+07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/10/1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814.gz; sha256sum /state/proof-object'
+1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/14/14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67.gz; sha256sum /state/proof-object'
+14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/18/18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f.gz; sha256sum /state/proof-object'
+18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/19/190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a.gz; sha256sum /state/proof-object'
+190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/25/254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326.gz; sha256sum /state/proof-object'
+254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/26/26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178.gz; sha256sum /state/proof-object'
+26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/32/3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09.gz; sha256sum /state/proof-object'
+3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/40/40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef.gz; sha256sum /state/proof-object'
+40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5a/5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d.gz; sha256sum /state/proof-object'
+5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5d/5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983.gz; sha256sum /state/proof-object'
+5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/66/66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75.gz; sha256sum /state/proof-object'
+66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/6c/6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90.gz; sha256sum /state/proof-object'
+6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/74/744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960.gz; sha256sum /state/proof-object'
+744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/81/81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9.gz; sha256sum /state/proof-object'
+81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/89/8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1.gz; sha256sum /state/proof-object'
+8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/8e/8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac.gz; sha256sum /state/proof-object'
+8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/94/94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7.gz; sha256sum /state/proof-object'
+94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/a0/a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824.gz; sha256sum /state/proof-object'
+a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ac/ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e.gz; sha256sum /state/proof-object'
+ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/bf/bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8.gz; sha256sum /state/proof-object'
+bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c5/c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8.gz; sha256sum /state/proof-object'
+c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c9/c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9.gz; sha256sum /state/proof-object'
+c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ca/cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018.gz; sha256sum /state/proof-object'
+cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/cb/cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31.gz; sha256sum /state/proof-object'
+cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/d0/d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4.gz; sha256sum /state/proof-object'
+d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73.gz; sha256sum /state/proof-object'
+f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2.gz; sha256sum /state/proof-object'
+f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/fa/fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259.gz; sha256sum /state/proof-object'
+fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/desired.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/signed-lifecycle.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+PASS PVC origin: desired signed manifest and all content objects match host SHA-256 via Service
+PASS restart: new pod UID, same PVC UIDs and persisted state/event log
+$ helm rollback lifecycle 1 --wait --timeout 90s --kube-context kind-edgelab-helm-05572eac37 -n lifecycle
+Rollback was a success! Happy Helming!
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle rollout status deployment/lifecycle-edgelab-hub --timeout=90s
+deployment "lifecycle-edgelab-hub" successfully rolled out
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- wget -qO- http://lifecycle-edgelab-hub:8080/healthz
+ok
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -S /state/admin.sock
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- test -s /state/events.jsonl
+
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- id -u
+100
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pvc -o json
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolumeClaim",
+            "metadata": {
+                "annotations": {
+                    "meta.helm.sh/release-name": "lifecycle",
+                    "meta.helm.sh/release-namespace": "lifecycle",
+                    "pv.kubernetes.io/bind-completed": "yes",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "volume.beta.kubernetes.io/storage-provisioner": "rancher.io/local-path",
+                    "volume.kubernetes.io/selected-node": "edgelab-helm-05572eac37-control-plane",
+                    "volume.kubernetes.io/storage-provisioner": "rancher.io/local-path"
+... 83 lines omitted ...
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/lifecycle-marker
+05572eac37
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- cat /state/events.jsonl
+{"seq":1,"time":"2026-09-19T23:48:36.627726491Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":2,"time":"2026-09-19T23:48:46.627838279Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":3,"time":"2026-09-19T23:48:56.627742708Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":4,"time":"2026-09-19T23:49:06.627652382Z","kind":"stats-snapshot","detail":"requests=0 chunk_requests=0 bytes=0"}
+{"seq":5,"time":"2026-09-19T23:49:16.627521026Z","kind":"stats-snapshot","detail":"requests=19 chunk_requests=19 bytes=1370651"}
+{"seq":6,"time":"2026-09-19T23:49:33.074133986Z","kind":"stats-snapshot","detail":"requests=12 chunk_requests=12 bytes=995788"}
+{"seq":7,"time":"2026-09-19T23:49:48.948167789Z","kind":"stats-snapshot","detail":"requests=6 chunk_requests=6 bytes=530940"}
+{"seq":8,"time":"2026-09-19T23:49:58.948300302Z","kind":"stats-snapshot","detail":"requests=31 chunk_requests=29 bytes=2103446"}
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/07/07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66.gz; sha256sum /state/proof-object'
+07743ac83308bb9766ffca4bf311a97d338d0c5c3b2751ab88a7f5d834b45f66  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/10/1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814.gz; sha256sum /state/proof-object'
+1098bf1c208395689d7fd0b3dd277bb8a921361fd463de3064b1b915b8cd8814  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/14/14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67.gz; sha256sum /state/proof-object'
+14f7b19d315ed357703b79681c173614eec3a33568d1a1f774b12fe66ca27a67  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/18/18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f.gz; sha256sum /state/proof-object'
+18c6b8137efe662e74134a6f92e51a1a8a563c647d872654748ac9d04834519f  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/19/190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a.gz; sha256sum /state/proof-object'
+190830a1b5b28651ad64ea6e7e1c649899fb63b6397f139e9c162076813c276a  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/25/254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326.gz; sha256sum /state/proof-object'
+254e3cbe6b126faeb9d9f47b446edf0b5851348be238187932377d6e81b8a326  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/26/26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178.gz; sha256sum /state/proof-object'
+26aeca6345d8ce6e5decec70c2e00ceacbdd803bce3089424369107053a46178  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/32/3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09.gz; sha256sum /state/proof-object'
+3205e449a4034f78eb4f7c5c246ab5531143cd2e5c395983ceb3f31ee4824e09  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/40/40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef.gz; sha256sum /state/proof-object'
+40302f664775eab17085eb13651168f07d9f96d91b2de3dc74a9763169ed4eef  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5a/5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d.gz; sha256sum /state/proof-object'
+5a9a7b80839c1594f1de81e380338f6fd802f3e03ec08f36c52f5ef068340a3d  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/5d/5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983.gz; sha256sum /state/proof-object'
+5d5ec98ffea60419e268d66577bf80ba40e49800fbbb4dc6b1cc5d3038190983  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/66/66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75.gz; sha256sum /state/proof-object'
+66c6eca0ea551aa4d3aafd9f2eb8fe3979b870a8d058ee51109208d83fdbad75  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/6c/6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90.gz; sha256sum /state/proof-object'
+6cba59885ccb8f75facb1966add7c9a71f0002323e99c17abf7dee1e08007b90  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/74/744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960.gz; sha256sum /state/proof-object'
+744c5e5e554308edc72d46c082caf0fcd7af3495c7f3adcf30e3f5ac3e60b960  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/81/81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9.gz; sha256sum /state/proof-object'
+81de4c7603a7eeb1919c8657e61204c70e61b41fd6285922541130c918567fe9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/89/8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1.gz; sha256sum /state/proof-object'
+8900f6f426896b3e19b4fb0c240577d91f7d82f39a450ba7ec2d4cb5e55750a1  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/8e/8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac.gz; sha256sum /state/proof-object'
+8e3302ab5303921fdfaf6e4adc4dc5d7cc44b6655c8a37ecd0b4df915d43d4ac  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/94/94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7.gz; sha256sum /state/proof-object'
+94eec779c82d56cf43db1b61a86e175f7d3ccf2e884c7d3328c54a274252baa7  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/a0/a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824.gz; sha256sum /state/proof-object'
+a05bd53316e89c70fed207cc72c2b94cfbeb58c293975777641b39767a77e824  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ac/ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e.gz; sha256sum /state/proof-object'
+ac90fac3f012177b8a84246f38ad110ff6443b1858a4c75a112c07dc574c493e  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/bf/bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8.gz; sha256sum /state/proof-object'
+bf7f940384884fd5ae0a438d7b045b0f9ecd82a7015e1656f26c243d6f1511a8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c5/c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8.gz; sha256sum /state/proof-object'
+c5b29a41ac0fb8374cf56cf82bb7955e72c33ff0fab0826f75430ce1d104d8f8  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/c9/c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9.gz; sha256sum /state/proof-object'
+c9f47d04fb43e8993f21699292af5907f28d4c6e461cf35d2fafa07bee9837f9  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/ca/cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018.gz; sha256sum /state/proof-object'
+cafd975abdb530a6c069f89a4de37ae02a28a9f4ca8c2ba6bd8b51c91c18d018  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/cb/cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31.gz; sha256sum /state/proof-object'
+cb592b05eb6e5f10b353e6672886a34a10d9811160c193a2ebffb50030ad5b31  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/d0/d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4.gz; sha256sum /state/proof-object'
+d0ebc0c3a2a09ed8adbe6040605a49ced1ab7f25d8a06fe3153bde5394d5ffa4  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73.gz; sha256sum /state/proof-object'
+f96b04aaac6dd8ba7ff81229a49058aa6ea76702e824283d3c703a957e137f73  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/f9/f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2.gz; sha256sum /state/proof-object'
+f974751233cf8a4d7aa76ee253ebed507e64c496fb55cfe7399417d0839f6ab2  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/chunks/fa/fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259.gz; sha256sum /state/proof-object'
+fae83dc2db159ee706ca09f00565506fc1596273f871b7ba633eb3eb5d663259  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/desired.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle exec deployment/lifecycle-edgelab-hub -c hub -- sh -ec 'wget -qO /state/proof-object http://lifecycle-edgelab-hub:8080/releases/signed-lifecycle.json; sha256sum /state/proof-object'
+b4a9e81f2232424fe221d1d1859435cd0b4c481d2bde397c4b87671b9d5e20bb  /state/proof-object
+[exit 0]
+PASS PVC origin: desired signed manifest and all content objects match host SHA-256 via Service
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get deployment lifecycle-edgelab-hub -o json
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+        "annotations": {
+            "deployment.kubernetes.io/revision": "4",
+            "meta.helm.sh/release-name": "lifecycle",
+            "meta.helm.sh/release-namespace": "lifecycle"
+        },
+        "creationTimestamp": "2026-09-19T23:48:00Z",
+        "generation": 4,
+        "labels": {
+            "app.kubernetes.io/instance": "lifecycle",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/name": "edgelab-hub",
+... 195 lines omitted ...
+                "lastTransitionTime": "2026-09-19T23:48:01Z",
+                "lastUpdateTime": "2026-09-19T23:50:15Z",
+                "message": "ReplicaSet \"lifecycle-edgelab-hub-7f65f4b4b5\" has successfully progressed.",
+                "reason": "NewReplicaSetAvailable",
+                "status": "True",
+                "type": "Progressing"
+            }
+        ],
+        "observedGeneration": 4,
+        "readyReplicas": 1,
+        "replicas": 1,
+        "terminatingReplicas": 0,
+        "updatedReplicas": 1
+    }
+}
+[exit 0]
+$ helm history lifecycle --kube-context kind-edgelab-helm-05572eac37 -n lifecycle
+REVISION	UPDATED                 	STATUS    	CHART            	APP VERSION	DESCRIPTION
+1       	Sun Sep 20 00:47:58 2026	superseded	edgelab-hub-0.1.0	v0.1.0     	Install complete
+2       	Sun Sep 20 00:49:21 2026	superseded	edgelab-hub-0.1.0	v0.1.0     	Upgrade complete
+3       	Sun Sep 20 00:49:56 2026	deployed  	edgelab-hub-0.1.0	v0.1.0     	Rollback to 1
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get pods,pvc,service -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP            NODE                                    NOMINATED NODE   READINESS GATES
+pod/lifecycle-edgelab-hub-7f65f4b4b5-hclph   1/1     Running   0          18s   10.244.0.12   edgelab-helm-05572eac37-control-plane   <none>           <none>
+
+NAME                                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE     VOLUMEMODE
+persistentvolumeclaim/lifecycle-edgelab-hub-origin   Bound    pvc-2b9443e9-df77-4152-86a6-53bb6fa3e5a5   5Gi        RWO            standard       <unset>                 2m24s   Filesystem
+persistentvolumeclaim/lifecycle-edgelab-hub-state    Bound    pvc-36b3b05b-7ae3-44a3-8ae6-845ed0f55cfc   1Gi        RWO            standard       <unset>                 2m24s   Filesystem
+
+NAME                            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE     SELECTOR
+service/lifecycle-edgelab-hub   ClusterIP   10.96.107.83   <none>        8080/TCP   2m24s   app.kubernetes.io/instance=lifecycle,app.kubernetes.io/name=edgelab-hub
+[exit 0]
+PASS rollback: revision 1 settings restored, exporter removed, PVC/state retained
+$ helm uninstall lifecycle --wait --timeout 90s --kube-context kind-edgelab-helm-05572eac37 -n lifecycle
+release "lifecycle" uninstalled
+[exit 0]
+$ kubectl --context kind-edgelab-helm-05572eac37 -n lifecycle get deployment,pod,service,pvc,secret -o json
+{
+    "apiVersion": "v1",
+    "items": [],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
+[exit 0]
+PASS uninstall: no release deployments/pods/services/PVCs/Helm secrets remain (PVC deletion is destructive)
+$ kind delete cluster --name edgelab-helm-05572eac37
+Deleting cluster "edgelab-helm-05572eac37" ...
+Deleted nodes: ["edgelab-helm-05572eac37-control-plane"]
+[exit 0]
+$ docker image rm edgelab-helm-lifecycle:05572eac37
+Untagged: edgelab-helm-lifecycle:05572eac37
+Deleted: sha256:7fb782fdeb14c033ef385dfdad5110678eac111279ae864b1e4e0b9e3e197093
+[exit 0]

@@ -1,0 +1,14 @@
+.PASS helm lint/render: exporter=False events=True rate=0 (defaults)
+PASS helm lint/render: exporter=False events=False rate=0
+PASS helm lint/render: exporter=False events=False rate=7500
+PASS helm lint/render: exporter=False events=True rate=0
+PASS helm lint/render: exporter=False events=True rate=7500
+PASS helm lint/render: exporter=True events=False rate=0
+PASS helm lint/render: exporter=True events=False rate=7500
+PASS helm lint/render: exporter=True events=True rate=0
+PASS helm lint/render: exporter=True events=True rate=7500
+.
+----------------------------------------------------------------------
+Ran 2 tests in 1.813s
+
+OK

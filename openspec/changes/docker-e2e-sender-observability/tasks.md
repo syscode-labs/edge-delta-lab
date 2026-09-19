@@ -24,7 +24,7 @@
 - [x] 3.2 Make the primary README steps plain English with copyable commands.
 - [x] 3.3 Add OpenSpec proposal, requirements, design, task list and structural checks.
 - [x] 3.4 Preserve the original evidence separately from revision-2 measurements.
-- [ ] 3.5 Run the official OpenSpec CLI strict validator on a host with that CLI installed.
+- [x] 3.5 Run the official OpenSpec CLI strict validator on a host with that CLI installed. (OpenSpec 1.6.0: `openspec validate docker-e2e-sender-observability --strict --json --no-interactive` passed with no issues; also validated `registry-watcher-hub-spoke`. See `evidence/helm-kind-lifecycle/validation.json`.)
 
 ## 4. Production follow-up (out of this reference demo)
 - [ ] 4.1 Validate power-cut behavior on the target filesystem and storage hardware.

@@ -45,7 +45,7 @@
 - [x] 6.3 `helm lint` + `helm template` smoke green. (helm 3.14.1; re-verified green at closeout.)
 - [x] 6.4 Docker run docs (plain English, plain docker path first). (docs/DOCKER_RUN.md; plain docker path first, Helm second.)
 - [x] 6.5 Container smoke run on OrbStack (healthz + client sync from container-served origin). (Docker 29.4.0 linux/amd64: daemon up as uid=100 edgelab, /healthz=ok, host client staged 53 chunks / 4200227 bytes through container-served origin, admin stats/events answered in-container via unix socket; smoke container+volume removed — commit d2158ce.)
-- [x] 6.6 NOT RUN ledger entry for cluster deployment (helm install) with reason. (No Kubernetes cluster made available in this lab; validation limited to helm lint + helm template. Recorded in PRODUCT_RESULT.md gate table.)
+- [x] 6.6 Real disposable Kind Helm lifecycle and signed client verified. (`evidence/helm-kind-lifecycle/signed-run-3/result.json`: fresh install, host-signed PVC publication, public-key-only in-cluster watch staging with exact archive SHA-256/size, origin/state persistence through exporter upgrade, pod restart and rollback, uninstall, cluster/image cleanup all passed. `validation.json` records closeout checks. Single-node local-path synthetic archive proof only; not Docker activation or production storage durability. Uninstall destructively deletes chart-managed PVCs.)
 
 ## 7. Client config + actions
 - [x] 7.1 YAML config loader (origin, manifest, key, dirs, allow/ignore, action, notifiers).
@@ -62,4 +62,4 @@
 - [x] 8.3 Notifications captured at test endpoints during the run. (hub-announce promote event captured at mock endpoint, seq 1 — mock-only; live Telegram/Slack remains NOT RUN per 2.6.)
 - [x] 8.4 Timing capture: publish→announce→spoke-sync-start→spoke-verified. (work/v3-e2e/TIMING.json copied to evidence/v4-productization/v3-e2e/TIMING.json: total wall 16.6s, publish→sim-spokes-synced 11.6s, publish→real-spoke-verified 13.2s, re-announce sequence 2.)
 - [x] 8.5 evidence/v4-productization/ artifacts + PRODUCT_RESULT.md gate table (PASS/FAIL/NOT RUN per stage) at workspace root. (Artifacts committed; PRODUCT_RESULT.md written at closeout.)
-- [ ] 8.6 CI workflow update covering new packages and gates.
+- [x] 8.6 CI workflow update covering new packages and gates. (`.github/workflows/test.yml` runs `make check`, `make openspec-check`, transport demo and real Docker E2E. Public initial run https://github.com/syscode-labs/edge-delta-lab/actions/runs/35475144442 at `cf508ac677f8486004d2bcdca67d87cf88da5332` passed both jobs; verified via GitHub API. This is not CI evidence for the later unpushed Helm amendment.)

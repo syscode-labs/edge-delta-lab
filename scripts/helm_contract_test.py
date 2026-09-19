@@ -68,7 +68,15 @@ def render_contracts():
         rendered = run("helm", "template", "contract", str(CHART), *settings).stdout
         docs = list(yaml.safe_load_all(rendered))
         deployment, = [doc for doc in docs if doc and doc.get("kind") == "Deployment"]
-        containers = deployment["spec"]["template"]["spec"]["containers"]
+        pod_spec = deployment["spec"]["template"]["spec"]
+        assert pod_spec["securityContext"]["runAsNonRoot"] is True
+        assert pod_spec["securityContext"]["runAsUser"] == 100
+        claims = [doc for doc in docs if doc and doc.get("kind") == "PersistentVolumeClaim"]
+        assert len(claims) == 2
+        assert all(claim["spec"]["accessModes"] == ["ReadWriteOnce"] for claim in claims)
+        containers = pod_spec["containers"]
+        hub_mounts = containers[0]["volumeMounts"]
+        assert next(m for m in hub_mounts if m["name"] == "origin")["readOnly"] is True
         hub, = [c for c in containers if c["name"] == "hub"]
         args = hub["args"]
         assert all(isinstance(arg, str) for arg in args), args
