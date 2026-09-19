@@ -1,0 +1,18 @@
+schema: spec-driven
+context: |
+  Edge Delta Lab is a reference implementation for shipping 1-2 GiB Docker
+  images over an intermittent 5 Mbit/s link. Most bytes remain unchanged.
+  Keep Docker as the receiver runtime. Chunk exact uncompressed archive bytes,
+  compress chunks independently, persist verified progress, then docker load.
+  The operator and collector live on the sender. Never require receiver SSH
+  or inbound scraping. Outbound device acknowledgements are permitted.
+  Distinguish observed bytes, acknowledged import, and application verification.
+  Never present synthetic archives as a measured real Docker execution.
+  Current format is an independent Gear-style CDC lab format, not desync.
+  Use plain English in README instructions. Preserve checked vs pending tasks.
+rules:
+  specs:
+    - Every requirement must include a concrete WHEN/THEN acceptance scenario.
+  tasks:
+    - Keep implementation tasks separate from execution evidence tasks.
+    - Never mark real Docker validation complete without retained runtime results.

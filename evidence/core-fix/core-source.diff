@@ -1,0 +1,365 @@
+diff --git a/internal/lab/lab_test.go b/internal/lab/lab_test.go
+index 0541a67..c689812 100644
+--- a/internal/lab/lab_test.go
++++ b/internal/lab/lab_test.go
+@@ -263,16 +263,38 @@ func TestOutageAndTimeoutRecover(t *testing.T) {
+ 		}
+ 	})
+ }
++
++type eventWriterFunc func([]byte) (int, error)
++
++func (f eventWriterFunc) Write(b []byte) (int, error) { return f(b) }
++
+ func TestCancellationPreservesCompletedChunks(t *testing.T) {
+ 	r := newRig(t, FaultPlan{RateKbit: 1000})
+ 	m := r.publish(t, "v1", 1, data(256<<10))
+ 	o := r.options("v1")
+ 	o.Workers = 1
+-	ctx, cancel := context.WithTimeout(context.Background(), 250*time.Millisecond)
++	// Metadata and fsync latency are platform-dependent. Cancel synchronously
++	// after AtomicWrite has completed, not after an assumed transfer duration.
++	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+ 	defer cancel()
+-	_, e := Sync(ctx, o)
+-	if !errors.Is(e, context.DeadlineExceeded) {
+-		t.Fatalf("wanted deadline, got %v", e)
++	var committed string
++	o.Events = eventWriterFunc(func(b []byte) (int, error) {
++		var event struct {
++			Event string `json:"event"`
++			Chunk string `json:"chunk"`
++		}
++		if e := json.Unmarshal(b, &event); e != nil {
++			return 0, e
++		}
++		if event.Event == "chunk_committed" && committed == "" {
++			committed = event.Chunk
++			cancel()
++		}
++		return len(b), nil
++	})
++	summary, e := Sync(ctx, o)
++	if !errors.Is(e, context.Canceled) || committed == "" {
++		t.Fatalf("wanted cancellation after durable progress; chunk=%q summary=%+v error=%v", committed, summary, e)
+ 	}
+ 	cached := map[string]bool{}
+ 	for _, c := range Unique(m) {
+@@ -281,8 +303,12 @@ func TestCancellationPreservesCompletedChunks(t *testing.T) {
+ 		}
+ 	}
+ 	if len(cached) == 0 || len(cached) == len(Unique(m)) {
+-		t.Fatal("did not interrupt mid-transfer")
++		t.Fatalf("did not interrupt mid-transfer: valid=%d total=%d", len(cached), len(Unique(m)))
++	}
++	if summary.DownloadedChunks != int64(len(cached)) {
++		t.Fatalf("reported commits=%d, validated cache=%d", summary.DownloadedChunks, len(cached))
+ 	}
++	t.Logf("canceled after durable chunk %s: validated %d/%d chunks", committed, len(cached), len(Unique(m)))
+ 	before := r.s.Snapshot()
+ 	mustSync(t, r, "v1")
+ 	after := r.s.Snapshot()
+diff --git a/internal/lab/server.go b/internal/lab/server.go
+index 0243a40..91b27f2 100644
+--- a/internal/lab/server.go
++++ b/internal/lab/server.go
+@@ -25,17 +25,22 @@ type FaultPlan struct {
+ 	StallMS        int64 `json:"stall_ms"`
+ }
+ type ServerStats struct {
+-	OriginStarted     string           `json:"origin_started"`
+-	Requests          int64            `json:"requests"`
+-	ChunkRequests     int64            `json:"chunk_requests"`
+-	MetadataRequests  int64            `json:"metadata_requests"`
+-	ChunkBodyBytes    int64            `json:"chunk_response_body_bytes"`
+-	MetadataBodyBytes int64            `json:"metadata_response_body_bytes"`
+-	Drops             int64            `json:"injected_disconnects"`
+-	Failures          int64            `json:"injected_503s"`
+-	Corruptions       int64            `json:"injected_corruptions"`
+-	Stalls            int64            `json:"injected_stalls"`
+-	ObjectRequests    map[string]int64 `json:"object_requests"`
++	OriginStarted     string `json:"origin_started"`
++	Requests          int64  `json:"requests"`
++	ChunkRequests     int64  `json:"chunk_requests"`
++	MetadataRequests  int64  `json:"metadata_requests"`
++	ChunkBodyBytes    int64  `json:"chunk_response_body_bytes"`
++	MetadataBodyBytes int64  `json:"metadata_response_body_bytes"`
++	// Accepted body bytes on the second and later GET for each chunk path in
++	// this origin epoch. This is not receiver-verified waste: distinct devices
++	// and intentional re-fetches also repeat objects, and first-attempt corrupt
++	// or truncated bodies are not included. Existing total counters include it.
++	ChunkRetryBodyBytes int64            `json:"chunk_retry_response_body_bytes"`
++	Drops               int64            `json:"injected_disconnects"`
++	Failures            int64            `json:"injected_503s"`
++	Corruptions         int64            `json:"injected_corruptions"`
++	Stalls              int64            `json:"injected_stalls"`
++	ObjectRequests      map[string]int64 `json:"object_requests"`
+ }
+ 
+ // Pacer is one aggregate response-body budget for this server/site, not per worker.
+@@ -136,10 +141,12 @@ func (s *FaultServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+ 	s.stats.Requests++
+ 	requestNo := s.stats.Requests
+ 	var chunkNo int64
++	var repeatedChunk bool
+ 	if isChunk {
+ 		s.stats.ChunkRequests++
+ 		chunkNo = s.stats.ChunkRequests
+ 		s.stats.ObjectRequests[rel]++
++		repeatedChunk = s.stats.ObjectRequests[rel] > 1
+ 	} else {
+ 		s.stats.MetadataRequests++
+ 	}
+@@ -221,6 +228,9 @@ func (s *FaultServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+ 		s.mu.Lock()
+ 		if isChunk {
+ 			s.stats.ChunkBodyBytes += int64(n)
++			if repeatedChunk {
++				s.stats.ChunkRetryBodyBytes += int64(n)
++			}
+ 		} else {
+ 			s.stats.MetadataBodyBytes += int64(n)
+ 		}
+diff --git a/internal/lab/server_test.go b/internal/lab/server_test.go
+new file mode 100644
+index 0000000..9006f24
+--- /dev/null
++++ b/internal/lab/server_test.go
+@@ -0,0 +1,77 @@
++package lab
++
++import (
++	"errors"
++	"net/http"
++	"net/http/httptest"
++	"os"
++	"path/filepath"
++	"testing"
++)
++
++// A real ResponseWriter can accept fewer bytes than requested and return an
++// error. Counters must use n, never len(p), file size, or the request count.
++type partialResponseWriter struct {
++	header  http.Header
++	limit   int
++	written int
++}
++
++func (w *partialResponseWriter) Header() http.Header { return w.header }
++func (w *partialResponseWriter) WriteHeader(int)     {}
++func (w *partialResponseWriter) Write(p []byte) (int, error) {
++	n := min(len(p), w.limit-w.written)
++	w.written += n
++	if n < len(p) {
++		return n, errors.New("injected short socket write")
++	}
++	return n, nil
++}
++
++func TestSenderRetryBodyCountsActualPartialWrites(t *testing.T) {
++	root := t.TempDir()
++	body := data(20000)
++	rel := "chunks/ab/" + Hash(body) + ".gz"
++	path := filepath.Join(root, filepath.FromSlash(rel))
++	if e := os.MkdirAll(filepath.Dir(path), 0700); e != nil {
++		t.Fatal(e)
++	}
++	if e := os.WriteFile(path, body, 0600); e != nil {
++		t.Fatal(e)
++	}
++	s := NewFaultServer(root, FaultPlan{})
++	for i, limit := range []int{9000, 123, 20000} {
++		w := &partialResponseWriter{header: http.Header{}, limit: limit}
++		s.ServeHTTP(w, httptest.NewRequest(http.MethodGet, "/"+rel, nil))
++		if w.written != limit {
++			t.Fatalf("attempt %d: wrote %d want %d", i+1, w.written, limit)
++		}
++	}
++	stats := s.Snapshot()
++	if stats.ChunkBodyBytes != 29123 || stats.ChunkRetryBodyBytes != 20123 {
++		t.Fatalf("incorrect accepted-body counters: %+v", stats)
++	}
++	if stats.ChunkRequests != 3 || stats.ObjectRequests[rel] != 3 || stats.MetadataBodyBytes != 0 {
++		t.Fatalf("existing totals changed: %+v", stats)
++	}
++}
++
++func TestSenderRetryBodyAfterBodylessFailure(t *testing.T) {
++	r := newRig(t, FaultPlan{})
++	m := r.publish(t, "v1", 1, data(32768))
++	c := Unique(m)[0]
++	// No concurrent requests: the first request is a bodyless 503, followed
++	// by a successful repeated request whose entire accepted body is counted.
++	r.s.Plan.FailFirst = 1
++	for _, status := range []int{http.StatusServiceUnavailable, http.StatusOK} {
++		w := httptest.NewRecorder()
++		r.s.ServeHTTP(w, httptest.NewRequest(http.MethodGet, "/"+BlobRel(c), nil))
++		if w.Code != status {
++			t.Fatalf("status=%d want=%d", w.Code, status)
++		}
++	}
++	stats := r.s.Snapshot()
++	if stats.ChunkRetryBodyBytes != c.EncodedSize || stats.ChunkBodyBytes != c.EncodedSize {
++		t.Fatalf("bodyless failure counted as bytes or retry omitted: %+v", stats)
++	}
++}
+diff --git a/internal/lab/telemetry_test.go b/internal/lab/telemetry_test.go
+index 278897e..18c3af3 100644
+--- a/internal/lab/telemetry_test.go
++++ b/internal/lab/telemetry_test.go
+@@ -1,14 +1,155 @@
+ package lab
+ 
+ import (
++	"bytes"
+ 	"context"
+ 	"encoding/json"
++	"io"
++	"net/http"
+ 	"net/http/httptest"
+ 	"os"
+ 	"path/filepath"
+ 	"testing"
+ )
+ 
++func TestReceiptLostResponseReplaysAfterSenderRestart(t *testing.T) {
++	root := t.TempDir()
++	s := NewFaultServer(root, FaultPlan{})
++	s.ReceiptsDir = filepath.Join(root, "sender-receipts")
++	o := DefaultAgentOptions()
++	o.StateDir = filepath.Join(root, "edge")
++	o.DeviceID = "test-edge"
++	o.AllowHTTP = true
++	if e := queueReceipt(o, Summary{Release: "r1", Sequence: 1, Phase: "staged", ArtifactSHA256: Hash([]byte("archive"))}); e != nil {
++		t.Fatal(e)
++	}
++	entries, e := os.ReadDir(filepath.Join(o.StateDir, "outbox"))
++	if e != nil || len(entries) != 1 {
++		t.Fatalf("outbox: %v, %v", entries, e)
++	}
++	path := filepath.Join(o.StateDir, "outbox", entries[0].Name())
++	body, e := os.ReadFile(path)
++	if e != nil {
++		t.Fatal(e)
++	}
++	var receipt Receipt
++	if e = json.Unmarshal(body, &receipt); e != nil || receipt.validate() != nil {
++		t.Fatalf("invalid persisted outbox: %v", e)
++	}
++
++	// Persist through the real receipt handler, but drop the socket before its
++	// successful status reaches the caller. No receipt is synthesized on replay.
++	lost := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		saved := httptest.NewRecorder()
++		s.ServeHTTP(saved, r)
++		if saved.Code != http.StatusCreated {
++			t.Errorf("persistence failed before response loss: %d", saved.Code)
++		}
++		conn, _, err := w.(http.Hijacker).Hijack()
++		if err != nil {
++			t.Error(err)
++			return
++		}
++		_ = conn.Close()
++	}))
++	o.ReceiptURL = lost.URL + "/receipts"
++	if e = FlushReceipts(context.Background(), o); e == nil {
++		t.Fatal("lost response reported success")
++	}
++	lost.Close()
++	retained, e := os.ReadFile(path)
++	if e != nil || !bytes.Equal(retained, body) {
++		t.Fatalf("lost response changed outbox: %v", e)
++	}
++	persisted, e := os.ReadFile(filepath.Join(s.ReceiptsDir, receipt.ID+".json"))
++	if e != nil || !bytes.Equal(persisted, body) {
++		t.Fatalf("sender had not persisted before response loss: %v", e)
++	}
++
++	restarted := NewFaultServer(root, FaultPlan{})
++	restarted.ReceiptsDir = s.ReceiptsDir
++	server := httptest.NewServer(restarted)
++	defer server.Close()
++	o.ReceiptURL = server.URL + "/receipts"
++	if e = FlushReceipts(context.Background(), o); e != nil {
++		t.Fatal(e)
++	}
++	entries, e = os.ReadDir(filepath.Join(o.StateDir, "outbox"))
++	if e != nil || len(entries) != 0 {
++		t.Fatalf("acknowledged outbox not empty: %v, %v", entries, e)
++	}
++	entries, e = os.ReadDir(restarted.ReceiptsDir)
++	if e != nil || len(entries) != 1 {
++		t.Fatalf("restart replay not idempotent: %v, %v", entries, e)
++	}
++	persisted, e = os.ReadFile(filepath.Join(restarted.ReceiptsDir, receipt.ID+".json"))
++	if e != nil || !bytes.Equal(persisted, body) {
++		t.Fatalf("replay changed receipt: %v", e)
++	}
++	resp, e := server.Client().Get(o.ReceiptURL)
++	if e != nil {
++		t.Fatal(e)
++	}
++	defer resp.Body.Close()
++	var receipts []Receipt
++	if e = json.NewDecoder(resp.Body).Decode(&receipts); e != nil || len(receipts) != 1 || receipts[0].ID != receipt.ID {
++		t.Fatalf("restart history: %+v, %v", receipts, e)
++	}
++}
++
++func TestReceiptStorageFailureNeverAcknowledged(t *testing.T) {
++	root := t.TempDir()
++	s := NewFaultServer(root, FaultPlan{})
++	s.ReceiptsDir = filepath.Join(root, "not-a-directory")
++	if e := os.WriteFile(s.ReceiptsDir, []byte("blocked"), 0600); e != nil {
++		t.Fatal(e)
++	}
++	server := httptest.NewServer(s)
++	defer server.Close()
++	o := DefaultAgentOptions()
++	o.StateDir = filepath.Join(root, "edge")
++	o.DeviceID = "test-edge"
++	o.ReceiptURL = server.URL + "/receipts"
++	o.AllowHTTP = true
++	if e := queueReceipt(o, Summary{Release: "r1", Phase: "loaded", ArtifactSHA256: Hash([]byte("archive"))}); e != nil {
++		t.Fatal(e)
++	}
++	if e := FlushReceipts(context.Background(), o); e == nil {
++		t.Fatal("sender storage failure acknowledged")
++	}
++	entries, e := os.ReadDir(filepath.Join(o.StateDir, "outbox"))
++	if e != nil || len(entries) != 1 {
++		t.Fatalf("storage failure discarded outbox: %v, %v", entries, e)
++	}
++	// A corrupt receipt is also never acknowledged or added to sender history.
++	s.ReceiptsDir = filepath.Join(root, "healthy-sender")
++	body, e := os.ReadFile(filepath.Join(o.StateDir, "outbox", entries[0].Name()))
++	if e != nil {
++		t.Fatal(e)
++	}
++	var receipt Receipt
++	if e = json.Unmarshal(body, &receipt); e != nil {
++		t.Fatal(e)
++	}
++	receipt.Phase = "staged" // invalidates its content-derived ID
++	body, e = json.Marshal(receipt)
++	if e != nil {
++		t.Fatal(e)
++	}
++	resp, e := server.Client().Post(o.ReceiptURL, "application/json", bytes.NewReader(body))
++	if e != nil {
++		t.Fatal(e)
++	}
++	_, _ = io.Copy(io.Discard, resp.Body)
++	resp.Body.Close()
++	if resp.StatusCode != http.StatusBadRequest {
++		t.Fatalf("tampered receipt accepted: %d", resp.StatusCode)
++	}
++	if _, e = os.Stat(s.ReceiptsDir); !os.IsNotExist(e) {
++		t.Fatalf("tampered receipt persisted: %v", e)
++	}
++}
++
+ func TestReceiptDurableOutboxAndIdempotentSender(t *testing.T) {
+ 	root := t.TempDir()
+ 	s := NewFaultServer(root, FaultPlan{Offline: true})

@@ -1,0 +1,25 @@
+edgelab-hub {{ .Chart.Version }} deployed as {{ include "edgelab-hub.fullname" . }}
+
+1. Populate the origin PVC with signed releases (from a machine that has the
+   publisher key), e.g.:
+
+   kubectl exec deploy/{{ include "edgelab-hub.fullname" . }} -it -- sh -c "edgelab publish --help"
+   # or copy objects: kubectl cp work/origin/. deploy/{{ include "edgelab-hub.fullname" . }}:/origin/
+
+   The origin is mounted READ-ONLY in the hub pod; publish from elsewhere or
+   via a separate publisher pod that owns the same PVC read-write.
+
+2. Notifier credentials come from the secret "{{ .Values.notifiers.existingSecret }}"
+   (keys: telegram-token, telegram-chat, slack-webhook). Create it only when
+   you have real credentials; without it the hub runs with notifications off:
+
+   kubectl create secret generic {{ .Values.notifiers.existingSecret }} \
+     --from-literal=telegram-token=... --from-literal=telegram-chat=... \
+     --from-literal=slack-webhook=...
+
+3. Admin plane: unix socket at {{ .Values.admin.socketPath }} (under /state):
+
+   kubectl exec deploy/{{ include "edgelab-hub.fullname" . }} -- \
+     edgelab-tui --admin {{ .Values.admin.socketPath }} --json
+
+4. Health: kubectl get pods -l app.kubernetes.io/name=edgelab-hub

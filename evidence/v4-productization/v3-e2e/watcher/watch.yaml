@@ -1,0 +1,12 @@
+registry_url: http://127.0.0.1:18107
+poll: 200ms
+repos:
+  - name: proj/app
+    allow: "^v"
+state_file: state.json
+publish:
+  root: ../origin
+  key: ../keys/publisher.key
+  channel: desired
+  release_prefix: app-
+  sequence_file: sequence

@@ -1,0 +1,33 @@
+{
+  "preserved_objects": [
+    "chunks/1f/1facf764883d1937f2640480879c06fd2561435f78f11bce2b0c34541d0812e2.gz",
+    "chunks/40/40b53d5b0325be6b523c563ba37b621264e0790c89fba51ab62e2a6dffe64a84.gz",
+    "chunks/43/439fe893bafc725461c7631f410fabd988b74847e3f92917473c63929aa908f7.gz",
+    "chunks/97/975f0eab8e922ce6d018cbbc69b0bc221cc5fc33bdcc2295f08ba5544d2f4283.gz",
+    "chunks/c4/c460b21465b646a7bb9d227e55355fae33ebd9a645ffea44b1b94aec59b339b6.gz"
+  ],
+  "origin_stats": {
+    "origin_started": "2026-09-18T18:32:36.366137Z",
+    "requests": 12,
+    "chunk_requests": 10,
+    "metadata_requests": 2,
+    "chunk_response_body_bytes": 295489,
+    "metadata_response_body_bytes": 61701,
+    "chunk_retry_response_body_bytes": 43592,
+    "injected_disconnects": 1,
+    "injected_503s": 1,
+    "injected_corruptions": 1,
+    "injected_stalls": 0,
+    "object_requests": {
+      "chunks/18/18556c43ca904a857e469b0492023a05a82c8511c79a4cc7937e8d2554b51dd3.gz": 1,
+      "chunks/1f/1facf764883d1937f2640480879c06fd2561435f78f11bce2b0c34541d0812e2.gz": 1,
+      "chunks/40/40b53d5b0325be6b523c563ba37b621264e0790c89fba51ab62e2a6dffe64a84.gz": 1,
+      "chunks/43/439fe893bafc725461c7631f410fabd988b74847e3f92917473c63929aa908f7.gz": 2,
+      "chunks/64/64a44cfa3273f9d35a20d54ea95d9717e51828643d6e82dc206754da302e89c1.gz": 1,
+      "chunks/97/975f0eab8e922ce6d018cbbc69b0bc221cc5fc33bdcc2295f08ba5544d2f4283.gz": 1,
+      "chunks/c4/c460b21465b646a7bb9d227e55355fae33ebd9a645ffea44b1b94aec59b339b6.gz": 1,
+      "chunks/dd/ddda0ddcbc40be67e515080523b159bcae2f8ee343651aac7b37d9d252a05c0a.gz": 2
+    }
+  },
+  "returncode": -9
+}

@@ -1,0 +1,5 @@
+# example.com/edge-delta-lab/internal/lab [example.com/edge-delta-lab/internal/lab.test]
+internal/lab/server_test.go:43:44: stats.ChunkRetryBodyBytes undefined (type ServerStats has no field or method ChunkRetryBodyBytes)
+internal/lab/server_test.go:64:11: stats.ChunkRetryBodyBytes undefined (type ServerStats has no field or method ChunkRetryBodyBytes)
+FAIL	example.com/edge-delta-lab/internal/lab [build failed]
+FAIL

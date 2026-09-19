@@ -1,0 +1,7 @@
+origin: http://127.0.0.1:18108
+manifest: http://127.0.0.1:18108/releases/desired.json
+pub_key: ../keys/publisher.pub
+state_dir: state
+device_id: real-spoke
+allow_http: true
+action: load

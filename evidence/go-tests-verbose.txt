@@ -1,0 +1,39 @@
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+=== RUN   TestCDCDeterministicAndBounded
+--- PASS: TestCDCDeterministicAndBounded (0.01s)
+=== RUN   TestCDCInsertionResynchronizes
+--- PASS: TestCDCInsertionResynchronizes (0.03s)
+=== RUN   TestCompressedAndRawIntegrity
+--- PASS: TestCompressedAndRawIntegrity (0.00s)
+=== RUN   TestDeltaRepeatAndVersionSkip
+--- PASS: TestDeltaRepeatAndVersionSkip (0.14s)
+=== RUN   TestTruncatedHTTPRetriesOnlyIncompleteChunks
+--- PASS: TestTruncatedHTTPRetriesOnlyIncompleteChunks (0.06s)
+=== RUN   TestCorruptResponseIsRetried
+--- PASS: TestCorruptResponseIsRetried (0.03s)
+=== RUN   TestExistingCacheCorruptionIsRepaired
+--- PASS: TestExistingCacheCorruptionIsRepaired (0.03s)
+=== RUN   TestBadSignatureFetchesNoChunks
+--- PASS: TestBadSignatureFetchesNoChunks (0.02s)
+=== RUN   TestSameSequenceEquivocationRejected
+--- PASS: TestSameSequenceEquivocationRejected (0.06s)
+=== RUN   TestOfflineReassemblyMakesNoRequests
+--- PASS: TestOfflineReassemblyMakesNoRequests (0.03s)
+=== RUN   TestOutageAndTimeoutRecover
+=== RUN   TestOutageAndTimeoutRecover/503
+=== RUN   TestOutageAndTimeoutRecover/stall
+--- PASS: TestOutageAndTimeoutRecover (2.05s)
+    --- PASS: TestOutageAndTimeoutRecover/503 (2.01s)
+    --- PASS: TestOutageAndTimeoutRecover/stall (0.04s)
+=== RUN   TestCancellationPreservesCompletedChunks
+--- PASS: TestCancellationPreservesCompletedChunks (2.34s)
+=== RUN   TestAggregateThrottlingAcrossWorkers
+--- PASS: TestAggregateThrottlingAcrossWorkers (0.58s)
+=== RUN   TestDiskPreflightAndSingleWriterLock
+--- PASS: TestDiskPreflightAndSingleWriterLock (0.01s)
+=== RUN   TestBoundsAndKeyValidation
+--- PASS: TestBoundsAndKeyValidation (0.01s)
+=== RUN   TestPublisherDeterminismAndImmutableNames
+--- PASS: TestPublisherDeterminismAndImmutableNames (0.02s)
+PASS
+ok  	example.com/edge-delta-lab/internal/lab	5.415s

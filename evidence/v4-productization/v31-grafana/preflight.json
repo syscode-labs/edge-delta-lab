@@ -1,0 +1,121 @@
+{
+  "observed_at": "2026-09-19T15:37:59.310143+00:00",
+  "series": [
+    {
+      "metric": {},
+      "value": [
+        1789832278.979,
+        "38"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "metric": {
+        "instance": "remote-linux-host"
+      },
+      "value": [
+        1789832279.085,
+        "16"
+      ]
+    },
+    {
+      "metric": {
+        "instance": "orbstack-client"
+      },
+      "value": [
+        1789832279.085,
+        "22"
+      ]
+    }
+  ],
+  "up": [
+    {
+      "metric": {
+        "__name__": "up",
+        "instance": "remote-linux-host",
+        "job": "edgelab",
+        "role": "hub"
+      },
+      "value": [
+        1789832279.221,
+        "1"
+      ]
+    },
+    {
+      "metric": {
+        "__name__": "up",
+        "instance": "orbstack-client",
+        "job": "edgelab",
+        "role": "client"
+      },
+      "value": [
+        1789832279.221,
+        "1"
+      ]
+    }
+  ],
+  "source": [
+    {
+      "metric": {
+        "__name__": "edgelab_source_up",
+        "exported_instance": "remote-linux-host",
+        "exported_job": "edgelab",
+        "exported_role": "hub",
+        "instance": "remote-linux-host",
+        "job": "edgelab",
+        "role": "hub"
+      },
+      "value": [
+        1789832279.345,
+        "1"
+      ]
+    },
+    {
+      "metric": {
+        "__name__": "edgelab_source_up",
+        "exported_instance": "orbstack-client",
+        "exported_job": "edgelab",
+        "exported_role": "client",
+        "instance": "orbstack-client",
+        "job": "edgelab",
+        "role": "client"
+      },
+      "value": [
+        1789832279.345,
+        "1"
+      ]
+    }
+  ],
+  "fresh": [
+    {
+      "metric": {
+        "exported_instance": "remote-linux-host",
+        "exported_job": "edgelab",
+        "exported_role": "hub",
+        "instance": "remote-linux-host",
+        "job": "edgelab",
+        "role": "hub"
+      },
+      "value": [
+        1789832279.448,
+        "3.5279998779296875"
+      ]
+    },
+    {
+      "metric": {
+        "exported_instance": "orbstack-client",
+        "exported_job": "edgelab",
+        "exported_role": "client",
+        "instance": "orbstack-client",
+        "job": "edgelab",
+        "role": "client"
+      },
+      "value": [
+        1789832279.448,
+        "5.447999954223633"
+      ]
+    }
+  ],
+  "polls": 35
+}

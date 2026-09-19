@@ -1,0 +1,23 @@
+commit 31482d41423d63c4b150cf69cc5fbca71d77c5cb
+Author:     Contributor <contributor@example.com>
+AuthorDate: Fri Sep 18 10:42:56 2026 +0100
+Commit:     Contributor <contributor@example.com>
+CommitDate: Fri Sep 18 10:42:56 2026 +0100
+
+    test: verify receipt persistence across lost replies and restart
+
+commit ca8b07d9cd16ae06a5e90388a085fefc842e2799
+Author:     Contributor <contributor@example.com>
+AuthorDate: Fri Sep 18 10:41:25 2026 +0100
+Commit:     Contributor <contributor@example.com>
+CommitDate: Fri Sep 18 10:41:25 2026 +0100
+
+    feat: count accepted response bodies for repeated chunk requests
+
+commit 70ed4be9a19356bc846d7c6c7fed4b3fb1a01605
+Author:     Contributor <contributor@example.com>
+AuthorDate: Fri Sep 18 10:38:46 2026 +0100
+Commit:     Contributor <contributor@example.com>
+CommitDate: Fri Sep 18 10:38:46 2026 +0100
+
+    test: cancel after durable chunk progress instead of elapsed time

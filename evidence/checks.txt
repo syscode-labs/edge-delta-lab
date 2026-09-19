@@ -1,0 +1,18 @@
+go vet ./...
+go test -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+ok  	example.com/edge-delta-lab/internal/lab	5.460s
+python3 -m unittest discover -s scripts -p '*_test.py' -v
+test_gzip_layers_preserve_exact_uncompressed_bytes (normalize_archive_test.NormalizeTest.test_gzip_layers_preserve_exact_uncompressed_bytes) ... ok
+test_normalization_is_repeatable (normalize_archive_test.NormalizeTest.test_normalization_is_repeatable) ... ok
+test_raw_layers_preserve_exact_bytes (normalize_archive_test.NormalizeTest.test_raw_layers_preserve_exact_bytes) ... ok
+test_wrong_diffid_is_rejected (normalize_archive_test.NormalizeTest.test_wrong_diffid_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.008s
+
+OK
+go test -race -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+ok  	example.com/edge-delta-lab/internal/lab	10.007s
+{"watch_promotion": "PASS", "same_agent_pid": 9602, "observed_staged_releases": ["v1", "v2"]}

@@ -1,0 +1,8 @@
+=== RUN   TestReceiptLostResponseReplaysAfterSenderRestart
+--- PASS: TestReceiptLostResponseReplaysAfterSenderRestart (0.24s)
+=== RUN   TestReceiptStorageFailureNeverAcknowledged
+--- PASS: TestReceiptStorageFailureNeverAcknowledged (0.09s)
+=== RUN   TestReceiptDurableOutboxAndIdempotentSender
+--- PASS: TestReceiptDurableOutboxAndIdempotentSender (0.28s)
+PASS
+ok  	example.com/edge-delta-lab/internal/lab	1.391s

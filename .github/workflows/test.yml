@@ -1,0 +1,43 @@
+name: test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          cache: false
+      - run: make check
+      - run: make openspec-check
+      - run: python3 scripts/demo.py --size-mib 4 --rate-kbit 20000 --work work/ci-demo
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-evidence
+          path: |
+            work/ci-demo/results.json
+            work/ci-demo/RESULTS.md
+            work/ci-demo/logs/
+  docker-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          cache: false
+      - run: make docker-demo WORK=work/ci-docker SIZE_MIB=8 RATE_KBIT=20000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-docker-evidence
+          path: |
+            work/ci-docker/results.json
+            work/ci-docker/RESULTS.md
+            work/ci-docker/logs/
+            work/ci-docker/sender/
+

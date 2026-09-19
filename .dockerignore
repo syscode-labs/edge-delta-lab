@@ -1,0 +1,7 @@
+# Build context stays tiny: the multi-stage build compiles from source.
+*
+!cmd/
+!internal/
+!go.mod
+!go.sum
+!deploy/docker/state/

@@ -1,0 +1,15 @@
+2026-09-18T09:47:24Z
+go version go1.25.8 darwin/amd64
+$HOME/.local/share/mise/installs/go/1.25.8
+go1.25.8
+local
+darwin
+amd64
+31482d41423d63c4b150cf69cc5fbca71d77c5cb
+ M scripts/docker_demo.py
+ M scripts/docker_smoke.py
+ M scripts/normalize_archive_test.py
+?? evidence/core-fix/
+?? evidence/docker-fix/
+?? scripts/docker_identity.py
+?? scripts/docker_identity_test.py

@@ -1,0 +1,6 @@
+=== RUN   TestCancellationPreservesCompletedChunks
+    lab_test.go:284: did not interrupt mid-transfer
+--- FAIL: TestCancellationPreservesCompletedChunks (4.14s)
+FAIL
+FAIL	example.com/edge-delta-lab/internal/lab	4.824s
+FAIL

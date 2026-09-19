@@ -1,0 +1,5 @@
+{
+  "owned_container": "edgelab-v31-linux",
+  "verified_absent": true,
+  "method": "successful docker ps -a exact-name filter returned no matches"
+}

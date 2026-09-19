@@ -1,0 +1,69 @@
+# JSON-form YAML keeps the workflow parseable by standard-library contract tests.
+# Action pins: checkout v4.2.2; setup-go v5.5.0; setup-helm v4.3.0;
+# upload-artifact v4.6.2; download-artifact v4.3.0; setup-qemu v3.6.0;
+# setup-buildx v3.11.1; login v3.4.0; build-push v6.18.0.
+{
+  "name": "release",
+  "on": {"push": {"tags": ["v*"]}},
+  "permissions": {},
+  "concurrency": {"group": "release-${{ github.ref }}", "cancel-in-progress": false},
+  "defaults": {"run": {"shell": "bash"}},
+  "jobs": {
+    "validate": {
+      "runs-on": "ubuntu-latest",
+      "permissions": {"contents": "read"},
+      "outputs": {
+        "tag": "${{ steps.identity.outputs.tag }}",
+        "stable": "${{ steps.identity.outputs.stable }}",
+        "repository": "${{ steps.identity.outputs.repository }}"
+      },
+      "steps": [
+        {
+          "name": "Validate exact stable tag (shared packager rejects prereleases)",
+          "id": "identity",
+          "env": {"TAG": "${{ github.ref_name }}", "REF_TYPE": "${{ github.ref_type }}", "REPOSITORY": "${{ github.repository }}"},
+          "run": "set -euo pipefail\n[[ \"$REF_TYPE\" == tag ]]\n[[ \"$TAG\" =~ ^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$ ]]\nprintf 'tag=%s\\nstable=true\\nrepository=%s\\n' \"$TAG\" \"$(printf '%s' \"$REPOSITORY\" | tr '[:upper:]' '[:lower:]')\" >> \"$GITHUB_OUTPUT\""
+        },
+        {"uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683", "with": {"ref": "${{ github.sha }}", "persist-credentials": false}},
+        {"uses": "actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5", "with": {"go-version": "stable", "cache": false}},
+        {"uses": "azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112", "with": {"version": "v3.14.1"}},
+        {"run": "make -j1 check"},
+        {"run": "make openspec-check"},
+        {"name": "Build the same local packages", "env": {"tag": "${{ steps.identity.outputs.tag }}"}, "run": "make release VERSION=\"${tag}\""},
+        {"uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02", "with": {"name": "release-dist", "path": "dist/", "if-no-files-found": "error", "retention-days": 7}}
+      ]
+    },
+    "github-release": {
+      "needs": "validate",
+      "runs-on": "ubuntu-latest",
+      "permissions": {"contents": "write"},
+      "steps": [
+        {"uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093", "with": {"name": "release-dist", "path": "dist/"}},
+        {
+          "name": "Create release for existing tag and upload every package",
+          "env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GH_REPO": "${{ github.repository }}", "TAG": "${{ needs.validate.outputs.tag }}"},
+          "run": "set -euo pipefail\n(cd dist && sha256sum -c SHA256SUMS)\nif ! gh release view \"$TAG\" >/dev/null 2>&1; then\n  gh release create \"$TAG\" --verify-tag --title \"$TAG\" --generate-notes\nfi\ngh release upload \"$TAG\" dist/* --clobber"
+        }
+      ]
+    },
+    "containers": {
+      "needs": "validate",
+      "runs-on": "ubuntu-latest",
+      "permissions": {"contents": "read", "packages": "write"},
+      "strategy": {"fail-fast": false, "matrix": {"include": [{"target": "daemon", "image": "edgelab"}, {"target": "client", "image": "edgelab-client"}]}},
+      "steps": [
+        {"uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683", "with": {"ref": "${{ github.sha }}", "persist-credentials": false}},
+        {"uses": "docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392"},
+        {"uses": "docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435"},
+        {"uses": "docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772", "with": {"registry": "ghcr.io", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}"}},
+        {
+          "name": "Exact version and stable-only latest",
+          "id": "tags",
+          "env": {"IMAGE": "ghcr.io/${{ needs.validate.outputs.repository }}/${{ matrix.image }}", "TAG": "${{ needs.validate.outputs.tag }}", "STABLE": "${{ needs.validate.outputs.stable }}"},
+          "run": "set -euo pipefail\n{\n  printf 'tags<<EOF\\n%s:%s\\n' \"$IMAGE\" \"$TAG\"\n  if [[ \"$STABLE\" == true && \"$TAG\" =~ ^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$ ]]; then\n    printf '%s:latest\\n' \"$IMAGE\"\n  fi\n  printf 'EOF\\n'\n} >> \"$GITHUB_OUTPUT\""
+        },
+        {"uses": "docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83", "with": {"context": ".", "file": "Dockerfile", "target": "${{ matrix.target }}", "platforms": "linux/amd64,linux/arm64", "push": true, "tags": "${{ steps.tags.outputs.tags }}", "labels": "org.opencontainers.image.source=https://github.com/${{ github.repository }}\norg.opencontainers.image.revision=${{ github.sha }}\norg.opencontainers.image.version=${{ needs.validate.outputs.tag }}"}}
+      ]
+    }
+  }
+}

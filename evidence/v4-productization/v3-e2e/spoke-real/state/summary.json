@@ -1,0 +1,22 @@
+{
+  "release": "app-proj-app-v1",
+  "sequence": 2,
+  "phase": "loaded",
+  "artifact": "state/staged/b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b.tar",
+  "artifact_sha256": "b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b",
+  "artifact_bytes": 1581056,
+  "unique_chunks": 19,
+  "reused_chunks": 0,
+  "reused_raw_bytes": 0,
+  "downloaded_chunks": 19,
+  "downloaded_raw_bytes": 1581056,
+  "chunk_response_body_bytes": 1579866,
+  "metadata_response_body_bytes": 5789,
+  "useful_encoded_bytes": 1579866,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 19,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 12.740712231
+}

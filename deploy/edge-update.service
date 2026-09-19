@@ -1,0 +1,23 @@
+[Unit]
+Description=Edge Delta reference delivery agent (staging only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=edge-update
+Group=edge-update
+StateDirectory=edge-update
+StateDirectoryMode=0750
+EnvironmentFile=/etc/edge-update/environment
+ExecStart=/usr/local/bin/edgelab watch --manifest ${MANIFEST_URL} --base ${ORIGIN_URL} --state /var/lib/edge-update --pub /etc/edge-update/publisher.pub --poll 5m
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/edge-update
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,51 @@
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+=== RUN   TestCDCDeterministicAndBounded
+--- PASS: TestCDCDeterministicAndBounded (0.03s)
+=== RUN   TestCDCInsertionResynchronizes
+--- PASS: TestCDCInsertionResynchronizes (0.06s)
+=== RUN   TestCompressedAndRawIntegrity
+--- PASS: TestCompressedAndRawIntegrity (0.00s)
+=== RUN   TestDeltaRepeatAndVersionSkip
+--- PASS: TestDeltaRepeatAndVersionSkip (14.27s)
+=== RUN   TestTruncatedHTTPRetriesOnlyIncompleteChunks
+--- PASS: TestTruncatedHTTPRetriesOnlyIncompleteChunks (8.40s)
+=== RUN   TestCorruptResponseIsRetried
+--- PASS: TestCorruptResponseIsRetried (5.90s)
+=== RUN   TestExistingCacheCorruptionIsRepaired
+--- PASS: TestExistingCacheCorruptionIsRepaired (5.44s)
+=== RUN   TestBadSignatureFetchesNoChunks
+--- PASS: TestBadSignatureFetchesNoChunks (2.15s)
+=== RUN   TestSameSequenceEquivocationRejected
+--- PASS: TestSameSequenceEquivocationRejected (6.30s)
+=== RUN   TestOfflineReassemblyMakesNoRequests
+--- PASS: TestOfflineReassemblyMakesNoRequests (4.44s)
+=== RUN   TestOutageAndTimeoutRecover
+=== RUN   TestOutageAndTimeoutRecover/503
+=== RUN   TestOutageAndTimeoutRecover/stall
+--- PASS: TestOutageAndTimeoutRecover (7.69s)
+    --- PASS: TestOutageAndTimeoutRecover/503 (3.70s)
+    --- PASS: TestOutageAndTimeoutRecover/stall (4.00s)
+=== RUN   TestCancellationPreservesCompletedChunks
+    lab_test.go:311: canceled after durable chunk 073d460c8a61426d9a74edc26b1c02471111e7d5738daea85ac6b468a62ce3a9: validated 1/57 chunks
+--- PASS: TestCancellationPreservesCompletedChunks (18.82s)
+=== RUN   TestAggregateThrottlingAcrossWorkers
+--- PASS: TestAggregateThrottlingAcrossWorkers (5.16s)
+=== RUN   TestDiskPreflightAndSingleWriterLock
+--- PASS: TestDiskPreflightAndSingleWriterLock (0.98s)
+=== RUN   TestBoundsAndKeyValidation
+--- PASS: TestBoundsAndKeyValidation (1.47s)
+=== RUN   TestPublisherDeterminismAndImmutableNames
+--- PASS: TestPublisherDeterminismAndImmutableNames (2.79s)
+=== RUN   TestSenderRetryBodyCountsActualPartialWrites
+--- PASS: TestSenderRetryBodyCountsActualPartialWrites (0.00s)
+=== RUN   TestSenderRetryBodyAfterBodylessFailure
+--- PASS: TestSenderRetryBodyAfterBodylessFailure (1.74s)
+=== RUN   TestReceiptLostResponseReplaysAfterSenderRestart
+--- PASS: TestReceiptLostResponseReplaysAfterSenderRestart (0.42s)
+=== RUN   TestReceiptStorageFailureNeverAcknowledged
+--- PASS: TestReceiptStorageFailureNeverAcknowledged (0.11s)
+=== RUN   TestReceiptDurableOutboxAndIdempotentSender
+--- PASS: TestReceiptDurableOutboxAndIdempotentSender (0.56s)
+PASS
+ok  	example.com/edge-delta-lab/internal/lab	87.498s
+?   	example.com/edge-delta-lab/work/docker-validation-002/build	[no test files]

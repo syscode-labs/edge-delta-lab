@@ -1,0 +1,15 @@
+// Minimal temporary Alloy configuration for the proof. Supply the existing
+// Grafana Cloud remote_write endpoint and credentials outside this file.
+prometheus.scrape "edgelab_hub" {
+  targets = [{"__address__" = "127.0.0.1:9109", "job" = "edgelab", "instance" = "remote-linux-host", "role" = "hub"}]
+  forward_to = [prometheus.remote_write.edgelab.receiver]
+}
+prometheus.scrape "edgelab_client" {
+  targets = [{"__address__" = "127.0.0.1:9110", "job" = "edgelab", "instance" = "orbstack-client", "role" = "client"}]
+  forward_to = [prometheus.remote_write.edgelab.receiver]
+}
+prometheus.remote_write "edgelab" {
+  endpoint { url = env("EDGELAB_REMOTE_WRITE_URL") basic_auth { username = env("EDGELAB_REMOTE_WRITE_USER") password = env("EDGELAB_REMOTE_WRITE_TOKEN") } }
+  external_labels = { job = "edgelab" }
+  write_relabel_config { source_labels = ["__name__"] regex = "edgelab_.*|up" action = "keep" }
+}

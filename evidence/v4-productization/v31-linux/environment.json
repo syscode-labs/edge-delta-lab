@@ -1,0 +1,8 @@
+{
+  "kernel": "7.0.14-orbstack-00380-ga7e0a2dc9535",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "binary_sha256": "9faf4f8ade88cc0439e3098c48e0075672bad965f21884b0cb1d7caf105bbb11",
+  "scope": "local Linux VM/container (OrbStack); not standalone Linux host",
+  "started_utc": "2026-09-19T13:49:19Z"
+}

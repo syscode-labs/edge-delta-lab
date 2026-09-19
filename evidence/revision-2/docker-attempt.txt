@@ -1,0 +1,1 @@
+NOT RUN: Docker CLI and a reachable Linux Docker daemon are required. No synthetic substitution was made.

@@ -1,0 +1,7 @@
+{
+  "rate_kbit": 5000,
+  "latency_ms": 50,
+  "drop_every": 7,
+  "drop_after_bytes": 8192,
+  "fail_first": 2
+}

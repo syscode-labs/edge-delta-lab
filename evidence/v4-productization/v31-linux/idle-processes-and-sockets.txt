@@ -1,0 +1,18 @@
+Linux 7.0.14-orbstack-00380-ga7e0a2dc9535 x86_64
+PID   ELAPSED COMMAND
+    1 10:54   sleep
+   53  8:36   python3
+  121  8:30   edgelab
+  129  8:30   edgelab
+  130  8:30   edgelab
+  135  8:30   edgelab
+  140  8:30   edgelab
+  224  0:01   sh
+  230  0:01   ps
+Recv-Q Send-Q Local Address:Port  Peer Address:Port Process                           
+0      0          127.0.0.1:39132    127.0.0.1:18108 users:(("edgelab",pid=129,fd=6)) 
+0      0          127.0.0.1:39136    127.0.0.1:18108 users:(("edgelab",pid=130,fd=3)) 
+0      0          127.0.0.1:39154    127.0.0.1:18108 users:(("edgelab",pid=135,fd=6)) 
+0      0          127.0.0.1:18108    127.0.0.1:39154 users:(("edgelab",pid=121,fd=10))
+0      0          127.0.0.1:18108    127.0.0.1:39132 users:(("edgelab",pid=121,fd=7)) 
+0      0          127.0.0.1:18108    127.0.0.1:39136 users:(("edgelab",pid=121,fd=9)) 

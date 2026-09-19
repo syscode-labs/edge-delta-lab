@@ -1,0 +1,46 @@
+# edgelab client configuration (v3). Copy, edit the four required fields and
+# run: edgelab conf -config client.yaml
+#
+# Safety defaults: action is dry-run (nothing is ever touched) and HTTPS is
+# required unless allow_http is set for an isolated lab. The allow/ignore gate
+# is applied BEFORE any artifact download, so ineligible releases cost no
+# bytes. `load` and `restart` import into Docker ONLY after signature, chunk,
+# size and whole-archive verification have all passed inside lab.Sync.
+
+origin: https://origin.example.invalid   # required: origin base URL
+manifest: https://origin.example.invalid/releases/stable.json  # required: signed channel/manifest URL
+pub_key: keys/publisher.pub              # required: pinned publisher public key (ed25519)
+state_dir: /var/lib/edgelab              # required: persistent state (chunks, staged artifacts, journal)
+
+# Optional fields (defaults shown):
+# device_id: edge-01          # label in delivery acknowledgements
+# allow_http: false           # plaintext escape hatch for an isolated lab ONLY
+# poll: 30s                   # reconcile cadence when run under `edgelab watch`
+# workers: 4                  # concurrent chunk requests
+# max_releases: 0             # safety bound for dry-run enumeration (0 = none)
+
+# Release gating: allow is a regex on the release name; ignore wins.
+# allow: "^app-"              # empty = every release is eligible
+# ignore: "-rc$"              # never touch release candidates
+
+# What may happen after a FULLY verified sync:
+#   dry-run  report what would happen; nothing is downloaded to Docker (default)
+#   load     import the verified archive into the local Docker daemon
+#   restart  load, then recreate containers whose image ID matches the
+#            manifest's SIGNED image IDs
+action: dry-run
+
+# Notifiers are opt-in; tokens come from the environment only.
+# notifiers:
+#   - type: telegram
+#     token_env: EDGELAB_TG_TOKEN
+#     chat_id: "123456789"
+#   - type: slack
+#     webhook_env: EDGELAB_SLACK_WEBHOOK
+
+# Only consulted when action == restart:
+# restart:
+#   docker_cli: docker         # overridable for tests (fake CLI)
+#   include: "^web-"           # container-name regex; empty = all matched
+#   exclude: "^(db|cache)-"    # wins over include
+#   stop_timeout: 10           # seconds passed to docker stop

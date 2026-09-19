@@ -1,0 +1,23 @@
+go vet ./...
+go test -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+ok  	example.com/edge-delta-lab/internal/lab	5.515s
+python3 -m unittest discover -s scripts -p '*_test.py' -v
+test_gzip_layers_preserve_exact_uncompressed_bytes (normalize_archive_test.NormalizeTest.test_gzip_layers_preserve_exact_uncompressed_bytes) ... ok
+test_normalization_is_repeatable (normalize_archive_test.NormalizeTest.test_normalization_is_repeatable) ... ok
+test_raw_layers_preserve_exact_bytes (normalize_archive_test.NormalizeTest.test_raw_layers_preserve_exact_bytes) ... ok
+test_wrong_diffid_is_rejected (normalize_archive_test.NormalizeTest.test_wrong_diffid_is_rejected) ... ok
+test_collector_retains_offline_history (sender_test.SenderTests.test_collector_retains_offline_history) ... ok
+test_rate_is_reset_aware (sender_test.SenderTests.test_rate_is_reset_aware) ... ok
+test_sender_bytes_do_not_claim_delivery (sender_test.SenderTests.test_sender_bytes_do_not_claim_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.024s
+
+OK
+go test -race -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+ok  	example.com/edge-delta-lab/internal/lab	12.468s
+python3 scripts/check_specs.py
+Local structural checks passed: 15 requirements and 3 editable scenes. Official OpenSpec CLI validation is separate.
+{"watch_promotion": "PASS", "same_agent_pid": 9222, "observed_staged_releases": ["v1", "v2"]}

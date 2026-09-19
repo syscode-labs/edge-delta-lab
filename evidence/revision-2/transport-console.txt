@@ -1,0 +1,11 @@
+Generating high-entropy, layered fixtures and signed releases...
+cold-sigkill-and-resume            chunks=17,089,252 B  metadata=  53,581 B  reused=   8  retries= 24
+second-image-shared-base           chunks= 6,819,307 B  metadata=  54,877 B  reused= 123  retries= 11
+small-edit-in-large-layer          chunks=   249,778 B  metadata=  53,581 B  reused= 199  retries=  0
+unchanged-repeat                   chunks=         0 B  metadata=       0 B  reused= 202  retries=  0
+inserted-bytes-resynchronize       chunks=   253,874 B  metadata=  53,581 B  reused= 199  retries=  0
+skip-v1-directly-to-v3             chunks=   262,066 B  metadata=  53,581 B  reused= 199  retries=  1
+repair-one-corrupt-cache-chunk     chunks=    76,731 B  metadata=       0 B  reused= 201  retries=  0
+Sender report: /mnt/data/edge-delta-lab/work/revision-2-run/sender/report
+
+Assertions passed. Evidence: /mnt/data/edge-delta-lab/work/revision-2-run/results.json

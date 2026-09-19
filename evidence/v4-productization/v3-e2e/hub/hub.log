@@ -1,0 +1,4 @@
+hub mode: announces active; hub cache 128 MiB
+admin socket at $TMPDIR/edgelab-admin-3318833826/admin.sock (event log $REPO/work/v3-e2e/hub/events.jsonl)
+origin listening at 127.0.0.1:18108
+{"component":"announce-trigger","detail":"kind=promote release=app-proj-app-v1 sequence=2 file=desired.json cache_invalidated=1","event":"announce"}

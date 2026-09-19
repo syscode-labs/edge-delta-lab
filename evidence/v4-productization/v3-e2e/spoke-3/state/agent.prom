@@ -1,0 +1,12 @@
+# TYPE edge_update_last_chunk_body_bytes gauge
+edge_update_last_chunk_body_bytes 0
+# TYPE edge_update_last_retry_overhead_bytes gauge
+edge_update_last_retry_overhead_bytes 0
+# TYPE edge_update_last_reused_chunks gauge
+edge_update_last_reused_chunks 19
+# TYPE edge_update_last_elapsed_seconds gauge
+edge_update_last_elapsed_seconds 0.510793
+# TYPE edge_update_last_success_timestamp_seconds gauge
+edge_update_last_success_timestamp_seconds 1789814124
+# TYPE edge_update_accepted_sequence gauge
+edge_update_accepted_sequence 2

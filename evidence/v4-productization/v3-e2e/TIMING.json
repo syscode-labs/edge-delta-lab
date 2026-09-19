@@ -1,0 +1,28 @@
+{
+  "hub_ready": "2026-09-19T11:35:12.485212+01:00",
+  "notify_capture": {
+    "detail": "kind=promote release=app-proj-app-v1 sequence=2 file=desired.json cache_invalidated=1",
+    "kind": "hub-announce",
+    "seq": 1,
+    "time": "2026-09-19T10:35:12.727029Z"
+  },
+  "publish_complete": "2026-09-19T11:35:12.458069+01:00",
+  "publish_to_real_verified_ms": 13228,
+  "publish_to_spokes_synced_ms": 11613,
+  "real_spoke_complete": "2026-09-19T11:35:25.686218+01:00",
+  "real_spoke_loaded_image_id": "sha256:9c09595589371fdd134348fe9c4462aef1cded2de47e93ba0f1c1d9af22c4030",
+  "reannounce_sequence": 2,
+  "spoke_sim-spoke-1_phase": "staged",
+  "spoke_sim-spoke-1_release": "app-proj-app-v1",
+  "spoke_sim-spoke-1_sync_complete": "2026-09-19T11:35:23.083676+01:00",
+  "spoke_sim-spoke-2_phase": "staged",
+  "spoke_sim-spoke-2_release": "app-proj-app-v1",
+  "spoke_sim-spoke-2_sync_complete": "2026-09-19T11:35:24.021092+01:00",
+  "spoke_sim-spoke-3_phase": "staged",
+  "spoke_sim-spoke-3_release": "app-proj-app-v1",
+  "spoke_sim-spoke-3_sync_complete": "2026-09-19T11:35:23.960631+01:00",
+  "spokes_sync_complete": "2026-09-19T11:35:24.071583+01:00",
+  "total_wall_ms": 16597,
+  "watch_start": "2026-09-19T11:35:10.881864+01:00",
+  "watch_to_publish_ms": 1576
+}

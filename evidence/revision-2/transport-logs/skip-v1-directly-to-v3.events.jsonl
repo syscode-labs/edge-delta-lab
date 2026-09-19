@@ -1,0 +1,6 @@
+{"event":"plan","missing_chunks":3,"missing_raw_bytes":253780,"release":"app-a-v3","reused_chunks":199,"time":"2026-09-17T23:02:21.521207773Z","unique_chunks":202}
+{"attempt":1,"delay_ms":91,"error":"unexpected EOF","event":"retry","object":"d92662e334735db509bc13de333ab9e2672d2fb81c7e4e36e5da0c431662f5c6","time":"2026-09-17T23:02:21.565199739Z"}
+{"chunk":"d92662e334735db509bc13de333ab9e2672d2fb81c7e4e36e5da0c431662f5c6","encoded_bytes":59243,"event":"chunk_committed","raw_bytes":59215,"time":"2026-09-17T23:02:21.862415951Z"}
+{"chunk":"c00e93df3e61e898f2a309857925ed81a3608dfcf9bc12e53e1d89012283c3c6","encoded_bytes":135587,"event":"chunk_committed","raw_bytes":135549,"time":"2026-09-17T23:02:21.870209184Z"}
+{"chunk":"34dc827c56f5eb594b6da09875474e298678304771b01ebf8cca8e9c2418fd88","encoded_bytes":59044,"event":"chunk_committed","raw_bytes":59016,"time":"2026-09-17T23:02:21.9776219Z"}
+{"artifact_sha256":"47f01c33c6261a87f3e83892f246b525ccd798d90e0788f01b4778c5a3ede11c","event":"release_ready","phase":"staged","release":"app-a-v3","time":"2026-09-17T23:02:22.044683531Z"}

@@ -1,0 +1,2 @@
+{"seq":1,"time":"2026-09-19T10:35:12.727029Z","kind":"hub-announce","detail":"kind=promote release=app-proj-app-v1 sequence=2 file=desired.json cache_invalidated=1"}
+{"seq":2,"time":"2026-09-19T10:35:22.47677Z","kind":"stats-snapshot","detail":"requests=81 chunk_requests=76 bytes=5936544"}

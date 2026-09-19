@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "edgelab-hub.fullname" . }}-origin
+  labels:
+    {{- include "edgelab-hub.labels" . | nindent 4 }}
+spec:
+  accessModes: ["ReadOnlyMany"]
+  {{- if .Values.origin.storageClass }}
+  storageClassName: {{ .Values.origin.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.origin.size }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "edgelab-hub.fullname" . }}-state
+  labels:
+    {{- include "edgelab-hub.labels" . | nindent 4 }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  {{- if .Values.state.storageClass }}
+  storageClassName: {{ .Values.state.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.state.size }}

@@ -1,0 +1,78 @@
+{
+  "app-a-v1": {
+    "file": "/mnt/data/edge-delta-lab/work/revision-2-run/fixtures/app-a-v1.tar",
+    "tag": "edge-delta-lab/app-a-v1:fixture",
+    "image_id": "sha256:2feb7cadbc3905130c914bc47071edd9ec4bc743c625b677e6ffd8716bd423d7",
+    "layers": [
+      {
+        "sha256": "cedf6d07cf5ed013e507d2f6c1af8d4d038c5657745551eeafe014a2f02adda5",
+        "raw_bytes": 10067968,
+        "gzip_bytes": 10069585
+      },
+      {
+        "sha256": "dcc9c68f913e274eec3f6204f830e8ba1eb76f5df4da783252958a61828fa115",
+        "raw_bytes": 6712832,
+        "gzip_bytes": 6713117
+      }
+    ],
+    "artifact_bytes": 16784896,
+    "changed_payload_bytes": 0
+  },
+  "app-a-v2": {
+    "file": "/mnt/data/edge-delta-lab/work/revision-2-run/fixtures/app-a-v2.tar",
+    "tag": "edge-delta-lab/app-a-v2:fixture",
+    "image_id": "sha256:50012940fc0ebb90b176d84ddd01429475f5e1a968a8772bb2ae569c08aba3f7",
+    "layers": [
+      {
+        "sha256": "cedf6d07cf5ed013e507d2f6c1af8d4d038c5657745551eeafe014a2f02adda5",
+        "raw_bytes": 10067968,
+        "gzip_bytes": 10069585
+      },
+      {
+        "sha256": "cbd8ecf2c659260b79d7dca9b3bf1968cc980d340c5436eee6ae838effcae3cb",
+        "raw_bytes": 6712832,
+        "gzip_bytes": 6713117
+      }
+    ],
+    "artifact_bytes": 16784896,
+    "changed_payload_bytes": 32768
+  },
+  "app-a-v3": {
+    "file": "/mnt/data/edge-delta-lab/work/revision-2-run/fixtures/app-a-v3.tar",
+    "tag": "edge-delta-lab/app-a-v3:fixture",
+    "image_id": "sha256:5b1a69f2c7dc29043711de43148fed4e76de92212b0a601bcf31fb7b5c15f910",
+    "layers": [
+      {
+        "sha256": "cedf6d07cf5ed013e507d2f6c1af8d4d038c5657745551eeafe014a2f02adda5",
+        "raw_bytes": 10067968,
+        "gzip_bytes": 10069585
+      },
+      {
+        "sha256": "22c2dc8adbb11bca2e56b08e67d306a0ac4ef160770e0c44d3b8423c8afd2258",
+        "raw_bytes": 6716928,
+        "gzip_bytes": 6717208
+      }
+    ],
+    "artifact_bytes": 16788992,
+    "changed_payload_bytes": 36864
+  },
+  "app-b-v1": {
+    "file": "/mnt/data/edge-delta-lab/work/revision-2-run/fixtures/app-b-v1.tar",
+    "tag": "edge-delta-lab/app-b-v1:fixture",
+    "image_id": "sha256:123dc31c774599b0b3e2917fd8a7c4320c9a463f6740e5b541eaf2a8673e3ba7",
+    "layers": [
+      {
+        "sha256": "cedf6d07cf5ed013e507d2f6c1af8d4d038c5657745551eeafe014a2f02adda5",
+        "raw_bytes": 10067968,
+        "gzip_bytes": 10069585
+      },
+      {
+        "sha256": "4e65d54f8360eee276af18fa932fb82d610e50fef7c87db9a297e25de04d53ce",
+        "raw_bytes": 6712832,
+        "gzip_bytes": 6713115
+      }
+    ],
+    "artifact_bytes": 16784896,
+    "changed_payload_bytes": 0
+  }
+}

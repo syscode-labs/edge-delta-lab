@@ -1,0 +1,18 @@
+{
+  "real_docker_execution": "PASSED_REAL_DOCKER_16_MIB_FIXTURES_AT_5000_KBIT_PER_SECOND_ORBSTACK_29_DOCKER_LINUX_AMD64",
+  "sigkill_recovery": "PASSED_EXIT_CODE_NEG9_AFTER_DURABLE_COMMITS_5_CHUNKS_PRESERVED_0_RE_REQUESTED",
+  "offline_runtime_verification": "PASSED_ALL_RELEASES_DOCKER_RUN_PULL_NEVER_NO_NETWORK_ORIGIN_STOPPED",
+  "transport_execution": "PASSED_16_MIB_FIXTURES_AT_5000_KBIT_PER_SECOND",
+  "sender_collection": "PASSED_REAL_HTTP_OBSERVATIONS_AND_STAGED_LOADED_RECEIPTS",
+  "receipt_durability_retry_and_idempotency": "PASSED_GO_UNIT_TEST_WITH_REAL_HTTP_SERVER_20_SENDER_TESTS",
+  "docker_smoke_with_context_fix": "PASSED_TWO_BUILDS_DISTINCT_CONFIG_AND_LAYER_DIGESTS_RUNTIME_VERIFIED",
+  "sender_292c04f_cherry_pick": "PASSED_CONFLICT_FREE_TESTS_GREEN",
+  "go_test_vet_race_and_python_tests": "PASSED",
+  "watch_promotion": "PASSED_SAME_AGENT_PROCESS_TWO_RELEASES_REVISION2_RETAINED",
+  "openspec_offline_structural_check": "PASSED_15_REQUIREMENTS",
+  "openspec_official_cli_validation": "NOT_RUN_CLI_NOT_INSTALLED",
+  "diagrams": "3_NATIVE_EXCALIDRAW_SCENES_AND_SVG_PREVIEWS_STRUCTURALLY_CHECKED",
+  "excalidraw_browser_import": "NOT_RUN_BROWSER_EDITOR_UNAVAILABLE",
+  "power_loss_hardware_validation": "NOT_RUN",
+  "production_1_2_GIB_IMAGE_BENCHMARK": "GO_NO_GO_DECIDED_SEE_DELIVERY_RESULT"
+}

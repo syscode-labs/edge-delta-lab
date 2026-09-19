@@ -1,0 +1,8 @@
+{"event":"plan","missing_chunks":4,"missing_raw_bytes":505848,"release":"app-a-v2","reused_chunks":229,"time":"2026-09-18T18:33:29.190032Z","unique_chunks":233}
+{"attempt":1,"delay_ms":76,"error":"unexpected EOF","event":"retry","object":"f60edac7bea893bb8d0b2cff19f67317bf9027b951af9ef1a8252b749816cd45","time":"2026-09-18T18:33:29.274941Z"}
+{"chunk":"f60edac7bea893bb8d0b2cff19f67317bf9027b951af9ef1a8252b749816cd45","encoded_bytes":16182,"event":"chunk_committed","raw_bytes":25506,"time":"2026-09-18T18:33:29.514967Z"}
+{"chunk":"70656f3521791a18beb48e083b486848ae313a5180f65dbbcaf3cb372843089a","encoded_bytes":99790,"event":"chunk_committed","raw_bytes":99757,"time":"2026-09-18T18:33:29.819954Z"}
+{"chunk":"d0c5032cc04a11767ddd4c3cb83447cf4016e9739e01342219e1ebbc60a529a8","encoded_bytes":141042,"event":"chunk_committed","raw_bytes":141004,"time":"2026-09-18T18:33:29.96259Z"}
+{"chunk":"4cb5066a654f70a0e0fdadb31275d6df233d17ed9b259df4b1fcb7a06d01a10d","encoded_bytes":239624,"event":"chunk_committed","raw_bytes":239581,"time":"2026-09-18T18:33:30.119409Z"}
+Loaded image: edge-delta-demo-0a26878b3de0:app-a-v2
+{"artifact_sha256":"3015d1cd597dc95619c6f0a4f4929df070c24427ef3326eed93a00541386eb74","event":"release_ready","phase":"loaded","release":"app-a-v2","time":"2026-09-18T18:33:32.005103Z"}

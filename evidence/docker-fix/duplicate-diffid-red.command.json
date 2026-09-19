@@ -1,0 +1,59 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts",
+    "-p",
+    "normalize_archive_test.py",
+    "-v"
+  ],
+  "cwd": "$REPO",
+  "started_utc": "2026-09-18T09:47:00.264056+00:00",
+  "environment": {
+    "PATH": "$HOME/.local/share/mise/installs/go/1.25.8/bin:$HOME/.local/share/mise/installs/python/3.11.15/bin:$REDACTED_PATH",
+    "GOROOT": "$HOME/.local/share/mise/installs/go/1.25.8",
+    "GOTOOLCHAIN": "local",
+    "DOCKER_CONTEXT": "orbstack"
+  },
+  "git_commit": "31482d41423d63c4b150cf69cc5fbca71d77c5cb",
+  "source_sha256": {
+    "scripts/check_specs.py": "657c784acae285adecab4bd587ea1d821c41eae933497f1eb5206bcb061f1663",
+    "scripts/demo.py": "249847d145de4c2f3ea62bfec19a2ef6f08a2709cd6d8ac7b0889c6afb0c174a",
+    "scripts/diagrams.py": "48333646d221e8aaaaa350d87f1ae21374cec4a5e699095db3c210859993f1e0",
+    "scripts/docker_demo.py": "ef7ad369d9d354209278c35d3a812a43440134042b85ac55f589fd6fe16a1dd4",
+    "scripts/docker_identity.py": "5f7268470e6a3d023e359225db8d74ced726a9122f985ea1e2e0662b46602085",
+    "scripts/docker_identity_test.py": "a0e75d98d9bdb5d96e9b49963550f39a2055571d23f0476c9583053ce67cfcc7",
+    "scripts/docker_smoke.py": "8184e840a53e6f45f9c8c2aa60756eddb51c35a9d3e8e5ccd95ad0c328f934e5",
+    "scripts/normalize_archive.py": "510df544f67d438a84c20b7ac0c2ac836b8c5b0120a01799a814f4db12ae4faa",
+    "scripts/normalize_archive_test.py": "3acda37e80ba3258fe2cc20a4125bd2225c7b7a4760076d350e1b553e300c5b2",
+    "scripts/prepare_compose.py": "bef9325c9c345066137e6480474ff30bbc259f119cb711f213806fc7f64f27e1",
+    "scripts/sender.py": "bfbd238a67cf9178c0d534594c8fc3e493e74ec46cb5aafc4f00830eea18e8c8",
+    "scripts/sender_test.py": "730ee6cc7808d47ccce39acf4cb0d072fb9cb478e313f9ed851fb187da361e5c",
+    "scripts/watch_smoke.py": "7b2f66c25100ce70a9a8d9e4f176e0375390e035231a4086300eca9865b1e2ec",
+    "internal/lab/agent.go": "9b231de7a9a03852b56c8a23a65ccc51178e9c87dd479a325ca5f96ea1b2956a",
+    "internal/lab/chunker.go": "3d4e275b4351e80ef41254e40488e7fa2359555b13070b15c2ad6331442f794b",
+    "internal/lab/fixtures.go": "ac036aeeb22c3097b58c8e1a89ad0221fc38e834f1297f87292fef9b5563029c",
+    "internal/lab/format.go": "4ac975eedb0d19d2417dc4d67e16d9f4b7e5b7519166d7c535321536fdd3cf17",
+    "internal/lab/lab_test.go": "817891b5fe9320cf0ee20612f2226eee437518162676a62e29cb0f1660113d1a",
+    "internal/lab/publish.go": "6bb034b72d82eb18bc5c6a7bd542a25fa905ee2724f7703e9b54c9074c743f0d",
+    "internal/lab/server.go": "32e263186c6464247582341d5fc98c7218e39875aabf9f54b3cc45f61777476e",
+    "internal/lab/server_test.go": "d529a5f31fe3260e6a0a07c0fc8c85d8583174b118995a105bfa94fb43c0bd32",
+    "internal/lab/storage.go": "87426b4526aab250058315edc50245cf51248540cab588c50f3bbb5ab8e3c056",
+    "internal/lab/telemetry.go": "5fcf9852344bb8408c9e8d86c473abb39adabad5d7104ae07ec1e91640d39f84",
+    "internal/lab/telemetry_test.go": "7decf17a0d894edabf57bc1ab76054e2c56e44059377a7a0ca8cef39d035f57c",
+    "cmd/edgelab/main.go": "25e7470868e4094e9d398fea29a0a8129c7fd1a0dc8a71b5de3191389fe7ecb8",
+    "Makefile": "e1b10298c139a040f7f736a95e5e23c2e5ee86ddac2f640c96f6c6fda2e74861",
+    "go.mod": "8260b5b8e26f15dba18eb77d4d7fa3918c2b4cf6a6c5d3e393a8294e5c4b2460"
+  },
+  "exit_code": 1,
+  "elapsed_seconds": 0.3330146400257945,
+  "finished_utc": "2026-09-18T09:47:00.597090+00:00",
+  "outputs": {
+    "stdout": "$REPO/evidence/docker-fix/duplicate-diffid-red.stdout.txt",
+    "stderr": "$REPO/evidence/docker-fix/duplicate-diffid-red.stderr.txt",
+    "command": "$REPO/evidence/docker-fix/duplicate-diffid-red.command.json"
+  }
+}

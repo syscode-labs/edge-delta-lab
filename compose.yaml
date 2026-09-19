@@ -1,0 +1,27 @@
+# This topology simulates delivery. It does NOT mount /var/run/docker.sock.
+services:
+  origin:
+    image: edge-delta-lab:local
+    build: .
+    command: ["serve", "--root", "/origin", "--faults", "/faults.json", "--listen", "0.0.0.0:8080"]
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./work/compose/origin:/origin:ro
+      - ./work/compose/faults.json:/faults.json:ro
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+  edge:
+    image: edge-delta-lab:local
+    command: ["watch", "--base", "http://origin:8080", "--manifest", "http://origin:8080/releases/desired.json", "--state", "/state", "--pub", "/publisher.pub", "--allow-http", "--poll", "5s"]
+    volumes:
+      - edge-state:/state
+      - ./work/compose/keys/publisher.pub:/publisher.pub:ro
+    depends_on:
+      - origin
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+volumes:
+  edge-state:

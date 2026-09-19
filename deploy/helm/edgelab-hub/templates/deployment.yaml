@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "edgelab-hub.fullname" . }}
+  labels:
+    {{- include "edgelab-hub.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "edgelab-hub.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "edgelab-hub.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: hub
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - serve
+            - --root
+            - /origin
+            - --listen
+            - 0.0.0.0:8080
+            - --admin-socket
+            - {{ .Values.admin.socketPath }}
+            - --event-log
+            - {{ .Values.admin.eventLogPath }}
+            - --event-log-mib
+            - {{ .Values.admin.eventLogMib | quote }}
+            - --hub
+            - {{ printf "--events=%t" .Values.hub.events | quote }}
+            - --cache-mib
+            - {{ .Values.hub.cacheMib | quote }}
+            - --rate-kbit
+            - {{ .Values.hub.rateKbit | quote }}
+            {{- if .Values.notifiers.existingSecret }}
+            - --telegram-token-env
+            - {{ .Values.notifiers.telegramTokenEnv }}
+            - --telegram-chat
+            - $(TELEGRAM_CHAT)
+            - --slack-webhook-env
+            - {{ .Values.notifiers.slackWebhookEnv }}
+            {{- end }}
+          env:
+            {{- if .Values.notifiers.existingSecret }}
+            - name: TELEGRAM_CHAT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.notifiers.existingSecret }}
+                  key: telegram-chat
+                  optional: true
+            - name: EDGELAB_TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.notifiers.existingSecret }}
+                  key: telegram-token
+                  optional: true
+            - name: EDGELAB_SLACK_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.notifiers.existingSecret }}
+                  key: slack-webhook
+                  optional: true
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: origin
+              mountPath: /origin
+              readOnly: true
+            - name: state
+              mountPath: /state
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+        {{- if .Values.exporter.enabled }}
+        - name: exporter
+          image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+          command:
+            - /usr/local/bin/edgelab-exporter
+          args:
+            - --socket
+            - {{ .Values.admin.socketPath }}
+            - --listen
+            - 0.0.0.0:{{ .Values.exporter.port }}
+            - --role
+            - hub
+            - --instance
+            - {{ .Values.exporter.instance }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.exporter.port }}
+          volumeMounts:
+            - name: state
+              mountPath: /state
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+        {{- end }}
+      volumes:
+        - name: origin
+          persistentVolumeClaim:
+            claimName: {{ include "edgelab-hub.fullname" . }}-origin
+        - name: state
+          persistentVolumeClaim:
+            claimName: {{ include "edgelab-hub.fullname" . }}-state

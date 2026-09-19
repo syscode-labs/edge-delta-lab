@@ -1,0 +1,9 @@
+{
+  "accepted_sequence": 2,
+  "accepted_manifest_sha256": "a75bfb37924950641f6efc54603745d5f9496cae9670ad9a0859b479d07fd5ae",
+  "manifest_url": "http://127.0.0.1:18108/releases/desired.json",
+  "release": "app-proj-app-v1",
+  "phase": "loaded",
+  "artifact": "state/staged/b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b.tar",
+  "updated": "2026-09-19T10:35:25.223939Z"
+}

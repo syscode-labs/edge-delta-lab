@@ -1,0 +1,840 @@
+{
+  "dashboard_readback": {
+    "version": 2,
+    "panel_count": 10
+  },
+  "scrapes": [
+    {
+      "observed_at": "2026-09-19T15:53:25.682272+00:00",
+      "results": [
+        {
+          "panel_id": 1,
+          "query": "edgelab_client_last_sync_download_bytes{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_download_bytes",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833203.45,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 1,
+          "query": "rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\",instance=\"orbstack-client\"}[1m])",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833203.56,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 2,
+          "query": "edgelab_client_last_sync_verified_chunks{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_verified_chunks",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833203.681,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 2,
+          "query": "edgelab_client_last_sync_reused_chunks{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_reused_chunks",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833203.835,
+                "202"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 3,
+          "query": "rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\"}[1m])",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833203.992,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 4,
+          "query": "edgelab_client_verified_chunks_total{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_verified_chunks_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833204.117,
+                "3"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 4,
+          "query": "edgelab_client_integrity_failures_total{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_integrity_failures_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833204.372,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_syncs_total{job=\"edgelab\",instance=\"orbstack-client\",kind=\"success\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_syncs_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "kind": "success",
+                "role": "client"
+              },
+              "value": [
+                1789833204.586,
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_syncs_total{job=\"edgelab\",instance=\"orbstack-client\",kind=\"failure\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_syncs_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "kind": "failure",
+                "role": "client"
+              },
+              "value": [
+                1789833204.725,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_state{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_state",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client",
+                "state": "loaded"
+              },
+              "value": [
+                1789833204.819,
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 6,
+          "query": "min(edgelab_source_up{job=\"edgelab\"})",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833204.916,
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 7,
+          "query": "time() - edgelab_snapshot_last_success_timestamp_seconds{job=\"edgelab\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "remote-linux-host",
+                "exported_job": "edgelab",
+                "exported_role": "hub",
+                "instance": "remote-linux-host",
+                "job": "edgelab",
+                "role": "hub"
+              },
+              "value": [
+                1789833205.021,
+                "9.057999849319458"
+              ]
+            },
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833205.021,
+                "11.020999908447266"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(edgelab_hub_cache_bytes{job=\"edgelab\"}) / clamp_min(sum(edgelab_hub_cache_capacity_bytes{job=\"edgelab\"}),1)",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833205.168,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(rate(edgelab_hub_cache_hits_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833205.298,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(rate(edgelab_hub_disk_reads_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833205.39,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 9,
+          "query": "sum by (instance,kind) (rate(edgelab_client_requests_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "instance": "orbstack-client",
+                "kind": "metadata"
+              },
+              "value": [
+                1789833205.502,
+                "0.018887037037037036"
+              ]
+            },
+            {
+              "metric": {
+                "instance": "orbstack-client",
+                "kind": "chunk"
+              },
+              "value": [
+                1789833205.502,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 9,
+          "query": "sum(rate(edgelab_client_retries_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833205.599,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 10,
+          "query": "sum by (kind) (rate(edgelab_hub_response_body_bytes_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "kind": "metadata"
+              },
+              "value": [
+                1789833205.71,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "kind": "chunk"
+              },
+              "value": [
+                1789833205.71,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": "series-budget",
+          "query": "count({job=\"edgelab\"})",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833205.838,
+                "38"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "observed_at": "2026-09-19T15:53:37.825353+00:00",
+      "results": [
+        {
+          "panel_id": 1,
+          "query": "edgelab_client_last_sync_download_bytes{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_download_bytes",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833215.994,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 1,
+          "query": "rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\",instance=\"orbstack-client\"}[1m])",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.107,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 2,
+          "query": "edgelab_client_last_sync_verified_chunks{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_verified_chunks",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.233,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 2,
+          "query": "edgelab_client_last_sync_reused_chunks{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_last_sync_reused_chunks",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.336,
+                "202"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 3,
+          "query": "rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\"}[1m])",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.437,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 4,
+          "query": "edgelab_client_verified_chunks_total{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_verified_chunks_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.538,
+                "3"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 4,
+          "query": "edgelab_client_integrity_failures_total{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_integrity_failures_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833216.653,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_syncs_total{job=\"edgelab\",instance=\"orbstack-client\",kind=\"success\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_syncs_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "kind": "success",
+                "role": "client"
+              },
+              "value": [
+                1789833216.759,
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_syncs_total{job=\"edgelab\",instance=\"orbstack-client\",kind=\"failure\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_syncs_total",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "kind": "failure",
+                "role": "client"
+              },
+              "value": [
+                1789833216.883,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 5,
+          "query": "edgelab_client_state{job=\"edgelab\",instance=\"orbstack-client\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "__name__": "edgelab_client_state",
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client",
+                "state": "loaded"
+              },
+              "value": [
+                1789833216.992,
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 6,
+          "query": "min(edgelab_source_up{job=\"edgelab\"})",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.098,
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 7,
+          "query": "time() - edgelab_snapshot_last_success_timestamp_seconds{job=\"edgelab\"}",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "exported_instance": "remote-linux-host",
+                "exported_job": "edgelab",
+                "exported_role": "hub",
+                "instance": "remote-linux-host",
+                "job": "edgelab",
+                "role": "hub"
+              },
+              "value": [
+                1789833217.196,
+                "21.23300004005432"
+              ]
+            },
+            {
+              "metric": {
+                "exported_instance": "orbstack-client",
+                "exported_job": "edgelab",
+                "exported_role": "client",
+                "instance": "orbstack-client",
+                "job": "edgelab",
+                "role": "client"
+              },
+              "value": [
+                1789833217.196,
+                "23.19600009918213"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(edgelab_hub_cache_bytes{job=\"edgelab\"}) / clamp_min(sum(edgelab_hub_cache_capacity_bytes{job=\"edgelab\"}),1)",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.299,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(rate(edgelab_hub_cache_hits_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.421,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 8,
+          "query": "sum(rate(edgelab_hub_disk_reads_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.523,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 9,
+          "query": "sum by (instance,kind) (rate(edgelab_client_requests_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "instance": "orbstack-client",
+                "kind": "chunk"
+              },
+              "value": [
+                1789833217.626,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "instance": "orbstack-client",
+                "kind": "metadata"
+              },
+              "value": [
+                1789833217.626,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 9,
+          "query": "sum(rate(edgelab_client_retries_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.774,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": 10,
+          "query": "sum by (kind) (rate(edgelab_hub_response_body_bytes_total{job=\"edgelab\"}[1m]))",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {
+                "kind": "chunk"
+              },
+              "value": [
+                1789833217.884,
+                "0"
+              ]
+            },
+            {
+              "metric": {
+                "kind": "metadata"
+              },
+              "value": [
+                1789833217.884,
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "panel_id": "series-budget",
+          "query": "count({job=\"edgelab\"})",
+          "http": 200,
+          "status": "success",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1789833217.984,
+                "38"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

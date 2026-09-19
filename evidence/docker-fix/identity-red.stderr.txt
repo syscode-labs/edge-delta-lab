@@ -1,0 +1,21 @@
+docker_identity_test (unittest.loader._FailedTest.docker_identity_test) ... ERROR
+
+======================================================================
+ERROR: docker_identity_test (unittest.loader._FailedTest.docker_identity_test)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: docker_identity_test
+Traceback (most recent call last):
+  File "$HOME/.local/share/mise/installs/python/3.11.15/lib/python3.11/unittest/loader.py", line 419, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$HOME/.local/share/mise/installs/python/3.11.15/lib/python3.11/unittest/loader.py", line 362, in _get_module_from_name
+    __import__(name)
+  File "$REPO/scripts/docker_identity_test.py", line 15, in <module>
+    from docker_identity import normalize_image
+ModuleNotFoundError: No module named 'docker_identity'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

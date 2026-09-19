@@ -1,0 +1,109 @@
+{"event":"plan","missing_chunks":91,"missing_raw_bytes":6779315,"release":"app-b-v1","reused_chunks":148,"time":"2026-09-18T18:33:13.752932Z","unique_chunks":239}
+{"attempt":1,"delay_ms":92,"error":"unexpected EOF","event":"retry","object":"0cfdf6ac81dba49a366f89f25ce94ba1d03cade880f45ebf83fb889da535858f","time":"2026-09-18T18:33:13.834382Z"}
+{"chunk":"1b1f38d7d4a4e4f99ce50914363af185a805b1d52708b755613fe5672b79b9ac","encoded_bytes":50926,"event":"chunk_committed","raw_bytes":50898,"time":"2026-09-18T18:33:14.144251Z"}
+{"chunk":"0cfdf6ac81dba49a366f89f25ce94ba1d03cade880f45ebf83fb889da535858f","encoded_bytes":29599,"event":"chunk_committed","raw_bytes":29571,"time":"2026-09-18T18:33:14.189607Z"}
+{"chunk":"dd2e79747a9b7bddad60c3d7f4faa6a908c615e0d14835ac04a15844c4f9abef","encoded_bytes":77905,"event":"chunk_committed","raw_bytes":77872,"time":"2026-09-18T18:33:14.272333Z"}
+{"chunk":"9c19b99939d78789ebabd65fcc7755ec8fae9ce8b9cecc51d84c45ffbf86d866","encoded_bytes":29930,"event":"chunk_committed","raw_bytes":29902,"time":"2026-09-18T18:33:14.338504Z"}
+{"chunk":"dd3260524f82d6d55bbf4048e492cdf4122e8e4d53dd7b2e03901d2f7fd781f6","encoded_bytes":22831,"event":"chunk_committed","raw_bytes":22803,"time":"2026-09-18T18:33:14.402244Z"}
+{"chunk":"15668eaf874e9a681ecc55e082bb6ec22747aee7fe80599ef1dc6561014b8fa0","encoded_bytes":101536,"event":"chunk_committed","raw_bytes":101503,"time":"2026-09-18T18:33:14.42342Z"}
+{"attempt":1,"delay_ms":103,"error":"unexpected EOF","event":"retry","object":"9d9d64e2eae5f6d863b5bd5fa0519619329d4beb68d87e56e61fb1dd88c04c8b","time":"2026-09-18T18:33:14.454451Z"}
+{"chunk":"cc31f32018de380733d7d66418b3ceabeb1f05632ce1d10fc2a578ea99364b89","encoded_bytes":37786,"event":"chunk_committed","raw_bytes":37758,"time":"2026-09-18T18:33:14.531404Z"}
+{"chunk":"076343795d35d0d615444e306679929c3f46fba7617e75acfca4bc50f2c3316c","encoded_bytes":18876,"event":"chunk_committed","raw_bytes":18848,"time":"2026-09-18T18:33:14.552344Z"}
+{"chunk":"614f059fe5bb9a79662729a12422374519f606b701f2c93b4d5c2d84065b258a","encoded_bytes":41800,"event":"chunk_committed","raw_bytes":41772,"time":"2026-09-18T18:33:14.595266Z"}
+{"chunk":"8487688260d4f7a3cf0b2df61af286bf2b0a774e72f31ea534cc8244407d8e03","encoded_bytes":44995,"event":"chunk_committed","raw_bytes":44967,"time":"2026-09-18T18:33:14.805338Z"}
+{"chunk":"4eae0b7c7f01f9bf3e77127c74e205bd1e50a1218a40fbb20375e3d4dc628025","encoded_bytes":51258,"event":"chunk_committed","raw_bytes":51230,"time":"2026-09-18T18:33:15.217311Z"}
+{"chunk":"ce42172c19252894dae5ddd5279a648b4933af0b8cfa4caf2f9977c216ece877","encoded_bytes":91224,"event":"chunk_committed","raw_bytes":91191,"time":"2026-09-18T18:33:15.26062Z"}
+{"attempt":1,"delay_ms":110,"error":"unexpected EOF","event":"retry","object":"dbba906ade85f6ddfdbe3e907aa2a067961de5f8d4d7dd18491762c212cb8de0","time":"2026-09-18T18:33:15.320046Z"}
+{"chunk":"9d9d64e2eae5f6d863b5bd5fa0519619329d4beb68d87e56e61fb1dd88c04c8b","encoded_bytes":134444,"event":"chunk_committed","raw_bytes":134406,"time":"2026-09-18T18:33:15.368175Z"}
+{"chunk":"7017019e85848c625b27003cdf1ac558eed10ccadc49cdfeca8d6d2b5a134c12","encoded_bytes":47292,"event":"chunk_committed","raw_bytes":47264,"time":"2026-09-18T18:33:15.534766Z"}
+{"chunk":"45c9cc027cfda5374c52286cd914b27af14beeef274478010819fa565230e069","encoded_bytes":178658,"event":"chunk_committed","raw_bytes":178620,"time":"2026-09-18T18:33:15.558757Z"}
+{"chunk":"dbba906ade85f6ddfdbe3e907aa2a067961de5f8d4d7dd18491762c212cb8de0","encoded_bytes":38118,"event":"chunk_committed","raw_bytes":38090,"time":"2026-09-18T18:33:15.655457Z"}
+{"chunk":"4ee2f4783ded103c0614c6ccbf5ea011ed10d3e004e5cab6a6fd19e3ad81e018","encoded_bytes":74260,"event":"chunk_committed","raw_bytes":74227,"time":"2026-09-18T18:33:15.767534Z"}
+{"chunk":"4f8b2ac1d891a24abe21a6466833c80f4879d86afac6621eda60dfb95e5fb770","encoded_bytes":94084,"event":"chunk_committed","raw_bytes":94051,"time":"2026-09-18T18:33:16.165837Z"}
+{"attempt":1,"delay_ms":89,"error":"unexpected EOF","event":"retry","object":"4b7e47b62d07260c32f3cd7f6c908ab5d77ae603914a54442403eb6c00ab6c1e","time":"2026-09-18T18:33:16.227102Z"}
+{"chunk":"1f027aa17898d2f4e516561294e4a9119bc58a14ce2e90442d83d5db4276e645","encoded_bytes":134187,"event":"chunk_committed","raw_bytes":134149,"time":"2026-09-18T18:33:16.369715Z"}
+{"chunk":"4b7e47b62d07260c32f3cd7f6c908ab5d77ae603914a54442403eb6c00ab6c1e","encoded_bytes":16480,"event":"chunk_committed","raw_bytes":16452,"time":"2026-09-18T18:33:16.52931Z"}
+{"chunk":"362a0508dc7b1db2ad7f40361e0305c89ebe2d56c3553cec9b33556dc3c03b48","encoded_bytes":120376,"event":"chunk_committed","raw_bytes":120343,"time":"2026-09-18T18:33:16.631077Z"}
+{"chunk":"6fe3a78fca614e84aec5fc4dd5b4a03d968a8625cb83cdd2267e713cbed63277","encoded_bytes":23787,"event":"chunk_committed","raw_bytes":23759,"time":"2026-09-18T18:33:16.652176Z"}
+{"chunk":"e03cd50b021b829f7fc5c0bf43bbeb549cbf70ca295617190d38f214bfe7f684","encoded_bytes":140083,"event":"chunk_committed","raw_bytes":140045,"time":"2026-09-18T18:33:16.732126Z"}
+{"chunk":"99a21bf80abf6f73fe90870d1fd6889c9f53e41eb2088ad6c3faf1852d9e5543","encoded_bytes":64095,"event":"chunk_committed","raw_bytes":64067,"time":"2026-09-18T18:33:16.754032Z"}
+{"attempt":1,"delay_ms":82,"error":"unexpected EOF","event":"retry","object":"bd9e6360119403ba3208eb308b57347d9c67fcfe741ac5ccea42f8b002f7cb44","time":"2026-09-18T18:33:16.805227Z"}
+{"chunk":"a15642fa21aa8e8d390c9f286c50326da1ae8330cb6ee55412642190a1dcae8b","encoded_bytes":36664,"event":"chunk_committed","raw_bytes":36636,"time":"2026-09-18T18:33:16.859261Z"}
+{"chunk":"48da389549859638e0eb725d10e90afe788cde6389865f216989ac15b516c899","encoded_bytes":45716,"event":"chunk_committed","raw_bytes":45688,"time":"2026-09-18T18:33:16.996081Z"}
+{"chunk":"5d8f804ef4b0ea513435f49468cc4f96ff2ba57d43232fd8f22526f735bc2d99","encoded_bytes":87876,"event":"chunk_committed","raw_bytes":87843,"time":"2026-09-18T18:33:17.048981Z"}
+{"chunk":"5ba3c0d816848127b6b2d78d8eaa573260de0b21a7f24e509482a8f3c283a2e7","encoded_bytes":45638,"event":"chunk_committed","raw_bytes":45610,"time":"2026-09-18T18:33:17.136225Z"}
+{"chunk":"d7b1f15d6f8301e8439c1deade8f3d8a76a51bae12e7db60c37fb9383fc35a09","encoded_bytes":31174,"event":"chunk_committed","raw_bytes":31146,"time":"2026-09-18T18:33:17.276268Z"}
+{"chunk":"a970d0a7c20d3c88b1a3a39110b1aec5ddb799a68b095a54a49d43aa25eb46ad","encoded_bytes":24215,"event":"chunk_committed","raw_bytes":24187,"time":"2026-09-18T18:33:17.298289Z"}
+{"attempt":1,"delay_ms":107,"error":"unexpected EOF","event":"retry","object":"da92958d3e23b9d3557f2c7a5aa4d80465599cb8cb91396b1b46b9fed5900a5e","time":"2026-09-18T18:33:17.352094Z"}
+{"chunk":"b55b58cceba9db5c60db44ffb1dd1b94bf7879a9aaee60f6ef957971ed5a5b51","encoded_bytes":54576,"event":"chunk_committed","raw_bytes":54548,"time":"2026-09-18T18:33:17.432068Z"}
+{"chunk":"9b20b0a024c75214ef75f130d2a6a794c4bdf68c6449fc2b726d97bef2bd1292","encoded_bytes":29735,"event":"chunk_committed","raw_bytes":29707,"time":"2026-09-18T18:33:17.696891Z"}
+{"chunk":"75f9545cf445bc405ebf752560eccc409a73149bb53a7904be8b8b108b7ed692","encoded_bytes":16673,"event":"chunk_committed","raw_bytes":16645,"time":"2026-09-18T18:33:17.897627Z"}
+{"chunk":"bd9e6360119403ba3208eb308b57347d9c67fcfe741ac5ccea42f8b002f7cb44","encoded_bytes":225866,"event":"chunk_committed","raw_bytes":225823,"time":"2026-09-18T18:33:18.092317Z"}
+{"chunk":"33dc244df9598d7090592c5f55dba0b947dd9b4806ba3763ae520629021fa582","encoded_bytes":151484,"event":"chunk_committed","raw_bytes":151446,"time":"2026-09-18T18:33:18.148212Z"}
+{"chunk":"3641ab1cdbf226557a73a02ae5dde581fb524ec558920832613e547882cbd657","encoded_bytes":30542,"event":"chunk_committed","raw_bytes":30514,"time":"2026-09-18T18:33:18.328403Z"}
+{"attempt":1,"delay_ms":103,"error":"unexpected EOF","event":"retry","object":"e5ba7639cea32cbbe6c40bbd4beafcc6b333d1d78855490dac86256d8b069904","time":"2026-09-18T18:33:18.370238Z"}
+{"chunk":"da92958d3e23b9d3557f2c7a5aa4d80465599cb8cb91396b1b46b9fed5900a5e","encoded_bytes":143764,"event":"chunk_committed","raw_bytes":143726,"time":"2026-09-18T18:33:18.371765Z"}
+{"chunk":"cc2cb652a7043405068fcd36b576e8408fd8edd291925bca024ee048362e7441","encoded_bytes":90294,"event":"chunk_committed","raw_bytes":90261,"time":"2026-09-18T18:33:18.440244Z"}
+{"chunk":"c194ea0b0c07640e44a61a5c5af5f21b6ad459af99b2035edd9fa38f7f58bfe0","encoded_bytes":19313,"event":"chunk_committed","raw_bytes":19285,"time":"2026-09-18T18:33:18.495316Z"}
+{"chunk":"4930a05f27dadfb0dbc3e9ca1beb6752200c20a87761b3ed79fad884223ad20f","encoded_bytes":89924,"event":"chunk_committed","raw_bytes":89891,"time":"2026-09-18T18:33:19.00882Z"}
+{"chunk":"e5ba7639cea32cbbe6c40bbd4beafcc6b333d1d78855490dac86256d8b069904","encoded_bytes":87581,"event":"chunk_committed","raw_bytes":87548,"time":"2026-09-18T18:33:19.069874Z"}
+{"chunk":"1d7979b695b9c0572ea94060417a6817ff24ffc26dc0261fbb353cb3f96b4a41","encoded_bytes":183744,"event":"chunk_committed","raw_bytes":183706,"time":"2026-09-18T18:33:19.178734Z"}
+{"attempt":1,"delay_ms":124,"error":"unexpected EOF","event":"retry","object":"45403f6c86430fcd4012ddbbb8627a5cc207779c14e1f934431992ab2ea51b14","time":"2026-09-18T18:33:19.239514Z"}
+{"chunk":"8c7565f3908736aef11b4a03b62a58a0ec0001f35d84ddfc1347332e6babbed0","encoded_bytes":135359,"event":"chunk_committed","raw_bytes":135321,"time":"2026-09-18T18:33:19.367956Z"}
+{"chunk":"9c67babeea8ebf7cea603fbd61ef501a9079afd91ad2a20cce10925724601e93","encoded_bytes":83350,"event":"chunk_committed","raw_bytes":83317,"time":"2026-09-18T18:33:19.476672Z"}
+{"chunk":"1333f6e2775356430c72f5d577f8a64b484ca3e2dbc7c92d61028eb1406475e5","encoded_bytes":75610,"event":"chunk_committed","raw_bytes":75577,"time":"2026-09-18T18:33:19.51971Z"}
+{"chunk":"8a60dff23fd1a2084a4f7efbaa2d42fe9bdb2f4b9edef5e3916be3d9ea468fe2","encoded_bytes":41575,"event":"chunk_committed","raw_bytes":41547,"time":"2026-09-18T18:33:19.809849Z"}
+{"chunk":"3be43141aef36585fb4e90fdbd1620fb8ee7ffe730f9fd7027f026da7db0b9b6","encoded_bytes":91744,"event":"chunk_committed","raw_bytes":91711,"time":"2026-09-18T18:33:19.931035Z"}
+{"chunk":"99e17a15e9ae654f789ba8c5e709876cebfcb899e91529b8acc0461122948aee","encoded_bytes":36535,"event":"chunk_committed","raw_bytes":36507,"time":"2026-09-18T18:33:20.239376Z"}
+{"attempt":1,"delay_ms":98,"error":"unexpected EOF","event":"retry","object":"41c379edef4e00f663eb283680aa73763d76cf3f4b93355aa32922f751c4ef73","time":"2026-09-18T18:33:20.298774Z"}
+{"chunk":"66bf945a298fdc09b5ed662b75b9f3057f0ba9158c107c06a3f35c1b03e0b96f","encoded_bytes":116242,"event":"chunk_committed","raw_bytes":116209,"time":"2026-09-18T18:33:20.305347Z"}
+{"chunk":"45403f6c86430fcd4012ddbbb8627a5cc207779c14e1f934431992ab2ea51b14","encoded_bytes":162082,"event":"chunk_committed","raw_bytes":162044,"time":"2026-09-18T18:33:20.348321Z"}
+{"chunk":"73333285ad059a8d14c667f9e06970970a2f20ad4c704dbc5cdffdbe098555db","encoded_bytes":23070,"event":"chunk_committed","raw_bytes":23042,"time":"2026-09-18T18:33:20.444249Z"}
+{"chunk":"556c7c575523d247c0203072c554af78c1a1c4c0fb8fc9c9e4abe1382fe8bad5","encoded_bytes":17609,"event":"chunk_committed","raw_bytes":17581,"time":"2026-09-18T18:33:20.499039Z"}
+{"chunk":"9d77706f93943559208ed22365ec2ab3b4ef8106defc890ca1836eac98eb7e3a","encoded_bytes":148890,"event":"chunk_committed","raw_bytes":148852,"time":"2026-09-18T18:33:20.542511Z"}
+{"chunk":"228fa5d2dd1c2135622e9f70ab32075db7c2cc95119c2a5c6a845d50f305be8a","encoded_bytes":35426,"event":"chunk_committed","raw_bytes":35398,"time":"2026-09-18T18:33:20.869818Z"}
+{"attempt":1,"delay_ms":111,"error":"unexpected EOF","event":"retry","object":"f0eada95afdc49cba0d953036fafd132349698848810eb17b31325d6474592d6","time":"2026-09-18T18:33:20.922891Z"}
+{"chunk":"f72a9690e3c712d4975ea6486a5bfd3c0ce6bb13944c257d219688724c22bc62","encoded_bytes":98667,"event":"chunk_committed","raw_bytes":98634,"time":"2026-09-18T18:33:21.023145Z"}
+{"chunk":"41c379edef4e00f663eb283680aa73763d76cf3f4b93355aa32922f751c4ef73","encoded_bytes":108534,"event":"chunk_committed","raw_bytes":108501,"time":"2026-09-18T18:33:21.102827Z"}
+{"chunk":"057fed4ec1e5f582036d9d0f4ff2422066575bd8a606a659969c786e41035297","encoded_bytes":98662,"event":"chunk_committed","raw_bytes":98629,"time":"2026-09-18T18:33:21.166937Z"}
+{"chunk":"e2a8117234ad3017eb04193c03900e078ff12270840b544b6102248ae0f5d047","encoded_bytes":24687,"event":"chunk_committed","raw_bytes":24659,"time":"2026-09-18T18:33:21.230938Z"}
+{"chunk":"f0eada95afdc49cba0d953036fafd132349698848810eb17b31325d6474592d6","encoded_bytes":19364,"event":"chunk_committed","raw_bytes":19336,"time":"2026-09-18T18:33:21.25208Z"}
+{"chunk":"03357c4888d9fbcf0ea7f15ccda7bba5dfc699a0ce959af9baa24273d92aa0c5","encoded_bytes":17188,"event":"chunk_committed","raw_bytes":17160,"time":"2026-09-18T18:33:21.296933Z"}
+{"attempt":1,"delay_ms":105,"error":"unexpected EOF","event":"retry","object":"1cc0aa947beed431df47929fd42b27f66209f2d84c8b454f9f9cf5aa71b7fa48","time":"2026-09-18T18:33:21.358644Z"}
+{"chunk":"54ccd4d2c3b80df05dd76c6b2f650d525dee0349f27a2e1b0bc7032c3fe23c00","encoded_bytes":27471,"event":"chunk_committed","raw_bytes":27443,"time":"2026-09-18T18:33:21.482329Z"}
+{"chunk":"4217db385245353112e209c582eb0dab444a5d946e480803d2bc48fde0bd866c","encoded_bytes":68499,"event":"chunk_committed","raw_bytes":68466,"time":"2026-09-18T18:33:21.611302Z"}
+{"chunk":"1357928b0c2cb8f3d2df135fd9bcd76669bff04376f2f45c7d871df6b0eb4724","encoded_bytes":132550,"event":"chunk_committed","raw_bytes":132512,"time":"2026-09-18T18:33:21.654648Z"}
+{"chunk":"1cc0aa947beed431df47929fd42b27f66209f2d84c8b454f9f9cf5aa71b7fa48","encoded_bytes":43456,"event":"chunk_committed","raw_bytes":43428,"time":"2026-09-18T18:33:21.720676Z"}
+{"chunk":"8f9f34bec3b046ba8d368c6dcc1b07f0048dd34270e224c35de47bf4891a4192","encoded_bytes":46883,"event":"chunk_committed","raw_bytes":46855,"time":"2026-09-18T18:33:21.764935Z"}
+{"chunk":"b9db4395d29836a5efbdf15c0ec4855829045ac696eb20fe727f0c1010f9532c","encoded_bytes":32812,"event":"chunk_committed","raw_bytes":32784,"time":"2026-09-18T18:33:21.913043Z"}
+{"attempt":1,"delay_ms":99,"error":"unexpected EOF","event":"retry","object":"8982152b429004c437c4fe8876066515d5a16e61e8592a21d3f3c1b5d1acf015","time":"2026-09-18T18:33:21.968077Z"}
+{"chunk":"c985bf4eba31fb060f855547fe6a04d23147ef5f594d49dc87f284fa4cae61b2","encoded_bytes":28151,"event":"chunk_committed","raw_bytes":28123,"time":"2026-09-18T18:33:21.984057Z"}
+{"chunk":"23e8d204c343d15baba52fb16b7c3c7d16e5f2035e998c69d9d9dffd1c5f7fef","encoded_bytes":97777,"event":"chunk_committed","raw_bytes":97744,"time":"2026-09-18T18:33:22.126075Z"}
+{"chunk":"f73e438f85426c78fde1ffeb09814187a76d1901a8090f137fe489188535ed63","encoded_bytes":108416,"event":"chunk_committed","raw_bytes":108383,"time":"2026-09-18T18:33:22.342493Z"}
+{"chunk":"30d5e2d80032dd50e1aa2f621a574cd6451f12cfa6e84e0600a11bde440ddc15","encoded_bytes":89056,"event":"chunk_committed","raw_bytes":89023,"time":"2026-09-18T18:33:22.512868Z"}
+{"chunk":"5abef5fcd53b19b0f3ab2366c1e82b58f4e7a2faade7c7c684970a21d4b9861f","encoded_bytes":71216,"event":"chunk_committed","raw_bytes":71183,"time":"2026-09-18T18:33:22.621798Z"}
+{"chunk":"b1867bbf61f0b7ca9f327509ef1b532b3dab526a82c9bd7d44ee80432e5d2455","encoded_bytes":34587,"event":"chunk_committed","raw_bytes":34559,"time":"2026-09-18T18:33:22.66612Z"}
+{"chunk":"8982152b429004c437c4fe8876066515d5a16e61e8592a21d3f3c1b5d1acf015","encoded_bytes":108545,"event":"chunk_committed","raw_bytes":108512,"time":"2026-09-18T18:33:22.710892Z"}
+{"attempt":1,"delay_ms":121,"error":"unexpected EOF","event":"retry","object":"fd9af5bdc8da0575dffa38db704f99b3a2667a55da4421f3d1f07a4ad7fbd5cd","time":"2026-09-18T18:33:22.711199Z"}
+{"chunk":"e9ac1141f8554e3fe75fc2ecb317ba7160da890d10f86b728068c7a81d80ffbc","encoded_bytes":45659,"event":"chunk_committed","raw_bytes":45631,"time":"2026-09-18T18:33:22.778796Z"}
+{"chunk":"fd9af5bdc8da0575dffa38db704f99b3a2667a55da4421f3d1f07a4ad7fbd5cd","encoded_bytes":16733,"event":"chunk_committed","raw_bytes":16705,"time":"2026-09-18T18:33:23.055493Z"}
+{"chunk":"c748de3c3432d0f7565840a4d8dd6d4a0ee0104c5973a56fd0672b4c48822495","encoded_bytes":80701,"event":"chunk_committed","raw_bytes":80668,"time":"2026-09-18T18:33:23.121902Z"}
+{"chunk":"c5cd0914d03e2c50d1797125dc0752812c5f0960935140b87076e77229cbb584","encoded_bytes":111073,"event":"chunk_committed","raw_bytes":111040,"time":"2026-09-18T18:33:23.181707Z"}
+{"chunk":"01b8dd12e2d0fedd3c85d4479df976352f4e93431d7ae7f302defbb667fe3680","encoded_bytes":75730,"event":"chunk_committed","raw_bytes":75697,"time":"2026-09-18T18:33:23.234268Z"}
+{"attempt":1,"delay_ms":102,"error":"unexpected EOF","event":"retry","object":"be99c15aad5219c164a66bfe30335b071eff898ac2be04bfd29caf29a2aae1d1","time":"2026-09-18T18:33:23.297193Z"}
+{"chunk":"850a04d60b62fc2558d5f66ef59f91d5132bdf92bac3172ecedc03b7e8f6129d","encoded_bytes":41116,"event":"chunk_committed","raw_bytes":41088,"time":"2026-09-18T18:33:23.474718Z"}
+{"chunk":"c170fc7d718a43d0f7d4d3025452939ca6d02db818c1fd160d115315760e9978","encoded_bytes":96382,"event":"chunk_committed","raw_bytes":96349,"time":"2026-09-18T18:33:23.699046Z"}
+{"chunk":"0483740be2f87b9d0ac5d5ea9aef108c227f45581a1d0cf1ce1a68347d0448fb","encoded_bytes":105081,"event":"chunk_committed","raw_bytes":105048,"time":"2026-09-18T18:33:23.720226Z"}
+{"chunk":"eacff4d2ae51167448f5d779eb3623adb2bdad8bc9265c68c40af5e5f83fea00","encoded_bytes":81213,"event":"chunk_committed","raw_bytes":81180,"time":"2026-09-18T18:33:23.942553Z"}
+{"chunk":"1c8facccca9a9226cbc6b1063ac35b46a09a9d3907cd3a94714055909edaf4a7","encoded_bytes":94911,"event":"chunk_committed","raw_bytes":94878,"time":"2026-09-18T18:33:24.338493Z"}
+{"chunk":"83b149f1a0a06f03dc941e92dceaf4aac13efb7b09b16aea0fa0d4b85d8d60cd","encoded_bytes":91970,"event":"chunk_committed","raw_bytes":91937,"time":"2026-09-18T18:33:24.382609Z"}
+{"chunk":"be99c15aad5219c164a66bfe30335b071eff898ac2be04bfd29caf29a2aae1d1","encoded_bytes":167847,"event":"chunk_committed","raw_bytes":167809,"time":"2026-09-18T18:33:24.428174Z"}
+{"attempt":1,"delay_ms":100,"error":"unexpected EOF","event":"retry","object":"92f8bc5ee99dfad2fc4668c879cdb87049dc570a96c6ed5e395dec6101d02204","time":"2026-09-18T18:33:24.434287Z"}
+{"chunk":"5968721566d899a9db304bf10891f11d6dd658c0064fb0b2da862e11cfcb5499","encoded_bytes":100319,"event":"chunk_committed","raw_bytes":100286,"time":"2026-09-18T18:33:24.544268Z"}
+{"chunk":"9841ee97664eac97e554d78a4c5b3fa71833abdd7e843958c24008c1611cfaed","encoded_bytes":34587,"event":"chunk_committed","raw_bytes":34559,"time":"2026-09-18T18:33:24.63731Z"}
+{"chunk":"92f8bc5ee99dfad2fc4668c879cdb87049dc570a96c6ed5e395dec6101d02204","encoded_bytes":19716,"event":"chunk_committed","raw_bytes":19688,"time":"2026-09-18T18:33:24.700563Z"}
+{"chunk":"000b036ec66b88e627566094f5480c7912b87ff0fdb0f73c3142cad00c4fe833","encoded_bytes":16177,"event":"chunk_committed","raw_bytes":25506,"time":"2026-09-18T18:33:24.767727Z"}
+{"chunk":"7b9097dbc4fdf3be242e5454c9b5cfbb8ecdef2411bfb521bf5a173e6042e223","encoded_bytes":149719,"event":"chunk_committed","raw_bytes":149681,"time":"2026-09-18T18:33:24.954646Z"}
+{"chunk":"88de07fe49b7b07efa80f50c5de2d9f54fcdaefcedce2fb6e35a98219e73dffa","encoded_bytes":160565,"event":"chunk_committed","raw_bytes":160527,"time":"2026-09-18T18:33:25.077034Z"}
+Loaded image: edge-delta-demo-0a26878b3de0:app-b-v1
+{"artifact_sha256":"ed79247d3ae0ff934a938ad5ee5aefadb65282ed1d813f6e369eaf5f2eed195a","event":"release_ready","phase":"loaded","release":"app-b-v1","time":"2026-09-18T18:33:27.142371Z"}

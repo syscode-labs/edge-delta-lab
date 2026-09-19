@@ -1,0 +1,9 @@
+{"seq":1,"time":"2026-09-19T13:59:37.970332569Z","kind":"stats-snapshot","detail":"requests=41 chunk_requests=40 bytes=2865800"}
+{"seq":2,"time":"2026-09-19T13:59:47.970788589Z","kind":"stats-snapshot","detail":"requests=83 chunk_requests=82 bytes=6574560"}
+{"seq":3,"time":"2026-09-19T13:59:57.970849968Z","kind":"stats-snapshot","detail":"requests=125 chunk_requests=124 bytes=10194989"}
+{"seq":4,"time":"2026-09-19T14:00:07.97084899Z","kind":"stats-snapshot","detail":"requests=167 chunk_requests=166 bytes=13683021"}
+{"seq":5,"time":"2026-09-19T14:00:17.970913991Z","kind":"stats-snapshot","detail":"requests=203 chunk_requests=202 bytes=16791337"}
+{"seq":6,"time":"2026-09-19T14:00:18.221481572Z","kind":"hub-announce","detail":"kind=promote release=app-b-v1 sequence=2 file=desired.json cache_invalidated=1"}
+{"seq":7,"time":"2026-09-19T14:00:27.970818152Z","kind":"stats-snapshot","detail":"requests=245 chunk_requests=243 bytes=19976937"}
+{"seq":8,"time":"2026-09-19T14:00:37.970855298Z","kind":"stats-snapshot","detail":"requests=288 chunk_requests=286 bytes=23520532"}
+{"seq":9,"time":"2026-09-19T14:00:39.222780333Z","kind":"hub-announce","detail":"kind=promote release=app-a-v2 sequence=3 file=desired.json cache_invalidated=1"}

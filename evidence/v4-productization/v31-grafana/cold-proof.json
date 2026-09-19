@@ -1,0 +1,104 @@
+{
+  "observed_at": "2026-09-19T15:44:09.534768+00:00",
+  "phase": "cold",
+  "queries": {
+    "bytes": [
+      {
+        "metric": {
+          "__name__": "edgelab_client_last_sync_download_bytes",
+          "exported_instance": "orbstack-client",
+          "exported_job": "edgelab",
+          "exported_role": "client",
+          "instance": "orbstack-client",
+          "job": "edgelab",
+          "role": "client"
+        },
+        "value": [
+          1789832644.064,
+          "0"
+        ]
+      }
+    ],
+    "chunks": [
+      {
+        "metric": {
+          "__name__": "edgelab_client_last_sync_verified_chunks",
+          "exported_instance": "orbstack-client",
+          "exported_job": "edgelab",
+          "exported_role": "client",
+          "instance": "orbstack-client",
+          "job": "edgelab",
+          "role": "client"
+        },
+        "value": [
+          1789832644.164,
+          "0"
+        ]
+      }
+    ],
+    "reused": [
+      {
+        "metric": {
+          "__name__": "edgelab_client_last_sync_reused_chunks",
+          "exported_instance": "orbstack-client",
+          "exported_job": "edgelab",
+          "exported_role": "client",
+          "instance": "orbstack-client",
+          "job": "edgelab",
+          "role": "client"
+        },
+        "value": [
+          1789832644.274,
+          "202"
+        ]
+      }
+    ],
+    "integrity": [
+      {
+        "metric": {
+          "__name__": "edgelab_client_integrity_failures_total",
+          "exported_instance": "orbstack-client",
+          "exported_job": "edgelab",
+          "exported_role": "client",
+          "instance": "orbstack-client",
+          "job": "edgelab",
+          "role": "client"
+        },
+        "value": [
+          1789832644.37,
+          "0"
+        ]
+      }
+    ],
+    "sync": [],
+    "state": [
+      {
+        "metric": {
+          "__name__": "edgelab_client_state",
+          "exported_instance": "orbstack-client",
+          "exported_job": "edgelab",
+          "exported_role": "client",
+          "instance": "orbstack-client",
+          "job": "edgelab",
+          "role": "client",
+          "state": "loaded"
+        },
+        "value": [
+          1789832644.562,
+          "1"
+        ]
+      }
+    ],
+    "series": [
+      {
+        "metric": {},
+        "value": [
+          1789832644.667,
+          "38"
+        ]
+      }
+    ]
+  },
+  "poll_seconds": 301.5,
+  "post_completion_scrapes": 0
+}

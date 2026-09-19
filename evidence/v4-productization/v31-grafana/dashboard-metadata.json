@@ -1,0 +1,10 @@
+{
+  "observed_at": "2026-09-19T15:13:38.398265+00:00",
+  "dashboard_uid": "edgelab-delivery-cache",
+  "dashboard_url": "$REPO/docs/GRAFANA.md",
+  "source_of_truth": "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+  "panel_count": 10,
+  "title": "Edge Delta \u2014 Delivery and Cache",
+  "version": 2,
+  "datasource_uid": "grafanacloud-prom"
+}

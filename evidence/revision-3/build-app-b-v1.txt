@@ -1,0 +1,35 @@
+#0 building with "orbstack" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 184B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load build context
+#3 transferring context: 6.71MB 0.1s done
+#3 DONE 0.1s
+
+#4 [1/3] COPY probe /probe
+#4 DONE 0.1s
+
+#5 [2/3] COPY base.bin /base.bin
+#5 DONE 0.2s
+
+#6 [3/3] COPY payload.bin release.txt /
+#6 DONE 0.2s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 0.8s done
+#7 exporting manifest sha256:0d65c755e75aacb186c7855c0b95cadea565903fdc42bf9b1bd2fa9e9e44227e 0.0s done
+#7 exporting config sha256:a577540fee6b5ec5e92c1bd424de9d0a223b2721051af981a9f57882fd729672 0.0s done
+#7 exporting attestation manifest sha256:3bbfd158894c6740b91da04433df90c39576e1e7bce7d2d889aa86601da70784 0.1s done
+#7 exporting manifest list sha256:196c2e3cba998e9f3b3ade72f3228b3637e080072895804f49d0f27a8c53078d
+#7 exporting manifest list sha256:196c2e3cba998e9f3b3ade72f3228b3637e080072895804f49d0f27a8c53078d 0.0s done
+#7 naming to docker.io/library/edge-delta-demo-0a26878b3de0:app-b-v1 done
+#7 unpacking to docker.io/library/edge-delta-demo-0a26878b3de0:app-b-v1
+#7 unpacking to docker.io/library/edge-delta-demo-0a26878b3de0:app-b-v1 0.3s done
+#7 DONE 1.3s

@@ -1,0 +1,350 @@
+{
+  "observed_at": "2026-09-19T15:07:06.582146+00:00",
+  "dashboard_uid": "edgelab-delivery-cache",
+  "dashboard_url": "$REPO/docs/GRAFANA.md",
+  "datasource_uid": "grafanacloud-prom",
+  "queries": [
+    {
+      "panel_id": 1,
+      "query": "min(edgelab_source_up{job=\"edgelab\"})",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830424.575,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 2,
+      "query": "time() - edgelab_snapshot_last_success_timestamp_seconds{job=\"edgelab\"}",
+      "http": 200,
+      "status": "success",
+      "result_count": 2,
+      "result": [
+        {
+          "metric": {
+            "exported_instance": "remote-linux-host",
+            "exported_job": "edgelab",
+            "exported_role": "hub",
+            "instance": "remote-linux-host",
+            "job": "edgelab",
+            "role": "hub"
+          },
+          "value": [
+            1789830424.689,
+            "16.168999910354614"
+          ]
+        },
+        {
+          "metric": {
+            "exported_instance": "orbstack-client",
+            "exported_job": "edgelab",
+            "exported_role": "client",
+            "instance": "orbstack-client",
+            "job": "edgelab",
+            "role": "client"
+          },
+          "value": [
+            1789830424.689,
+            "18.05299997329712"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 3,
+      "query": "sum by (instance,kind) (rate(edgelab_hub_response_body_bytes_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 2,
+      "result": [
+        {
+          "metric": {
+            "instance": "remote-linux-host",
+            "kind": "metadata"
+          },
+          "value": [
+            1789830424.791,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "remote-linux-host",
+            "kind": "chunk"
+          },
+          "value": [
+            1789830424.791,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 3,
+      "query": "sum by (instance,kind) (rate(edgelab_client_response_body_bytes_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 2,
+      "result": [
+        {
+          "metric": {
+            "instance": "orbstack-client",
+            "kind": "chunk"
+          },
+          "value": [
+            1789830424.936,
+            "0"
+          ]
+        },
+        {
+          "metric": {
+            "instance": "orbstack-client",
+            "kind": "metadata"
+          },
+          "value": [
+            1789830424.936,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 4,
+      "query": "sum by (instance) (rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {
+            "instance": "orbstack-client"
+          },
+          "value": [
+            1789830425.051,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 5,
+      "query": "sum by (instance) (rate(edgelab_client_verified_download_bytes_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {
+            "instance": "orbstack-client"
+          },
+          "value": [
+            1789830425.197,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 5,
+      "query": "sum by (instance) (rate(edgelab_client_response_body_bytes_total{job=\"edgelab\",kind=\"chunk\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {
+            "instance": "orbstack-client"
+          },
+          "value": [
+            1789830425.311,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 6,
+      "query": "sum(edgelab_client_integrity_failures_total{job=\"edgelab\"})",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830425.451,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 7,
+      "query": "edgelab_client_state{job=\"edgelab\"}",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {
+            "__name__": "edgelab_client_state",
+            "exported_instance": "orbstack-client",
+            "exported_job": "edgelab",
+            "exported_role": "client",
+            "instance": "orbstack-client",
+            "job": "edgelab",
+            "role": "client",
+            "state": "loaded"
+          },
+          "value": [
+            1789830425.564,
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 7,
+      "query": "edgelab_client_sync_active{job=\"edgelab\"}",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {
+            "__name__": "edgelab_client_sync_active",
+            "exported_instance": "orbstack-client",
+            "exported_job": "edgelab",
+            "exported_role": "client",
+            "instance": "orbstack-client",
+            "job": "edgelab",
+            "role": "client"
+          },
+          "value": [
+            1789830425.703,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 8,
+      "query": "sum(edgelab_hub_cache_bytes{job=\"edgelab\"}) / clamp_min(sum(edgelab_hub_cache_capacity_bytes{job=\"edgelab\"}),1)",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830425.802,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 9,
+      "query": "sum(rate(edgelab_hub_cache_hits_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.061,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 9,
+      "query": "sum(rate(edgelab_hub_disk_reads_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.234,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 9,
+      "query": "sum(rate(edgelab_hub_coalesced_requests_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.395,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 9,
+      "query": "sum(rate(edgelab_hub_cache_evictions_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.5,
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": 10,
+      "query": "sum by (result) (rate(edgelab_client_syncs_total{job=\"edgelab\"}[5m]))",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.603,
+            "0.4876019766081871"
+          ]
+        }
+      ]
+    },
+    {
+      "panel_id": "series-budget",
+      "query": "count({job=\"edgelab\"})",
+      "http": 200,
+      "status": "success",
+      "result_count": 1,
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1789830426.718,
+            "41"
+          ]
+        }
+      ]
+    }
+  ]
+}

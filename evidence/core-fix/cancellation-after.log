@@ -1,0 +1,11 @@
+=== RUN   TestCancellationPreservesCompletedChunks
+    lab_test.go:311: canceled after durable chunk 073d460c8a61426d9a74edc26b1c02471111e7d5738daea85ac6b468a62ce3a9: validated 1/57 chunks
+--- PASS: TestCancellationPreservesCompletedChunks (8.62s)
+=== RUN   TestCancellationPreservesCompletedChunks
+    lab_test.go:311: canceled after durable chunk 073d460c8a61426d9a74edc26b1c02471111e7d5738daea85ac6b468a62ce3a9: validated 1/57 chunks
+--- PASS: TestCancellationPreservesCompletedChunks (8.81s)
+=== RUN   TestCancellationPreservesCompletedChunks
+    lab_test.go:311: canceled after durable chunk 073d460c8a61426d9a74edc26b1c02471111e7d5738daea85ac6b468a62ce3a9: validated 1/57 chunks
+--- PASS: TestCancellationPreservesCompletedChunks (8.77s)
+PASS
+ok  	example.com/edge-delta-lab/internal/lab	26.883s

@@ -1,0 +1,51 @@
+{
+  "status": "PASS_LOCAL_LINUX_VM_ONLY",
+  "idle_seconds": 600.4866056150058,
+  "idle_body_kib_per_device_hour": {
+    "push-1": 0.0,
+    "push-2": 0.0,
+    "push-3": 0.0,
+    "poll-1": 0.0
+  },
+  "link": [
+    {
+      "release": "app-a-v1",
+      "chunk_bytes": 16791337,
+      "metadata_bytes": 53581,
+      "seconds": 48.43623711398686,
+      "baseline_chunk_bytes": 17072868,
+      "baseline_difference_percent": -1.6489965247783793,
+      "body_mbit_per_second": 2.7822009311513125
+    },
+    {
+      "release": "app-b-v1",
+      "chunk_bytes": 6729195,
+      "metadata_bytes": 54877,
+      "seconds": 20.10754098999314,
+      "baseline_chunk_bytes": 6819307,
+      "baseline_difference_percent": -1.3214245963702762,
+      "body_mbit_per_second": 2.6991155222316676
+    },
+    {
+      "release": "app-a-v2",
+      "chunk_bytes": 249778,
+      "metadata_bytes": 53581,
+      "seconds": 1.855158348014811,
+      "baseline_chunk_bytes": 249778,
+      "baseline_difference_percent": 0.0,
+      "body_mbit_per_second": 1.3081751229467689
+    }
+  ],
+  "soak_seconds": 206.5731343429943,
+  "observed_retry_events": 39,
+  "max_retry_attempt": 10,
+  "max_retry_delay_ms": 5000,
+  "verified_committed_counts_at_outage": [
+    3,
+    12
+  ],
+  "theoretical_1gib_seconds_at_5mbit_no_overhead": 1717.9869184,
+  "standalone_linux": "NOT RUN",
+  "tailscale_overhead": "NOT RUN",
+  "mock_alert_delivery_during_soak": "NOT RUN"
+}

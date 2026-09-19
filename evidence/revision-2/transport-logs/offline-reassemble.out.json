@@ -1,0 +1,22 @@
+{
+  "release": "app-a-v3",
+  "sequence": 4,
+  "phase": "staged",
+  "artifact": "/mnt/data/edge-delta-lab/work/revision-2-run/edge/staged/47f01c33c6261a87f3e83892f246b525ccd798d90e0788f01b4778c5a3ede11c.tar",
+  "artifact_sha256": "47f01c33c6261a87f3e83892f246b525ccd798d90e0788f01b4778c5a3ede11c",
+  "artifact_bytes": 16788992,
+  "unique_chunks": 202,
+  "reused_chunks": 202,
+  "reused_raw_bytes": 16788992,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 0,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.049904362
+}

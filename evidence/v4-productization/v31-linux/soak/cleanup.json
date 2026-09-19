@@ -1,0 +1,5 @@
+{
+  "daemon_children_reaped": true,
+  "temporary_workdir_removed": true,
+  "qdisc": "qdisc noqueue 0: root refcnt 2 \n"
+}

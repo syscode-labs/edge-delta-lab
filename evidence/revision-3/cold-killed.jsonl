@@ -1,0 +1,9 @@
+{"attempt":1,"delay_ms":1000,"error":"HTTP 503 from http://127.0.0.1:61619/releases/app-a-v1.json","event":"retry","object":"manifest","time":"2026-09-18T18:32:36.443224Z"}
+{"event":"plan","missing_chunks":233,"missing_raw_bytes":19855360,"release":"app-a-v1","reused_chunks":0,"time":"2026-09-18T18:32:37.67577Z","unique_chunks":233}
+{"chunk":"4fca2cd4f5fd9b09df00814a00cfc7cced328b5787aef9b369abdb8fb680e29d","event":"integrity_failure","time":"2026-09-18T18:32:37.840802Z"}
+{"attempt":1,"delay_ms":91,"error":"encoded chunk integrity failure","event":"retry","object":"4fca2cd4f5fd9b09df00814a00cfc7cced328b5787aef9b369abdb8fb680e29d","time":"2026-09-18T18:32:37.840893Z"}
+{"chunk":"b4a73e23100a56abb6ad098d8d05175453cdc50a5f9f32235cc81df573d73e0d","encoded_bytes":52972,"event":"chunk_committed","raw_bytes":89931,"time":"2026-09-18T18:32:38.188138Z"}
+{"chunk":"4fca2cd4f5fd9b09df00814a00cfc7cced328b5787aef9b369abdb8fb680e29d","encoded_bytes":19016,"event":"chunk_committed","raw_bytes":37381,"time":"2026-09-18T18:32:38.209901Z"}
+{"attempt":1,"delay_ms":76,"error":"unexpected EOF","event":"retry","object":"49ae58a41612131776c009fb05cfdc101c66a05f08f07aabfd2eb20475d104b6","time":"2026-09-18T18:32:38.236668Z"}
+{"chunk":"8ad4417399151a23c622cf1daca2ab5658bc6dcdf734ab3e33fabcdf231f54ec","encoded_bytes":61802,"event":"chunk_committed","raw_bytes":111959,"time":"2026-09-18T18:32:38.252036Z"}
+{"chunk":"8e9a315a1745345af7d12fed4c6772049769a2b14af54d6588066244aa38a999","encoded_bytes":91627,"event":"chunk_committed","raw_bytes":161167,"time":"2026-09-18T18:32:38.374068Z"}

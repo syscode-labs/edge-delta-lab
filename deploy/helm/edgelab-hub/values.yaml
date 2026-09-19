@@ -1,0 +1,69 @@
+# Default values for the edgelab-hub chart.
+image:
+  repository: edge-delta-lab
+  tag: local
+  pullPolicy: IfNotPresent
+
+# Where the hub state lives: admin socket + durable event log (VOLUME /state).
+state:
+  size: 1Gi
+  storageClass: ""
+
+# The origin is mounted read-only; the hub never writes published bytes.
+origin:
+  size: 5Gi
+  storageClass: ""
+  # A real deployment populates the origin by running the publisher
+  # (`edgelab publish` / watch-registry) against this PVC or by syncing
+  # release objects into it. The chart mounts it read-only.
+
+service:
+  type: ClusterIP
+  port: 8080
+
+admin:
+  # Unix socket path UNDER /state (the state volume). Not network-exposed;
+  # operators reach it with kubectl exec + edgelab-tui --admin <path>.
+  socketPath: /state/admin.sock
+  eventLogPath: /state/events.jsonl
+  eventLogMib: 8
+
+notifiers:
+  # Credential values are read from a Secret, never from values directly.
+  # Create the secret first (see templates/NOTES.txt).
+  telegramTokenEnv: EDGELAB_TELEGRAM_TOKEN
+  telegramChatEnv: EDGELAB_TELEGRAM_CHAT
+  slackWebhookEnv: EDGELAB_SLACK_WEBHOOK
+  existingSecret: edgelab-notifiers
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 512Mi
+
+hub:
+  events: true      # expose /events websocket announce channel
+  cacheMib: 128     # hub object cache budget
+  rateKbit: 0       # 0 = unlimited
+
+exporter:
+  enabled: false
+  image:
+    repository: edge-delta-lab
+    tag: local
+    pullPolicy: IfNotPresent
+  port: 9108
+  instance: edgelab-hub
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podSecurityContext:
+  runAsNonRoot: true
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]

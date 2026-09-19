@@ -1,0 +1,10 @@
+=== RUN   TestTruncatedHTTPRetriesOnlyIncompleteChunks
+--- PASS: TestTruncatedHTTPRetriesOnlyIncompleteChunks (7.79s)
+=== RUN   TestCorruptResponseIsRetried
+--- PASS: TestCorruptResponseIsRetried (4.46s)
+=== RUN   TestSenderRetryBodyCountsActualPartialWrites
+--- PASS: TestSenderRetryBodyCountsActualPartialWrites (0.00s)
+=== RUN   TestSenderRetryBodyAfterBodylessFailure
+--- PASS: TestSenderRetryBodyAfterBodylessFailure (0.73s)
+PASS
+ok  	example.com/edge-delta-lab/internal/lab	13.674s

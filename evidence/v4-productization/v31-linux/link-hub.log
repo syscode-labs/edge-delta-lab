@@ -1,0 +1,5 @@
+hub mode: announces active; hub cache 128 MiB
+admin socket at /tmp/edgelab-v31-lnbtvztn/admin.sock (event log /tmp/results/link-hub-events.jsonl)
+origin listening at 127.0.0.1:18108
+{"component":"announce-trigger","detail":"kind=promote release=app-b-v1 sequence=2 file=desired.json cache_invalidated=1","event":"announce"}
+{"component":"announce-trigger","detail":"kind=promote release=app-a-v2 sequence=3 file=desired.json cache_invalidated=1","event":"announce"}

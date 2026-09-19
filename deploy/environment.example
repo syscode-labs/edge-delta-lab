@@ -1,0 +1,3 @@
+# Provision the pinned public key separately. No private signing key goes here.
+MANIFEST_URL=https://updates.example.com/releases/desired.json
+ORIGIN_URL=https://updates.example.com

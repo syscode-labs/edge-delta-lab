@@ -1,0 +1,5 @@
+{"event":"plan","missing_chunks":3,"missing_raw_bytes":249684,"release":"app-a-v2","reused_chunks":199,"time":"2026-09-17T23:02:20.144281616Z","unique_chunks":202}
+{"chunk":"c14889c134dd2ac55d48f260c6d4131814e7ef722dd54df0f4d62efb24615471","encoded_bytes":55147,"event":"chunk_committed","raw_bytes":55119,"time":"2026-09-17T23:02:20.327961189Z"}
+{"chunk":"512dbbcc371ddb106e6c528f5f70710655588cb480f8ef9d694e0e16eb8973bd","encoded_bytes":59044,"event":"chunk_committed","raw_bytes":59016,"time":"2026-09-17T23:02:20.541997385Z"}
+{"chunk":"cc78c07e85553216f1438130b43abd3721d5ae1ba90912a0524c4fed85ab0c9a","encoded_bytes":135587,"event":"chunk_committed","raw_bytes":135549,"time":"2026-09-17T23:02:20.564043767Z"}
+{"artifact_sha256":"02646c124acb47e6e0e6ed11f5361cce511540e119903720ef430859ca87a6df","event":"release_ready","phase":"staged","release":"app-a-v2","time":"2026-09-17T23:02:20.635671081Z"}

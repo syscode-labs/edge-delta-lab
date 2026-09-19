@@ -1,0 +1,4 @@
+bin/release/edgelab-linux-amd64: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, BuildID[sha1]=e57e4415a822931be3cb740a7ab1b16bba420d3b, with debug_info, not stripped
+bin/release/edgelab-linux-arm64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, BuildID[sha1]=ac44e81203c3c760201f3a0b2a076a79a7f49607, with debug_info, not stripped
+9faf4f8ade88cc0439e3098c48e0075672bad965f21884b0cb1d7caf105bbb11  bin/release/edgelab-linux-amd64
+d3994e68197e102be3f173002df6ff0a30c4ac990b41d24f5be1e74b52c0d070  bin/release/edgelab-linux-arm64

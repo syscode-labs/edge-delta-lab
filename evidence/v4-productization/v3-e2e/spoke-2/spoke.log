@@ -1,0 +1,68 @@
+{"event":"announce_accepted","release":"app-proj-app-v1","sequence":2}
+{"event":"plan","missing_chunks":19,"missing_raw_bytes":1581056,"release":"app-proj-app-v1","reused_chunks":0,"time":"2026-09-19T10:35:12.924585Z","unique_chunks":19}
+{"chunk":"c3e8484b4e59c6e566573e1eaee4e29989a51a2960968dd5b64b1a3b9b899516","encoded_bytes":14846,"event":"chunk_committed","raw_bytes":16605,"time":"2026-09-19T10:35:13.444309Z"}
+{"chunk":"da98650a014776d8d0508cb2066fc48275f89a241c7c109e67f9ad5d0a420720","encoded_bytes":42838,"event":"chunk_committed","raw_bytes":42810,"time":"2026-09-19T10:35:13.611607Z"}
+{"chunk":"815ab9ebc38b0e7e0a8f01bf25fd8ef93df666327516e7fcd0a34f3196accce6","encoded_bytes":61609,"event":"chunk_committed","raw_bytes":61581,"time":"2026-09-19T10:35:14.219608Z"}
+{"chunk":"306313f4dac05d477b7eb5a67b505da03b82e9d7b386ee50a49feb30ae474f2b","encoded_bytes":59085,"event":"chunk_committed","raw_bytes":59057,"time":"2026-09-19T10:35:14.448666Z"}
+{"chunk":"b02043b28aa3f21fc962176057ac1635dd3323deaef94602e3b518126d10f7b6","encoded_bytes":22069,"event":"chunk_committed","raw_bytes":22041,"time":"2026-09-19T10:35:14.534528Z"}
+{"chunk":"eb633c95b0d6d915d508291139ceee5846f503fe344879b2ca4a011978c4952f","encoded_bytes":71102,"event":"chunk_committed","raw_bytes":71069,"time":"2026-09-19T10:35:15.359754Z"}
+{"chunk":"63906f9966fe8c26e2c15946f652839272330617d63094846478892638e7ee1e","encoded_bytes":78677,"event":"chunk_committed","raw_bytes":78644,"time":"2026-09-19T10:35:15.558077Z"}
+{"chunk":"9ab450f28c5d6f238d94ab7292504178f8af022d871be914563cd68b82dd2fb7","encoded_bytes":157117,"event":"chunk_committed","raw_bytes":157079,"time":"2026-09-19T10:35:17.384349Z"}
+{"chunk":"f79d614ce16ac4d44ef984e7790256d3c5ae07be66459a0b3fc1c3b29ae13d54","encoded_bytes":153587,"event":"chunk_committed","raw_bytes":153549,"time":"2026-09-19T10:35:17.571572Z"}
+{"chunk":"e0e57c0c12dd131662c8dd39671c99257c66a25234800e704c43e26d5968b429","encoded_bytes":40897,"event":"chunk_committed","raw_bytes":40869,"time":"2026-09-19T10:35:17.864413Z"}
+{"chunk":"75b9a683183c7624df1aed1d50336d9aa07636e9fe88f358bbfc73c97789cac2","encoded_bytes":107216,"event":"chunk_committed","raw_bytes":107183,"time":"2026-09-19T10:35:18.995856Z"}
+{"chunk":"644f1d34ade8d5a0cfb61eeeca38cd2fa5478319a594cd0b48db0daa276d5c65","encoded_bytes":100150,"event":"chunk_committed","raw_bytes":100117,"time":"2026-09-19T10:35:19.082132Z"}
+{"chunk":"1a20203986fa2e8de21ff32b8648bdf5c58531ff7e803e08079ac721f4274dda","encoded_bytes":38491,"event":"chunk_committed","raw_bytes":38463,"time":"2026-09-19T10:35:19.551716Z"}
+{"chunk":"47516af33eecea67b352bf00878e66c2f7fb5d01236a9a0d0c9a5435de7e5aba","encoded_bytes":25527,"event":"chunk_committed","raw_bytes":25499,"time":"2026-09-19T10:35:19.593816Z"}
+{"chunk":"7787603c60ee42b6c4a1cf97b2b4948eecfd8090fffba6233667eeeaa5e5118e","encoded_bytes":62122,"event":"chunk_committed","raw_bytes":62094,"time":"2026-09-19T10:35:20.352568Z"}
+{"chunk":"366bfc4378758d40a4ee1d9a17d55165d3db69bf94543da5d93de30817e06fe4","encoded_bytes":112251,"event":"chunk_committed","raw_bytes":112218,"time":"2026-09-19T10:35:21.770442Z"}
+{"chunk":"b8bcbe999e4a7823ef4d91abcc9a1f68b7be1d52e932631b47b7f4de4b032791","encoded_bytes":182062,"event":"chunk_committed","raw_bytes":182024,"time":"2026-09-19T10:35:21.944436Z"}
+{"chunk":"9f9ccae1a0e307fd19eb4e7f30b49b45224141c3365eaf18eeae7f7860d4eb8c","encoded_bytes":60282,"event":"chunk_committed","raw_bytes":60254,"time":"2026-09-19T10:35:22.358838Z"}
+{"chunk":"5a0ccb5a4e16c0a73ea847ad72d0b791677c0ae72906e6d2d0e4ab79f5bc0763","encoded_bytes":189938,"event":"chunk_committed","raw_bytes":189900,"time":"2026-09-19T10:35:23.276248Z"}
+{"artifact_sha256":"b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b","event":"release_ready","phase":"staged","release":"app-proj-app-v1","time":"2026-09-19T10:35:23.876298Z"}
+{
+  "release": "app-proj-app-v1",
+  "sequence": 2,
+  "phase": "staged",
+  "artifact": "state/staged/b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b.tar",
+  "artifact_sha256": "b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b",
+  "artifact_bytes": 1581056,
+  "unique_chunks": 19,
+  "reused_chunks": 0,
+  "reused_raw_bytes": 0,
+  "downloaded_chunks": 19,
+  "downloaded_raw_bytes": 1581056,
+  "chunk_response_body_bytes": 1579866,
+  "metadata_response_body_bytes": 5789,
+  "useful_encoded_bytes": 1579866,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 19,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 11.391956528
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"app-proj-app-v1","reused_chunks":19,"time":"2026-09-19T10:35:24.379356Z","unique_chunks":19}
+{"artifact_sha256":"b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b","event":"release_ready","phase":"staged","release":"app-proj-app-v1","time":"2026-09-19T10:35:24.661545Z"}
+{
+  "release": "app-proj-app-v1",
+  "sequence": 2,
+  "phase": "staged",
+  "artifact": "state/staged/b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b.tar",
+  "artifact_sha256": "b4917d4e679b10dec47186cf28ccc3f38ec1f70ce8a565284da88fde0c0cda2b",
+  "artifact_bytes": 1581056,
+  "unique_chunks": 19,
+  "reused_chunks": 19,
+  "reused_raw_bytes": 1581056,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.536564045
+}

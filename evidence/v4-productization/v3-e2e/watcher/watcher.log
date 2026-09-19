@@ -1,0 +1,3 @@
+watch-registry: polling http://127.0.0.1:18107 for 1 repo(s)
+{"detail":"proj/app:v1@sha256:005f291c1813472e6b10e8582dbedada3481843275b7e1f317d3926f21f15fbc","event":"release-detected"}
+{"detail":"release=app-proj-app-v1 repo=proj/app tag=v1 digest=sha256:005f291c1813472e6b10e8582dbedada3481843275b7e1f317d3926f21f15fbc sequence=1","event":"release-published"}

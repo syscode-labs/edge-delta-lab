@@ -1,0 +1,7 @@
+{
+  "rate_kbit": 5000,
+  "latency_ms": 50,
+  "offline_for_ms": 15000,
+  "drop_every": 9,
+  "drop_after_bytes": 8192
+}

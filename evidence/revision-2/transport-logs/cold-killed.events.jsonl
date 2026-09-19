@@ -1,0 +1,14 @@
+{"attempt":1,"delay_ms":1000,"error":"HTTP 503 from http://127.0.0.1:47083/releases/app-a-v1.json","event":"retry","object":"manifest","time":"2026-09-17T23:01:38.062308897Z"}
+{"attempt":2,"delay_ms":1000,"error":"HTTP 503 from http://127.0.0.1:47083/releases/app-a-v1.json","event":"retry","object":"manifest","time":"2026-09-17T23:01:39.078179888Z"}
+{"event":"plan","missing_chunks":202,"missing_raw_bytes":16784896,"release":"app-a-v1","reused_chunks":0,"time":"2026-09-17T23:01:40.190591758Z","unique_chunks":202}
+{"chunk":"7695bc5c7d778ca23220a12d9044066b1950c0d0ad33b51d281dfdf314df6e5b","encoded_bytes":55056,"event":"chunk_committed","raw_bytes":55028,"time":"2026-09-17T23:01:40.389350505Z"}
+{"chunk":"a4c5fefb1a01f009e5aafe8238f5364c6528b20c9232811913dd585d7d0e58db","event":"integrity_failure","time":"2026-09-17T23:01:40.432972665Z"}
+{"attempt":1,"delay_ms":79,"error":"encoded chunk integrity failure","event":"retry","object":"a4c5fefb1a01f009e5aafe8238f5364c6528b20c9232811913dd585d7d0e58db","time":"2026-09-17T23:01:40.432993644Z"}
+{"chunk":"08d5ebd13b95d84e268d419b429d86d58b4f6b81b486be13b77f1cb9de0aaf6b","encoded_bytes":130571,"event":"chunk_committed","raw_bytes":130538,"time":"2026-09-17T23:01:40.724246049Z"}
+{"chunk":"a4c5fefb1a01f009e5aafe8238f5364c6528b20c9232811913dd585d7d0e58db","encoded_bytes":76731,"event":"chunk_committed","raw_bytes":76698,"time":"2026-09-17T23:01:40.769643656Z"}
+{"chunk":"cd640abfdb10996f4a40044ba672c528dbebb800de7f371379c233fe17c87583","encoded_bytes":47108,"event":"chunk_committed","raw_bytes":47080,"time":"2026-09-17T23:01:40.871949262Z"}
+{"chunk":"81e62e8dacac09ed57798f0a32eba0e4fbd071cd876dcebc13eae72eb641e4b2","encoded_bytes":49795,"event":"chunk_committed","raw_bytes":49767,"time":"2026-09-17T23:01:40.939137474Z"}
+{"chunk":"c939158794b488adb0d4531858f6bd4eeb3371c0d853ac108c8bda7fa6ee01b8","encoded_bytes":74447,"event":"chunk_committed","raw_bytes":74414,"time":"2026-09-17T23:01:41.111106065Z"}
+{"attempt":1,"delay_ms":83,"error":"unexpected EOF","event":"retry","object":"b768032c2fab2662b5f90b720b78ef0782e014af43e970c789a3bbbf52df93ad","time":"2026-09-17T23:01:41.150255786Z"}
+{"chunk":"29d8747dafd05cfe7eee9b7eb73ec6a5e7eca4b0725425427457b0bdb1288972","encoded_bytes":137252,"event":"chunk_committed","raw_bytes":137214,"time":"2026-09-17T23:01:41.282012686Z"}
+{"chunk":"b768032c2fab2662b5f90b720b78ef0782e014af43e970c789a3bbbf52df93ad","encoded_bytes":35512,"event":"chunk_committed","raw_bytes":35484,"time":"2026-09-17T23:01:41.352602884Z"}

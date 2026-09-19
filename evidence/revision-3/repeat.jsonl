@@ -1,0 +1,3 @@
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"app-a-v2","reused_chunks":233,"time":"2026-09-18T18:33:33.945608Z","unique_chunks":233}
+Loaded image: edge-delta-demo-0a26878b3de0:app-a-v2
+{"artifact_sha256":"3015d1cd597dc95619c6f0a4f4929df070c24427ef3326eed93a00541386eb74","event":"release_ready","phase":"loaded","release":"app-a-v2","time":"2026-09-18T18:33:35.618743Z"}

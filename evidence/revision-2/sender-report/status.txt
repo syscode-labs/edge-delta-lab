@@ -1,0 +1,13 @@
+SENDER  http://127.0.0.1:47083  last observation: reachable  sample age 315.6s
+Observed at the sender (not proof of delivery):
+  Chunk body bytes: 24,751,008   Metadata body bytes: 269,201
+  Chunk requests: 336   Repeated object requests: 44
+  Disconnects: 37   HTTP 503s: 2   Corruptions: 1
+  Last measured response-body rate: 3667.7 kbit/s
+
+Device acknowledgements received at the sender:
+  edge  app-a-v3  STAGED  reused 201/202 chunks
+  edge-skip  app-a-v3  STAGED  reused 199/202 chunks
+
+LOADED acknowledges image import only. Running/healthy is NOT inferred.
+Collector polls only the sender; the receiver has no metrics listener.

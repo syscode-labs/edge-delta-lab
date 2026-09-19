@@ -1,0 +1,13 @@
+SENDER  http://127.0.0.1:61619  last observation: unreachable  sample age 0.4s
+Observed at the sender (not proof of delivery):
+  Chunk body bytes: 26,452,103   Metadata body bytes: 186,671
+  Chunk requests: 387   Repeated object requests: 59
+  Disconnects: 55   HTTP 503s: 1   Corruptions: 1
+  Last measured response-body rate: 0.0 kbit/s
+
+Device acknowledgements received at the sender:
+  demo-edge  app-a-v2  LOADED  reused 233/233 chunks
+
+LOADED acknowledges image import only. Running/healthy is NOT inferred.
+Collector polls only the sender; the receiver has no metrics listener.
+Last collection error: <urlopen error [Errno 61] Connection refused>

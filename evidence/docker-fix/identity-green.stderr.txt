@@ -1,0 +1,6 @@
+test_containerd_index_is_provenance_not_signed_config_id (docker_identity_test.IdentityTest.test_containerd_index_is_provenance_not_signed_config_id) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+OK
