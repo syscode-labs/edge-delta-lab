@@ -63,6 +63,7 @@ type SyncOptions struct {
 // LoadOptions carries what lab.Sync needs, translated from the config.
 // The runner never modifies lab semantics; it only fills AgentOptions.
 func (c Config) LoadOptions(o *lab.AgentOptions) {
+	o.HubTLS = c.HubTLS
 	o.ManifestURL = c.Manifest
 	o.BaseURL = c.Origin
 	o.StateDir = c.StateDir

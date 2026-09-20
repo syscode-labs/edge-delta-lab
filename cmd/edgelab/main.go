@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"crypto/ed25519"
+
 	"encoding/json"
 	"errors"
 	"flag"
@@ -19,6 +19,7 @@ import (
 	"example.com/edge-delta-lab/internal/lab"
 	"example.com/edge-delta-lab/internal/notify"
 	"example.com/edge-delta-lab/internal/push"
+	"example.com/edge-delta-lab/internal/receiverloop"
 	"example.com/edge-delta-lab/internal/registry"
 )
 
@@ -243,6 +244,7 @@ func main() {
 		}
 	case "sync", "watch":
 		o := lab.DefaultAgentOptions()
+		tlsFlags := hubTLSFlags(fs)
 		fs.StringVar(&o.ReceiptURL, "receipt-url", "", "outbound sender acknowledgement endpoint; no receiver listener")
 		fs.StringVar(&o.DeviceID, "device-id", "edge-01", "device label in delivery acknowledgements")
 		fs.StringVar(&o.ManifestURL, "manifest", "", "signed release/channel URL")
@@ -265,6 +267,7 @@ func main() {
 		clientAdmin := fs.String("admin-socket", "", "client telemetry admin Unix socket (watch mode; never TCP)")
 		fs.Parse(os.Args[2:])
 		o.MaxArtifact = *max << 30
+		o.HubTLS = *tlsFlags
 		o.ReserveBytes = *reserve << 20
 		o.Events = os.Stderr
 		o.Telemetry = lab.NewTelemetry()
@@ -281,62 +284,28 @@ func main() {
 			ctx, cancel = context.WithTimeout(ctx, *deadline)
 			defer cancel()
 		}
-		kick := make(chan struct{}, 1)
-		if *eventsURL != "" {
-			pub, e := lab.ReadKey(o.PublicKey, ed25519.PublicKeySize)
-			if e != nil {
-				fatal(fmt.Errorf("events-url requires the pinned public key: %w", e))
-			}
-			// Announcements are hints only: the envelope is re-verified against
-			// the pinned key here — the transport is never trusted — and a
-			// valid hint merely wakes the existing reconcile loop early. The
-			// signed manifest fetched by Sync remains the only source of truth.
-			go push.Run(ctx, push.ClientOptions{
-				URL:    *eventsURL,
-				Device: o.DeviceID,
-				OnAnnounce: func(a push.Announce) {
-					m, err := push.Accept(a, ed25519.PublicKey(pub), o.MaxArtifact)
-					if err != nil {
-						_ = json.NewEncoder(os.Stderr).Encode(map[string]any{"event": "announce_rejected", "error": err.Error()})
-						return
-					}
-					_ = json.NewEncoder(os.Stderr).Encode(map[string]any{"event": "announce_accepted", "release": m.Release, "sequence": m.Sequence})
-					select {
-					case kick <- struct{}{}:
-					default:
-					}
-				},
-			})
-		}
-		for {
+		if cmd == "sync" {
 			s, e := lab.Sync(ctx, o)
 			if e == nil {
 				e = lab.WriteSummary(o.StateDir, s)
 			}
-			if cmd == "sync" {
-				if e != nil {
-					fatal(e)
-				}
-				printJSON(s)
-				return
-			}
 			if e != nil {
-				_ = json.NewEncoder(os.Stderr).Encode(map[string]any{"event": "reconcile_failed", "error": e.Error()})
-			} else {
-				printJSON(s)
+				fatal(e)
 			}
-			if *poll <= 0 {
-				fatal(fmt.Errorf("poll must be positive"))
-			}
-			select {
-			case <-ctx.Done():
-				return
-			case <-time.After(*poll):
-			case <-kick: // verified announcement: reconcile immediately
-			}
+			printJSON(s)
+			return
+		}
+		if *poll <= 0 {
+			fatal(fmt.Errorf("poll must be positive"))
+		}
+		if e := receiverloop.Run(ctx, o, *poll, *eventsURL, func(e error) {
+			_ = json.NewEncoder(os.Stderr).Encode(map[string]any{"event": "reconcile_failed", "error": e.Error()})
+		}, func(s lab.Summary) { printJSON(s) }); e != nil && !errors.Is(e, context.Canceled) {
+			fatal(e)
 		}
 	case "watch-registry":
 		cfgPath := fs.String("config", "", "watch-registry YAML config path (required)")
+		tlsFlags := hubTLSFlags(fs)
 		fs.Parse(os.Args[2:])
 		if *cfgPath == "" {
 			fatal(fmt.Errorf("watch-registry: -config is required"))
@@ -344,6 +313,10 @@ func main() {
 		cfg, e := registry.LoadConfig(*cfgPath)
 		if e != nil {
 			fatal(e)
+		}
+		overlayHubTLS(&cfg.HubTLS, tlsFlags)
+		if cfg.HubTLS.CA != "" || cfg.HubTLS.ClientCert != "" || cfg.HubTLS.ClientKey != "" {
+			fatal(fmt.Errorf("watch-registry publishes to a local root; hub TLS credentials do not apply to registry traffic"))
 		}
 		password := ""
 		if cfg.PasswordEnv != "" {

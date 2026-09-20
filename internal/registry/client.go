@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+
 	"fmt"
 	"io"
 	"net/http"
@@ -52,6 +53,7 @@ type tokenEntry struct {
 
 // NewClient builds a client for the registry rooted at base.
 func NewClient(base string, auth AuthConfig) (*Client, error) {
+
 	u, err := url.Parse(strings.TrimRight(base, "/"))
 	if err != nil {
 		return nil, fmt.Errorf("registry url: %w", err)
@@ -59,7 +61,9 @@ func NewClient(base string, auth AuthConfig) (*Client, error) {
 	if u.Scheme != "http" && u.Scheme != "https" {
 		return nil, fmt.Errorf("registry url must be http(s): %q", base)
 	}
-	return &Client{Base: u, HTTP: &http.Client{Timeout: 60 * time.Second}, tok: map[string]tokenEntry{}, auth: auth}, nil
+	// Registry and token authorities must never receive the hub's mTLS identity.
+	client := &http.Client{Timeout: 60 * time.Second}
+	return &Client{Base: u, HTTP: client, tok: map[string]tokenEntry{}, auth: auth}, nil
 }
 
 // Ping performs the v2 base endpoint check and returns the bearer challenge

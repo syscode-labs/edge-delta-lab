@@ -21,6 +21,7 @@ import (
 	"context"
 	"crypto/ed25519"
 	"encoding/json"
+	"example.com/edge-delta-lab/hubclient"
 	"flag"
 	"fmt"
 	"io"
@@ -36,7 +37,7 @@ import (
 
 // confHTTPGet fetches url honoring the lab URL policy (HTTPS unless the lab
 // allow-http escape hatch is on). Returns the caller-closed body.
-func confHTTPGet(o lab.AgentOptions, raw string) (io.ReadCloser, error) {
+func confHTTPGet(ctx context.Context, o lab.AgentOptions, raw string) (io.ReadCloser, error) {
 	u, err := url.Parse(raw)
 	if err != nil {
 		return nil, err
@@ -47,11 +48,16 @@ func confHTTPGet(o lab.AgentOptions, raw string) (io.ReadCloser, error) {
 	if u.Scheme != "https" && !(u.Scheme == "http" && o.AllowHTTP) {
 		return nil, fmt.Errorf("HTTPS required; allow_http is for an isolated lab only")
 	}
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, raw, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, raw, nil)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	client, err := hubclient.New(o.HubTLS, o.RequestTimeout)
+	if err != nil {
+		return nil, err
+	}
+	defer client.CloseIdleConnections()
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +71,8 @@ func confHTTPGet(o lab.AgentOptions, raw string) (io.ReadCloser, error) {
 // fetchVerifiedManifest downloads the signed envelope at url and verifies it
 // against the pinned key. It is the only place conf learns release metadata;
 // nothing is downloaded before this succeeds.
-func fetchVerifiedManifest(o lab.AgentOptions, maxArtifact int64) (lab.Manifest, error) {
-	resp, err := confHTTPGet(o, o.ManifestURL)
+func fetchVerifiedManifest(ctx context.Context, o lab.AgentOptions, maxArtifact int64) (lab.Manifest, error) {
+	resp, err := confHTTPGet(ctx, o, o.ManifestURL)
 	if err != nil {
 		return lab.Manifest{}, fmt.Errorf("manifest fetch: %w", err)
 	}
@@ -88,6 +94,7 @@ func fetchVerifiedManifest(o lab.AgentOptions, maxArtifact int64) (lab.Manifest,
 
 func runConf(ctx context.Context, args []string) error {
 	fs := flag.NewFlagSet("conf", flag.ExitOnError)
+	tlsFlags := hubTLSFlags(fs)
 	cfgPath := fs.String("config", "", "client YAML config path (required)")
 	maxGib := fs.Int64("max-artifact-gib", 10, "maximum authorized artifact size")
 	fs.Parse(args)
@@ -105,6 +112,7 @@ func runConf(ctx context.Context, args []string) error {
 	maxArtifact := *maxGib << 30
 	o := lab.DefaultAgentOptions()
 	cfg.LoadOptions(&o)
+	overlayHubTLS(&o.HubTLS, tlsFlags)
 	o.Events = os.Stderr
 	o.MaxArtifact = maxArtifact
 
@@ -123,7 +131,7 @@ func runConf(ctx context.Context, args []string) error {
 
 	// Step: verify manifest FIRST (signature with pinned key), gate SECOND
 	// (before any artifact byte is fetched).
-	m, err := fetchVerifiedManifest(o, maxArtifact)
+	m, err := fetchVerifiedManifest(ctx, o, maxArtifact)
 	if err != nil {
 		return err
 	}

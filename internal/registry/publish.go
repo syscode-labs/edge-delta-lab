@@ -80,6 +80,7 @@ func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (stri
 		if err != nil {
 			return "", err
 		}
+		defer c.HTTP.CloseIdleConnections()
 	}
 	if opts.Event != nil {
 		opts.Event("release-detected", fmt.Sprintf("%s:%s@%s", req.Repo, req.Tag, req.Digest))

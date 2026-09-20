@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"example.com/edge-delta-lab/hubclient"
 	"fmt"
 	"io"
 	"math/rand"
@@ -61,6 +62,7 @@ type Summary struct {
 	Seconds            float64 `json:"elapsed_seconds"`
 }
 type AgentOptions struct {
+	HubTLS                                    hubclient.Config
 	ManifestURL, BaseURL, StateDir, PublicKey string
 	ReceiptURL, DeviceID                      string
 	Workers, MaxAttempts                      int
@@ -402,6 +404,20 @@ func retry(ctx context.Context, o AgentOptions, p *progress, label string, fn fu
 	}
 }
 func Sync(ctx context.Context, o AgentOptions) (summary Summary, err error) {
+	if err := ctx.Err(); err != nil {
+		return summary, err
+	}
+	tlsConfig, err := o.HubTLS.TLSConfig()
+	if err != nil {
+		return summary, err
+	}
+	for _, raw := range []string{o.ManifestURL, o.BaseURL, o.ReceiptURL} {
+		if raw != "" {
+			if err := o.HubTLS.ValidateURL(raw); err != nil {
+				return summary, err
+			}
+		}
+	}
 	start := time.Now()
 	p := &progress{out: o.Events}
 	if o.Telemetry != nil {
@@ -478,6 +494,7 @@ func Sync(ctx context.Context, o AgentOptions) (summary Summary, err error) {
 		return summary, e
 	}
 	transport := &http.Transport{DisableCompression: true, MaxIdleConnsPerHost: o.Workers + 1, ResponseHeaderTimeout: o.RequestTimeout, DialContext: (&net.Dialer{Timeout: o.RequestTimeout, KeepAlive: 30 * time.Second}).DialContext}
+	transport.TLSClientConfig = tlsConfig
 	defer transport.CloseIdleConnections()
 	client := &http.Client{Transport: transport, Timeout: o.RequestTimeout, CheckRedirect: func(_ *http.Request, _ []*http.Request) error { return errors.New("redirects are disabled") }}
 	var envelope []byte

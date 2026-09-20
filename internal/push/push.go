@@ -9,6 +9,7 @@ package push
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"math/rand"
 	"net/http"
@@ -36,7 +37,7 @@ const subBuffer = 32
 // publisher. Slow subscribers drop announcements; spokes reconcile by polling
 // regardless, so a dropped hint is never a correctness problem.
 type Broker struct {
-	mu sync.RWMutex
+	mu   sync.RWMutex
 	subs map[*sub]struct{}
 	// dropped/announced are atomic so concurrent announce writers and
 	// Snapshot readers never race (the mutex guards only the sub set).
@@ -185,11 +186,12 @@ func serveConn(ctx context.Context, b *Broker, conn *websocket.Conn) {
 
 // ClientOptions configures Run.
 type ClientOptions struct {
-	URL        string // ws:// or wss:// /events endpoint
-	Device     string // optional X-Edgelab-Device identification
-	OnAnnounce func(Announce)
-	Backoff    time.Duration // initial reconnect delay (default 1s)
-	MaxBackoff time.Duration // reconnect cap (default 30s)
+	TLSConfig   *tls.Config
+	URL         string // ws:// or wss:// /events endpoint
+	Device      string // optional X-Edgelab-Device identification
+	OnAnnounce  func(Announce)
+	Backoff     time.Duration // initial reconnect delay (default 1s)
+	MaxBackoff  time.Duration // reconnect cap (default 30s)
 	DialTimeout time.Duration // handshake timeout (default 5s)
 }
 
@@ -208,7 +210,7 @@ func Run(ctx context.Context, o ClientOptions) {
 	}
 	backoff := o.Backoff
 	for ctx.Err() == nil {
-		d := websocket.Dialer{HandshakeTimeout: o.DialTimeout}
+		d := websocket.Dialer{HandshakeTimeout: o.DialTimeout, TLSClientConfig: o.TLSConfig}
 		hdr := http.Header{}
 		if o.Device != "" {
 			hdr.Set("X-Edgelab-Device", o.Device)
@@ -222,6 +224,7 @@ func Run(ctx context.Context, o ClientOptions) {
 			continue
 		}
 		backoff = o.Backoff
+		stopClose := context.AfterFunc(ctx, func() { _ = conn.Close() })
 		conn.SetPingHandler(func(string) error {
 			_ = conn.SetReadDeadline(time.Now().Add(pongWait))
 			return conn.WriteControl(websocket.PongMessage, nil, time.Now().Add(writeWait))
@@ -238,6 +241,7 @@ func Run(ctx context.Context, o ClientOptions) {
 			}
 		}
 		_ = conn.Close()
+		stopClose()
 		if ctx.Err() != nil {
 			return
 		}

@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"example.com/edge-delta-lab/hubclient"
 	"fmt"
 	"io"
 	"net/http"
@@ -78,7 +79,11 @@ func FlushReceipts(ctx context.Context, o AgentOptions) error {
 	if e != nil {
 		return e
 	}
-	client := &http.Client{Timeout: 3 * time.Second, CheckRedirect: func(_ *http.Request, _ []*http.Request) error { return errors.New("receipt redirects disabled") }}
+	client, e := hubclient.New(o.HubTLS, 3*time.Second)
+	if e != nil {
+		return e
+	}
+	defer client.CloseIdleConnections()
 	for _, entry := range entries {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
 			continue

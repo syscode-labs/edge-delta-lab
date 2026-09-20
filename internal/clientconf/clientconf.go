@@ -11,6 +11,7 @@
 package clientconf
 
 import (
+	"example.com/edge-delta-lab/hubclient"
 	"fmt"
 	"os"
 	"regexp"
@@ -38,21 +39,22 @@ type NotifierConfig struct {
 
 // Config is the client configuration file (YAML).
 type Config struct {
-	Origin   string `yaml:"origin"`   // origin base URL (http allowed only with allow_http)
-	Manifest string `yaml:"manifest"` // signed manifest/channel URL
-	PubKey   string `yaml:"pub_key"`  // pinned publisher public key
-	StateDir string `yaml:"state_dir"`
-	CacheDir string `yaml:"cache_dir,omitempty"` // optional alias for state_dir chunks
+	HubTLS   hubclient.Config `yaml:",inline"`
+	Origin   string           `yaml:"origin"`   // origin base URL (http allowed only with allow_http)
+	Manifest string           `yaml:"manifest"` // signed manifest/channel URL
+	PubKey   string           `yaml:"pub_key"`  // pinned publisher public key
+	StateDir string           `yaml:"state_dir"`
+	CacheDir string           `yaml:"cache_dir,omitempty"` // optional alias for state_dir chunks
 
-	DeviceID   string `yaml:"device_id,omitempty"`
-	AllowHTTP  bool   `yaml:"allow_http,omitempty"`
-	Poll       string `yaml:"poll,omitempty"`        // watch interval (time.Duration syntax)
-	EventsURL  string `yaml:"events_url,omitempty"`  // hub ws:// announce endpoint (hints only)
-	Workers    int    `yaml:"workers,omitempty"`
-	Action     Action `yaml:"action,omitempty"` // dry-run (default) | load | restart
-	Allow      string `yaml:"allow,omitempty"`  // release-name regex; empty = all
-	Ignore     string `yaml:"ignore,omitempty"` // release-name regex; wins over allow
-	MaxReleases int   `yaml:"max_releases,omitempty"` // safety bound for dry-run enumeration
+	DeviceID    string `yaml:"device_id,omitempty"`
+	AllowHTTP   bool   `yaml:"allow_http,omitempty"`
+	Poll        string `yaml:"poll,omitempty"`       // watch interval (time.Duration syntax)
+	EventsURL   string `yaml:"events_url,omitempty"` // hub ws:// announce endpoint (hints only)
+	Workers     int    `yaml:"workers,omitempty"`
+	Action      Action `yaml:"action,omitempty"`       // dry-run (default) | load | restart
+	Allow       string `yaml:"allow,omitempty"`        // release-name regex; empty = all
+	Ignore      string `yaml:"ignore,omitempty"`       // release-name regex; wins over allow
+	MaxReleases int    `yaml:"max_releases,omitempty"` // safety bound for dry-run enumeration
 
 	Notifiers []NotifierConfig `yaml:"notifiers,omitempty"`
 
@@ -146,11 +148,11 @@ func (c Config) Eligible(release string) bool {
 
 // Plan is what a dry-run (or a gated action run) reports for one release.
 type Plan struct {
-	Release   string   `json:"release"`
-	Eligible  bool     `json:"eligible"`
-	Action    Action   `json:"action"`
-	WouldDo   []string `json:"would_do,omitempty"`
-	Reason    string   `json:"reason,omitempty"`
+	Release  string   `json:"release"`
+	Eligible bool     `json:"eligible"`
+	Action   Action   `json:"action"`
+	WouldDo  []string `json:"would_do,omitempty"`
+	Reason   string   `json:"reason,omitempty"`
 }
 
 // SortPlans orders plans by release name for stable output.

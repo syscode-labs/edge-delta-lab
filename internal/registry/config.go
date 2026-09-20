@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"example.com/edge-delta-lab/hubclient"
 	"fmt"
 	"os"
 	"regexp"
@@ -18,13 +19,14 @@ type RepoConfig struct {
 
 // Config is the watch-registry configuration file.
 type Config struct {
-	RegistryURL string      `yaml:"registry_url"`
-	Poll        time.Duration `yaml:"poll"`
-	Repos       []RepoConfig `yaml:"repos"`
-	StateFile   string      `yaml:"state_file"`
-	Publish     PublishConfig `yaml:"publish"`
-	Username    string      `yaml:"username,omitempty"`
-	PasswordEnv string      `yaml:"password_env,omitempty"`
+	HubTLS      hubclient.Config `yaml:",inline"`
+	RegistryURL string           `yaml:"registry_url"`
+	Poll        time.Duration    `yaml:"poll"`
+	Repos       []RepoConfig     `yaml:"repos"`
+	StateFile   string           `yaml:"state_file"`
+	Publish     PublishConfig    `yaml:"publish"`
+	Username    string           `yaml:"username,omitempty"`
+	PasswordEnv string           `yaml:"password_env,omitempty"`
 }
 
 // PublishConfig points the watcher's publish trigger at the v2 pipeline.
@@ -46,6 +48,11 @@ func LoadConfig(path string) (Config, error) {
 	if err := yaml.Unmarshal(b, &c); err != nil {
 		return Config{}, fmt.Errorf("watch config: %w", err)
 	}
+	return ValidateConfig(c)
+}
+
+// ValidateConfig validates an owned config snapshot and applies defaults.
+func ValidateConfig(c Config) (Config, error) {
 	if c.RegistryURL == "" {
 		return Config{}, fmt.Errorf("watch config: registry_url is required")
 	}
