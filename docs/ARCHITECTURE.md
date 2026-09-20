@@ -14,7 +14,7 @@ Loading makes an image available; it does not start a container or prove the app
 
 [Editable HTML source](diagrams/architecture.html). The optional mTLS proxy can be removed without changing publication, signing or verification; replace it with your existing trusted HTTPS boundary. It does not hold the release-signing private key.
 
-The client downloads from the hub. Docker does not pull from the hub, and the hub is not a Docker registry. The [README](../README.md) is the starting point for trying this flow. The [runtime guide](DOCKER_RUN.md) covers publication and deployment commands.
+The client downloads from the hub. Docker does not pull from the hub, and the hub is not a Docker registry. Start with the [README](../README.md); [operations](../OPERATIONS.md) owns installation and service management.
 
 ## 1. The publisher prepares and signs a release
 
@@ -30,7 +30,7 @@ The publisher signs that description with its private Ed25519 key. The signed fi
 
 The current splitting rule is `gear64-lab-v1`. It fixes the Gear table seed and boundary rule; it is an independent implementation, not the full FastCDC algorithm. Gear chooses where to split, not whether bytes are trustworthy. Defaults are a 16 KiB minimum, 64 KiB target, and 256 KiB maximum. The target is a tuning parameter, not a guaranteed average piece size.
 
-A release can contain more than one image, with every expected image ID signed. The sample per-image fixtures share one device-level sequence stream to exercise reuse between images. They are not a database that independently tracks the desired version of every application.
+A release can contain more than one image, with every expected image ID signed. One device-level sequence stream is not a database that independently tracks the desired version of every application.
 
 Source: [registry publisher](../internal/registry/publish.go), [archive publication](../internal/lab/publish.go), [release format](../internal/lab/format.go), [splitting rule](../internal/lab/chunker.go).
 
@@ -42,7 +42,7 @@ To select what clients should receive, the publisher copies an already signed re
 
 The hub reads this published-file directory, also called the **origin**, and serves its files over HTTP. It does not need the signing key. In hub mode, simultaneous requests for the same object share a disk read, and an in-memory **cache** keeps recently read bytes for reuse. This reduces repeated disk work when several devices request the same update. The client still checks every release independently.
 
-When configured, one shared rate limiter covers metadata and piece response bodies across workers. It limits application body traffic, not all network packets. The test server can also inject HTTP 503 errors, delays beyond request deadlines, damaged bytes, cut-off responses, or outages. Fault choices follow deterministic request counters, but concurrent scheduling and timing are not exactly reproducible.
+When configured, one shared rate limiter covers metadata and piece response bodies across workers. It limits application body traffic, not all network packets. Test-only fault controls and measurement definitions are documented in [TESTING.md](../TESTING.md#measure-a-real-site-safely).
 
 Source: [hub cache](../internal/hub/hub.go), [HTTP server](../internal/lab/server.go), [command wiring](../cmd/edgelab/main.go).
 
@@ -52,7 +52,7 @@ With events enabled, the hub watches publication changes and sends WebSocket ann
 
 **A notification is only a hint, not trusted delivery or permission to load an image.** Polling remains the fallback when notifications are absent or missed. The `watch` client checks once on startup, then checks again on its polling interval or an accepted hint. This keeps the update path usable without a persistent notification connection.
 
-The hub and `watch` client are long-lived services. One-shot `sync`, `conf`, publication, and demo commands are supporting tools; successful one-shot runs do not prove behavior through idle periods or outages.
+The hub and `watch` client are long-lived services; `sync` and `conf` are one-shot commands.
 
 Source: [client update loop](../cmd/edgelab/main.go), [announcement checks](../internal/push/push.go), [publication watcher](../internal/push/trigger.go).
 
@@ -90,7 +90,7 @@ If assembly is interrupted, the client can rebuild locally from completed pieces
 
 Before downloading, the client checks available space for missing raw pieces, an archive if it must be rebuilt, and a reserve. That estimate does not cover Docker's additional unpacked storage or the publisher's compression scratch space. It can be conservative when old staging files remain.
 
-Plan disk capacity explicitly: the lab keeps all pieces and archives, has no cache quota, and does not automatically delete data. Production use needs a retention policy that protects active and rollback content before removing unneeded files.
+For capacity, backup and retention requirements, see [operations](../OPERATIONS.md#persistent-data-and-permissions).
 
 Source: [space checks and assembly](../internal/lab/agent.go).
 
@@ -104,9 +104,9 @@ The delivery signature authorizes this archive. Import does not promise to prese
 
 The separate archive-normalization helper supports raw and gzip layer members. It checks each uncompressed layer's expected hash (its **DiffID**) without extracting and repacking the layer's filesystem. It rejects archives containing only the Open Container Initiative (OCI) layout, a standard container image format, or requiring zstd layer decoding; use Skopeo to produce a suitable Docker archive for those inputs.
 
-**Loaded is not running or healthy.** Application activation remains outside the core transfer flow. The Docker smoke test separately starts an image by verified ID, with pulls and networking disabled. The separate, one-shot `conf` command has a limited explicit `restart` action, but it does not preserve general ports, environment, or mounts and is not a production rollout controller. Keeping an old image also does not undo persistent-data schema changes.
+**Loaded is not running or healthy.** Application activation remains outside the core transfer flow. The separate, one-shot `conf` command has a limited explicit `restart` action, but it does not preserve general ports, environment, or mounts and is not a production rollout controller. Keeping an old image also does not undo persistent-data schema changes.
 
-Source: [import and stored-image checks](../internal/lab/agent.go), [archive-normalization helper](../scripts/normalize_archive.py), [separate config actions](../internal/clientconf/runner.go). See the [runtime guide](DOCKER_RUN.md) for deployment requirements.
+Source: [import and stored-image checks](../internal/lab/agent.go), [archive-normalization helper](../scripts/normalize_archive.py), [separate config actions](../internal/clientconf/runner.go).
 
 ## When nothing has changed
 
@@ -116,7 +116,7 @@ With Docker loading enabled, an unchanged signed description skips repeat import
 
 The saved marker records a past import, not current Docker inventory or application health. Deleting an image outside this tool or switching Docker daemons is not automatically repaired by that marker.
 
-Every update check still verifies the signature and sequence and re-hashes referenced cache entries and the archive. This favors straightforward integrity checks over low disk and CPU use. Avoid checking gigabytes every few seconds: use a longer interval. Faster conditional checks with separate periodic integrity scans, and smaller metadata indexes, remain future optimizations.
+Every update check still verifies the signature and sequence and re-hashes referenced cache entries and the archive. This favors straightforward integrity checks over low disk and CPU use; choose polling intervals accordingly. Remaining performance gaps are tracked in [TESTING.md](../TESTING.md#limits-and-missing-evidence).
 
 Zero response-body bytes does not mean zero network traffic. HTTP headers, WebSocket keepalives, TCP/IP, and VPN packets still matter on a constrained link.
 
@@ -124,7 +124,7 @@ Source: [conditional requests and import marker](../internal/lab/agent.go).
 
 ## Operating and trusting the services
 
-Use the server on an isolated lab network. It has no client authentication or built-in TLS. Release signatures protect authenticity and integrity, not confidentiality or availability. Only allowed chunk/release path shapes are served, but the origin and client cache must still be trusted, operator-owned directories without attacker-controlled symlinks.
+The core server has no client authentication or built-in TLS. Release signatures protect authenticity and integrity, not confidentiality or availability; [operations](../OPERATIONS.md#tls-and-network-boundaries) supplies the remote-access boundary. Only allowed chunk/release path shapes are served, but the origin and client cache must still be trusted, operator-owned directories without attacker-controlled symlinks.
 
 Keep the private signing key with the publisher, never on a client or in a public origin volume. Provision the client's pinned public key through a separate trusted route.
 
@@ -132,8 +132,12 @@ An **administrative socket** is a local Unix socket used by the console and metr
 
 The Docker socket is a different interface and grants highly privileged host access. Import must remain explicit. The Compose simulation does not mount that socket, and the shipped client image has no Docker CLI. A production design should separate Docker privileges from network-facing code where practical.
 
-Source: [HTTP server](../internal/lab/server.go), [local status server](../internal/admin/server.go), [runtime guide](DOCKER_RUN.md).
+Source: [HTTP server](../internal/lab/server.go), [local status server](../internal/admin/server.go).
 
-## Tests and scope
+## Design references
 
-[TESTING.md](../TESTING.md) is the single current home for retained proof, measurement definitions and remaining limits. [Operations](../deploy/compose/README.md) covers installation; [MTLS.md](../MTLS.md) covers the optional transport wrapper. Neither a transport certificate nor a WebSocket hint replaces release-signature verification.
+These sources were checked during repository preparation on 2026-09-17. They explain concepts, not the correctness or performance of this implementation; [TESTING.md](../TESTING.md) owns retained proof and remaining limits.
+
+- **Content reuse:** [content-defined chunking research](https://www.usenix.org/conference/atc16/technical-sessions/presentation/xia), [desync releases](https://github.com/folbricht/desync/releases), its [v1.1.3 store interface](https://raw.githubusercontent.com/folbricht/desync/v1.1.3/store.go) and [publisher command](https://raw.githubusercontent.com/folbricht/desync/v1.1.3/docs/cli/desync_make.md). This lab is neither full FastCDC nor desync-format compatible.
+- **Release signatures:** [Go Ed25519](https://pkg.go.dev/crypto/ed25519) supplies signing and verification primitives, not fleet enrollment or trust management.
+- **Import versus activation:** Docker's [image load](https://docs.docker.com/reference/cli/docker/image/load/), [container run](https://docs.docker.com/reference/cli/docker/container/run/) and [Compose up](https://docs.docker.com/reference/cli/docker/compose/up/) describe distinct operations; they do not establish health-gated activation in this lab.

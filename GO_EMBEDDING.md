@@ -14,7 +14,7 @@ context and handle normal cancellation without treating it as failure.
 From the repository root:
 
 ```sh
-(cd examples/go-embedding && go test -race ./... && go build ./... && go vet ./...)
+(cd examples/go-embedding && go build ./...)
 go run ./cmd/edgelab keygen --out work/keys
 (cd examples/go-embedding && go run ./publisher \
   --registry https://registry.example.test --repo app \
@@ -95,10 +95,9 @@ that identity; do not point a receipt or events URL at an unrelated service.
 redirects are disabled. Hostname verification remains enabled; an optional CA
 adds to system roots. A client certificate and key must be provided together.
 Keys are PEM regular files with mode `0600` or stricter (no execute/group/other
-bits). Test TLS fixtures generate `0600` keys; provision real TLS keys the same
-way. Artifact signing keys are separate hex-encoded Ed25519 files: `keygen`
-creates private keys at `0600` and public keys at `0644`. Existing Compose setup
-uses group-readable `0640` signing keys; those are not TLS client keys.
+bits). Artifact signing keys are separate hex-encoded Ed25519 files: `keygen`
+creates private keys at `0600` and public keys at `0644`. For packaged service
+permissions and transport enrollment, see [operations](OPERATIONS.md) and [mTLS](MTLS.md).
 
 TLS material forbids HTTP/WS downgrade. Without TLS material, plaintext receiver
 traffic still requires explicit `AllowHTTP`; use it only in an isolated lab.
@@ -109,6 +108,5 @@ rotation. TLS does not replace the pinned signing key, anti-rollback checks,
 exact-size checks or encoded/raw/whole-artifact hashes.
 
 `DockerLoad` is opt-in and gives the importer privileged access to Docker. A
-`loaded` result is not proof that an application is running or healthy. The Go
-integration tests exercise registry publication, mTLS staging and receipt delivery;
-they are not Docker end-to-end evidence.
+`loaded` result is not proof that an application is running or healthy.
+Integration evidence and test reproduction live in [TESTING.md](TESTING.md).

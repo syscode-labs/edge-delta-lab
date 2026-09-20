@@ -13,7 +13,7 @@ Hub or client → local Unix admin socket → edgelab-exporter /metrics
 
 An **exporter** turns the daemon's status into numeric metrics. **Prometheus** collects these numbers periodically (a “scrape”) and stores their history. Grafana queries that history through a Prometheus datasource; it does not read the admin socket or collect the metrics itself.
 
-For native daemons, start one exporter beside each daemon with permission to read its admin socket. For the [native runtime example](DOCKER_RUN.md), run each command under your supervisor (or in separate terminals for a local exercise):
+For native daemons, start one exporter beside each daemon with permission to read its admin socket. For the [native runtime example](DEVELOPMENT.md), run each command under your supervisor (or in separate terminals for a local exercise):
 
 ```sh
 ./bin/edgelab-exporter --socket work/registry/hub/admin.sock \
@@ -28,7 +28,7 @@ Alternatively, the [Alloy example](../deploy/helm/edgelab-hub/edgelab-proof.allo
 
 ## Enable the Helm exporter
 
-Skip this section if you already run the native exporters. The [runtime guide's Helm prerequisites](DOCKER_RUN.md#helm-kubernetes) still apply: a cluster-accessible built image, compatible persistent volumes, populated origin data, and working non-root storage permissions. The chart deploys the hub, not publishers, clients, Prometheus, or Grafana. It supplies no ServiceMonitor or PodMonitor to configure collection automatically.
+Skip this section if you already run the native exporters. The [runtime guide's Helm prerequisites](DEVELOPMENT.md#helm-kubernetes) still apply: a cluster-accessible built image, compatible persistent volumes, populated origin data, and working non-root storage permissions. The chart deploys the hub, not publishers, clients, Prometheus, or Grafana. It supplies no ServiceMonitor or PodMonitor to configure collection automatically.
 
 From the repository root, save the following as `work/grafana-values.yaml` (create `work/` if needed). Replace `YOUR_REPOSITORY` and `YOUR_TAG` with your built hub image in **both** places; exporter image settings are independent of hub image settings.
 
@@ -113,15 +113,13 @@ The dashboard has ten panels. Importing it does not provision exporters or data.
 
 Last-sync values describe the most recently completed check, not an immutable release history. Later no-change checks can show zero downloaded bytes and many reused chunks. Repeated points can be scrapes of the same result, not new transfers. Keep the original transfer window and client summaries when comparing cold and incremental delivery. Counters can reset when the daemon restarts.
 
-## Latest supplied screenshot and measured context
+<a id="latest-supplied-screenshot-and-measured-context"></a>
+
+## Historical screenshot
 
 ![Historical Grafana crop showing downloaded bytes per sync and transferred versus reused chunks](images/edge-delta-grafana-dashboard.png)
 
-This is a **3938 × 625 pixel crop** of the latest user-supplied Desktop capture, `Screenshot 2026-09-19 at 17.35.17.png`. The filename records the capture's local wall-clock time; its timezone is not established here. Only the two top panels are included. Browser chrome, URLs, identity, and lower panels containing private machine names are excluded. The visible graph window is wider than the dashboard JSON's saved default.
-
-The crop illustrates cold-download peaks and subsequent reuse. **[TESTING.md](../TESTING.md#daemon-link-and-dashboard-measurements) records the exact measurements and evidence limits**, rather than inferring values from pixels.
-
-The unchanged historical crop predates the panel-unit correction: its yellow line in the left panel is verified **bytes per second**, not another byte total. The current dashboard JSON removes that rate from the bytes panel; use the separate throughput panel for rates. This user-supplied crop is not proof that a hosted service is currently available or that authenticated automated capture ran.
+This user-supplied crop contains only the top two panels of `Screenshot 2026-09-19 at 17.35.17.png` (capture timezone unspecified), not current service availability. It predates the panel-unit correction: the yellow line on the left is **bytes per second**, not a byte total. The current dashboard puts rates in the separate throughput panel. [TESTING.md](../TESTING.md) owns exact measurements, retained monitoring evidence and reproduction commands.
 
 ## If panels are empty
 

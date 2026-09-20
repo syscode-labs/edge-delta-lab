@@ -10,15 +10,15 @@ A successful chunk commit requires file sync, atomic rename and directory sync. 
 
 Keep the Docker socket out of the simulation containers. The explicit host Docker importer is privileged; do not auto-enable it. Preserve active and rollback artifacts when designing GC. Loading is not activation and image rollback is not database rollback.
 
-Next priorities: real-image benchmark and real Docker test; power-loss/storage-failure harness; maintained CDC engine evaluation; compact/per-layer indexes and no-op fast path; bounded cache/GC; authenticated enrollment and trust rotation; health-gated activation and signed rollback intent. Update evidence and limitations alongside code.
+Use TESTING.md for current proof, remaining gaps and test reproduction; do not maintain a parallel readiness ledger here. README is the short install entrypoint, OPERATIONS.md owns packaged configuration/lifecycle/security/storage, docs/ARCHITECTURE.md owns design and references, and docs/DEVELOPMENT.md owns native/optional Helm alternatives. MTLS.md, GO_EMBEDDING.md and docs/GRAFANA.md are scoped integration guides. Preserve dated evidence and checksum records byte-for-byte during documentation cleanup.
 
 
-## Revision-2 contract
-Read openspec/config.yaml and the active docker-e2e-sender-observability change
-before changing behavior. Main acceptance command is `make docker-demo`; the
+## Transport and sender contract
+Read openspec/config.yaml and the applicable change before changing behavior.
+Real-image acceptance command is `make docker-demo`; the
 synthetic demo is not Docker proof. Sender.py must never SSH/scrape/read receiver
 state. Receipts are outbound only; served bytes are not acknowledged progress.
 Keep LOADED distinct from RUNNING/HEALTHY. Do not infer trust from unauthenticated
-lab receipts. Do not mark task 1.7 complete until retained real Docker results exist.
-Native .excalidraw sources and SVG previews must agree. Keep README instructions
+lab receipts. Keep OpenSpec acceptance tied to retained results, not planned runs.
+The canonical diagram HTML/SVG must agree; preserve historical Excalidraw scenes. Keep README instructions
 plain English and runnable without access to the original chat.

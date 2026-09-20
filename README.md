@@ -14,7 +14,7 @@ A publisher watches a standard Registry v2 repository and signs releases. A rece
 
 Use two Linux hosts: a publisher/hub with Docker Compose, and a receiver with systemd and a local Docker daemon. Both need Python 3, make and the complete Linux bundle; receiver installation needs sudo. No Go or source checkout is required. Use **single-platform image tags matching the receiver architecture**; multi-platform indexes are unsupported. Arm64 bundles exist, but arm64 runtime remains unvalidated; see [testing and limits](TESTING.md).
 
-The commands below target [v0.1.2](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.2), **pending publication and hosted acceptance**. See [release delivery status](TESTING.md#hosted-v011-acceptance-and-v012-delivery-status) for the verified v0.1.1 archives and failed container publication. After v0.1.2 is published, download on each host (replace `linux-amd64` with `linux-arm64` if needed):
+Download the published [v0.1.2](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.2) bundle on each host (replace `linux-amd64` with `linux-arm64` if needed):
 
 ```sh
 curl -fLO https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-linux-amd64.tar.gz
@@ -36,7 +36,7 @@ make hub-status
 
 Setup starts persistent services and creates trust/state once. Keep the private signing key and any registry password on the publisher host. Use new immutable version tags for updates; do not reset keys or sequence counters on restart.
 
-The hub is **loopback HTTP**, not a public endpoint. Remote receivers need trusted HTTPS infrastructure. Use your existing reverse proxy, or the optional [Caddy mTLS wrapper](MTLS.md) (`make mtls-init`, `make mtls-up`, `make mtls-client`; stop it with `make mtls-down`). The wrapper is removable and adds transport client authentication, not release signing. Never expose the raw listener or disable certificate verification.
+The hub is **loopback HTTP**, not a public endpoint. Before connecting a remote receiver, configure [trusted HTTPS](OPERATIONS.md#tls-and-network-boundaries) using your existing reverse proxy or the optional, removable [Caddy mTLS wrapper](MTLS.md). Never expose the raw listener or disable certificate verification.
 
 ### Receiver
 
@@ -51,23 +51,12 @@ sudo make receiver-status
 
 Docker loading grants root-equivalent daemon access; leave it off to stage/verify only. Push an eligible image tag, then a new version tag. Watch `sudo journalctl -u edgelab-receiver`: `staged` means verified archive, `loaded` means verified import—not running or healthy.
 
-### Lifecycle
-
-| Action | Publisher/hub host | Receiver host |
-|---|---|---|
-| Inspect | `make hub-status` | `sudo make receiver-status` |
-| Restart | `make hub-restart` | `sudo make receiver-restart` |
-| Stop | `make hub-stop` | `sudo make receiver-stop` |
-| Uninstall | `make hub-uninstall` | `sudo make receiver-uninstall` |
-
-Uninstall retains trust/state/data; it is not a purge or automatic upgrade. Keep the bundle and env files for management. See [operations](deploy/compose/README.md) for credentials, logs, storage, start/reinstall behavior and cleanup boundaries.
-
 ## Guides
 
-- [Operations and configuration](deploy/compose/README.md)
+- [Operations: configuration, lifecycle, security and storage](OPERATIONS.md)
 - [Optional mTLS transport](MTLS.md)
 - [Embedding from Go](GO_EMBEDDING.md)
 - [Tests, retained proof, measurements and remaining limits](TESTING.md)
-- [Native commands and optional Helm hub](docs/DOCKER_RUN.md) · [Optional monitoring](docs/GRAFANA.md)
+- [Developer/native commands and optional Helm hub](docs/DEVELOPMENT.md) · [Optional monitoring](docs/GRAFANA.md)
 
-No particular registry vendor, VPN, Kubernetes or monitoring service is required. Release signatures protect content, not confidentiality, enrollment or application health. Plan disk capacity: cache and archive retention are unbounded.
+No particular registry vendor, VPN, Kubernetes or monitoring service is required.

@@ -2,7 +2,7 @@
 
 **Current:** [architecture.html](architecture.html) is the single editable source; [architecture.svg](architecture.svg) is its accessible README preview. Edit the HTML, run `python3 scripts/diagrams.py`, then `python3 scripts/diagrams.py --check`. `make diagrams` calls the same exporter. It never regenerates legacy diagrams.
 
-Design: architecture, doc-wide 1280×720, simplified (six nodes), engineer/mixed audience, light editorial layout. The installed customized IMP profile supplied the warm paper/ink/red tokens and Chakra Petch / IBM Plex Mono families. No shared style profile was modified. Google Fonts are optional: image-embedded SVGs and offline viewers use Arial/monospace fallbacks. Both font modes need visual inspection after edits.
+Design: 1280×720, six nodes, light editorial layout. Google Fonts (Chakra Petch / IBM Plex Mono) are optional: image-embedded SVGs and offline viewers use Arial/monospace fallbacks. Inspect both font modes after edits.
 
 ## Fidelity and retirement ledger
 

@@ -44,7 +44,7 @@ type ServerStats struct {
 }
 
 // Pacer is one aggregate response-body budget for this server/site, not per worker.
-// It does not model packet loss or TCP retransmission; see docs/EXPERIMENTS.md.
+// It does not model packet loss or TCP retransmission; see TESTING.md.
 type Pacer struct {
 	mu   sync.Mutex
 	next time.Time

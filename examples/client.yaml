@@ -1,7 +1,7 @@
 # edgelab client configuration (v3). Copy, edit the four required fields and
 # run: edgelab conf -config client.yaml
 #
-# Safety defaults: action is dry-run (nothing is ever touched) and HTTPS is
+# Safety defaults: action is dry-run (downloads/stages without Docker import) and HTTPS is
 # required unless allow_http is set for an isolated lab. The allow/ignore gate
 # is applied BEFORE any artifact download, so ineligible releases cost no
 # bytes. `load` and `restart` import into Docker ONLY after signature, chunk,
@@ -15,7 +15,7 @@ state_dir: /var/lib/edgelab              # required: persistent state (chunks, s
 # Optional fields (defaults shown):
 # device_id: edge-01          # label in delivery acknowledgements
 # allow_http: false           # plaintext escape hatch for an isolated lab ONLY
-# poll: 30s                   # reconcile cadence when run under `edgelab watch`
+# poll: 30s                   # accepted by parser; conf remains one-shot, not a watcher
 # workers: 4                  # concurrent chunk requests
 # max_releases: 0             # safety bound for dry-run enumeration (0 = none)
 

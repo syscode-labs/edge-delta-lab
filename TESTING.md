@@ -2,6 +2,8 @@
 
 This is the current human-readable home for **what ran, what the numbers mean, and what remains unproved**. Evidence under `evidence/` and OpenSpec task histories are dated records, not claims about today's source or release. Their original version labels and checksums are retained. A configured CI workflow or a command below is not proof of execution.
 
+Two frozen evidence indexes retain relative links to guides removed in the documentation consolidation. Read those indexes in the [pre-consolidation packaged-install snapshot](https://github.com/syscode-labs/edge-delta-lab/blob/811b082eeaec9deeefce4bd85d942dff5763257e/evidence/intended-install/packaged-linux/README.md) and [revision-3 snapshot](https://github.com/syscode-labs/edge-delta-lab/blob/811b082eeaec9deeefce4bd85d942dff5763257e/evidence/revision-3/README.md), where the linked files and anchors remain available. Their bytes and checksum records were not rewritten to follow the current guide map.
+
 Edge Delta remains experimental. Docker **loaded** means verified import, not running, healthy or still present in Docker. The publisher signs an exact archive; the receiver checks signature, sequence, sizes, encoded/raw chunk hashes and whole-archive identity before optional import. Never weaken those checks to make a test pass.
 
 ## Retained proof
@@ -43,6 +45,8 @@ The historical [closeout](evidence/intended-install/packaged-linux/VALIDATION.md
 **Scope:** two Ubuntu 24.04 amd64 OrbStack LXC guests with independent classic `vfs` Docker stores, but a shared kernel—not independent physical hosts or a WAN. OrbStack globally clears `LoadCredential`; a disclosed receiver-only fixture drop-in restored the packaged declarations and added a nonsecret mode diagnostic. This is not untouched native-host sandbox or reboot proof. Only amd64 executed in this run; arm64 was archive/ELF inspection only. The packaged publisher writes the shared local hub filesystem; it has no outbound publisher-to-hub mTLS option, and that path was not exercised.
 
 **Go embedding and HTTP mTLS:** [GO_EMBEDDING.md](GO_EMBEDDING.md) and [MTLS.md](MTLS.md) are integrated guides, not pending integrations. The fresh [make-check log](evidence/usability-mtls-20260920/make-check.txt) records Go vet, uncached Go tests and race tests (including `embedding` and `hubclient`), 82 Python tests and 3 Compose setup tests passing. Go integration covers the public publisher/receiver agents, registry publication, receiver-to-hub HTTP mTLS staging and receipt delivery. It does not establish a remote HTTP publisher upload, Docker activation or the separate example module's test execution. Keep that Go integration scope separate from packaged registry-to-Docker acceptance.
+
+<a id="hosted-v011-acceptance-and-v012-delivery-status"></a>
 
 #### Hosted v0.1.2 acceptance and complete release delivery
 
@@ -152,7 +156,7 @@ Body bytes exclude HTTP headers, IP/TCP/TLS framing, acknowledgements, lower-lev
 | Other integrations | Live Harbor-specific acceptance and live Telegram/Slack notification delivery are not established by registry/mock endpoint tests. |
 | Tool/render evidence | Legacy Excalidraw browser import and authenticated automated Grafana capture remain **NOT RUN**. The new canonical diagram is editable HTML/SVG, not an Excalidraw runtime test. |
 
-This independent Gear-style chunker is not desync/casync compatible or a full FastCDC implementation. Upstream [sources](docs/SOURCES.md) explain concepts; they do not certify this code. Evaluate maintained alternatives before adopting a custom fleet updater.
+This independent Gear-style chunker is not desync/casync compatible or a full FastCDC implementation. Upstream [design references](docs/ARCHITECTURE.md#design-references) explain concepts; they do not certify this code. Evaluate maintained alternatives before adopting a custom fleet updater.
 
 ## Documentation-only validation
 
@@ -170,6 +174,7 @@ These are **reproduction commands, not fresh results**. Use one isolated checkou
 make -j1 check
 make openspec-check
 python3 scripts/watch_smoke.py
+(cd examples/go-embedding && go test -race ./... && go build ./... && go vet ./...)
 make build
 python3 scripts/demo.py --work work/transport-fresh --size-mib 16 --rate-kbit 5000
 make docker-smoke
@@ -177,7 +182,7 @@ make docker-demo WORK=work/docker-fresh SIZE_MIB=16 RATE_KBIT=5000
 make install-contract
 ```
 
-Choose fresh work paths. `make check` covers Go vet/tests/race and Python tests, not physical durability. The synthetic demo is transport-only; the Docker demo explicitly runs images offline. Inspect each generated `results.json`, logs and `RESULTS.md`, not just process exit. Sender-side demo visibility uses `make sender-status WORK=work/docker-fresh`; it does not scrape receiver files.
+Choose fresh work paths. `make check` covers Go vet/tests/race and Python tests, not physical durability. The synthetic demo is transport-only: its generated archives are not runnable Docker images, so never use `--docker-load` with them. `scripts/watch_smoke.py` exercises manual publication, promotion and a persistent staging client; prefer that automated reproduction to a parallel multi-terminal demo. The root `compose.yaml` and `scripts/prepare_compose.py` are fault-injection simulation, not the installation entrypoint. The Docker demo explicitly runs real images offline. Inspect each generated `results.json`, logs and `RESULTS.md`, not just process exit. Sender-side demo visibility uses `make sender-status WORK=work/docker-fresh`; it does not scrape receiver files.
 
 Additional checks:
 
@@ -186,6 +191,8 @@ Additional checks:
 openspec validate --all --strict --no-interactive
 # Requires Docker, Kind, kubectl, Helm and matching Go/GOROOT.
 python3 scripts/helm_kind_lifecycle.py --evidence work/helm-kind-fresh
+# Static chart contracts; omit --render-only for the isolated Docker exporter check.
+python3 scripts/helm_contract_test.py --render-only
 # Inspect the historical Linux evidence with its independent verifier.
 python3 scripts/verify_sustainability.py
 # Local artifacts only: no upload, push or tag.
@@ -251,4 +258,4 @@ Use [HTTP fault controls](examples/flaky.json) only on isolated tests. `rate_kbi
 
 Compare actual ordinary pulls and delta transfers from equivalent initial caches. Record CPU, elapsed time, disk high-water mark, flash writes and interface bytes, alongside body counters. Vary chunk size/concurrency and test expired credentials, full disks and long outages. Only authorized disposable namespaces/hosts should receive kernel traffic shaping; remove it afterward. Test actual abrupt power-off separately. Never change unrelated routes, firewalls, cloud accounts or Tailscale ACLs to make a test pass.
 
-See [operations](deploy/compose/README.md), [architecture](docs/ARCHITECTURE.md) and the [evidence redaction policy](evidence/REDACTION.md) before collecting or sharing results.
+See [operations](OPERATIONS.md), [architecture](docs/ARCHITECTURE.md) and the [evidence redaction policy](evidence/REDACTION.md) before collecting or sharing results.

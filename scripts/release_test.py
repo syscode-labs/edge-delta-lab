@@ -13,6 +13,7 @@ from unittest.mock import patch
 from urllib.parse import urlsplit
 
 import release
+from docs_test import anchors
 
 
 class DocumentationTest(unittest.TestCase):
@@ -20,7 +21,7 @@ class DocumentationTest(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         entries = {name: data for name, data, _ in release.install_entries(root, 'v0.1.1')}
         required = {'TESTING.md', 'GO_EMBEDDING.md', 'docs/ARCHITECTURE.md',
-                    'docs/DOCKER_RUN.md', 'docs/GRAFANA.md',
+                    'OPERATIONS.md', 'docs/DEVELOPMENT.md', 'docs/GRAFANA.md',
                     'docs/diagrams/architecture.html', 'docs/diagrams/architecture.svg',
                     'docs/images/edge-delta-grafana-dashboard.png',
                     'examples/go-embedding/go.mod', 'examples/go-embedding/go.sum',
@@ -37,6 +38,8 @@ class DocumentationTest(unittest.TestCase):
                     continue
                 resolved = posixpath.normpath(posixpath.join(posixpath.dirname(name), parsed.path))
                 self.assertIn(resolved, entries, (name, target))
+                if parsed.fragment and resolved.endswith('.md'):
+                    self.assertIn(parsed.fragment, anchors(entries[resolved].decode()), (name, target))
             # Do not silently turn a source typo into a broken versioned web link.
             for target in re.findall(r'\]\(([^)]+)\)', (root / name).read_text()):
                 parsed = urlsplit(target)
@@ -46,7 +49,11 @@ class DocumentationTest(unittest.TestCase):
         self.assertIn(b'](examples/go-embedding/publisher/main.go)', entries['GO_EMBEDDING.md'])
         self.assertIn(b'https://github.com/syscode-labs/edge-delta-lab/tree/v0.1.1/evidence/v0.1.1-install/README.md', entries['TESTING.md'])
         self.assertIn(b'https://github.com/syscode-labs/edge-delta-lab/tree/v0.1.1/internal/registry/publish.go', entries['docs/ARCHITECTURE.md'])
-        self.assertIn(b'../TESTING.md#retained-proof', entries['docs/DOCKER_RUN.md'])
+        self.assertIn(b'../TESTING.md', entries['docs/DEVELOPMENT.md'])
+        canonical_docs = {'README.md', 'OPERATIONS.md', 'MTLS.md', 'GO_EMBEDDING.md',
+                          'TESTING.md', 'docs/ARCHITECTURE.md',
+                          'docs/DEVELOPMENT.md', 'docs/GRAFANA.md'}
+        self.assertEqual({name for name in entries if name.endswith('.md')}, canonical_docs)
 
 
 @unittest.skipUnless(shutil.which("helm"), "Helm is required for packaging tests")

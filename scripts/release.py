@@ -24,7 +24,7 @@ INSTALL_FILES = {
     "scripts/lifecycle.py": ("scripts/lifecycle.py", 0o755),
     "scripts/mtls.py": ("scripts/mtls.py", 0o755),
     "deploy/mtls/Caddyfile.template": ("deploy/mtls/Caddyfile.template", 0o644),
-    "deploy/compose/README.md": ("deploy/compose/README.md", 0o644),
+    "OPERATIONS.md": ("OPERATIONS.md", 0o644),
     "install": ("scripts/install.sh", 0o755),
     "scripts/install.py": ("scripts/install.py", 0o755),
     "deploy/compose/setup.py": ("deploy/compose/setup.py", 0o644),
@@ -36,9 +36,8 @@ INSTALL_FILES = {
 # historical evidence corpus. Other Markdown links get a versioned web target.
 for name in (
     "TESTING.md", "GO_EMBEDDING.md",
-    "docs/ARCHITECTURE.md", "docs/DOCKER_RUN.md", "docs/GRAFANA.md",
-    "docs/EXPERIMENTS.md", "docs/PRODUCTION_GAPS.md", "docs/SOURCES.md",
-    "docs/SYNTHETIC_DEMO.md", "docs/diagrams/architecture.html",
+    "docs/ARCHITECTURE.md", "docs/DEVELOPMENT.md", "docs/GRAFANA.md",
+    "docs/diagrams/architecture.html",
     "docs/diagrams/architecture.svg", "docs/images/edge-delta-grafana-dashboard.png",
     "examples/flaky.json", "examples/go-embedding/go.mod",
     "examples/go-embedding/go.sum", "examples/go-embedding/lifecycle_test.go",

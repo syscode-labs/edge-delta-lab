@@ -1,95 +1,51 @@
 # Optional mutual-TLS front door
 
-The hub remains plain HTTP on **127.0.0.1 only**. This separate Caddy container
-terminates HTTPS and requires a verified client certificate before forwarding any
-request, including health, manifests, objects and receipts. Removing it does not
-change hub code, publisher keys, data, or the receiver protocol. Another proxy can
-replace it. This is transport authentication, not per-device authorization or a
-replacement for signed manifests.
+The hub remains plain HTTP on **127.0.0.1 only**. This separate Caddy container terminates HTTPS and requires a verified client certificate for every request, including health, manifests, objects and receipts. Removing it does not change hub code, publisher keys, data or the receiver protocol. This is transport authentication, not per-device authorization or a replacement for signed manifests.
 
 ## Requirements
 
-Use a Linux Docker host with Compose v2, Python 3, Make and OpenSSL 1.1.1 or newer.
-The wrapper uses host networking to reach the hub's loopback port. It is not a
-portable Docker Desktop networking recipe. Source installs additionally need Go;
-extracted Linux bundles do not. Receivers require Linux systemd; mTLS uses
-`LoadCredential` (systemd 247 or newer). No inbound receiver port is needed.
+First install the publisher/hub using [OPERATIONS.md](OPERATIONS.md). Keep its `hub.env` and work from the same source tree or extracted Linux release directory. The wrapper needs Linux Docker with Compose v2, Python 3, Make and OpenSSL 1.1.1 or newer. Host networking reaches the hub's loopback port; this is not a portable Docker Desktop networking recipe. Receiver mTLS uses systemd `LoadCredential` (systemd 247 or newer); no inbound receiver port is needed.
 
-## Install
-
-From the source tree or extracted Linux release directory:
+## Initialize the wrapper
 
 ```sh
-cp hub.env.example hub.env
-# Edit hub.env: writable HUB_DIRECTORY and MTLS_DIRECTORY (~/ is supported), registry,
-# repository, allow regex, MTLS_HOST matching DNS, and distinct ports.
-# REGISTRY_PASSWORD_FILE points to a chmod-600 file, never a password argument.
-make hub-up
+# Edit hub.env: writable MTLS_DIRECTORY (~/ is supported),
+# MTLS_HOST matching DNS, and MTLS_PORT distinct from HUB_PORT.
 make mtls-init
 make mtls-client CLIENT=edge-01
 make mtls-up
-make hub-status
 ```
 
-Use an unprivileged operator with Docker access and writable installation paths.
-Docker access is root-equivalent. Defaults create new directories under that
-operator's home; only the directory paths expand `~`, never shell expressions or
-secret values. For a custom location, provision/assign its **parent** to the
-operator, not HUB_DIRECTORY or MTLS_DIRECTORY themselves: both initializers
-refuse existing installation directories. Permit inbound TCP on MTLS_PORT (default 8443),
-not HUB_PORT. No HTTP redirect listener is created. DNS must resolve MTLS_HOST to
-the Linux host; the generated server certificate covers that exact name/IP.
+Use an unprivileged operator with Docker access (root-equivalent). For a custom directory, assign its **parent** to that operator, not MTLS_DIRECTORY itself: initialization refuses existing paths, including symlinks, rather than replacing trust. Only directory paths expand `~`, never shell expressions or secrets. Permit inbound TCP on MTLS_PORT (default 8443), not HUB_PORT. No HTTP redirect listener is created. DNS must resolve MTLS_HOST to the Linux host; the generated server certificate covers that exact name/IP.
 
-The initializer refuses existing paths rather than silently replacing trust. It
-creates **two independent CAs**: server trust and client enrollment. Server and
-client leaf certificates have only their respective EKUs. CA certificates expire
-in 365 days and leaf certificates in 90 days. There is no automatic renewal or
-per-client revocation: plan rotation before expiry; replace the trusted client CA
-to revoke its entire cohort. Do not claim certificate identity is bound to a
-receiver's device-id. Caddy has no authority private-key mounts.
+Initialization creates **two independent CAs**: server trust and client enrollment. Server and client leaf certificates have only their respective extended key usages. CA certificates expire in 365 days and leaf certificates in 90 days. There is no automatic renewal or per-client revocation: plan rotation before expiry; replace the trusted client CA to revoke its entire cohort. Certificate identity is not bound to a receiver's device-id. Caddy mounts no authority private keys.
 
-Only transfer `MTLS_DIRECTORY/clients/edge-01/{hub-ca.pem,client.pem,client.key}`
-to edge-01 through a trusted channel, plus **publisher.pub** from the hub. Never
-transfer publisher.key, server.key, authority/, or another client's private key.
-Protect enrollment directories with mode 0700 and private keys with 0600.
-Back up CA private keys securely/offline; they are needed only to issue certificates.
+## Enroll a receiver
 
-On the receiver, set absolute paths in receiver.env:
+Transfer only `MTLS_DIRECTORY/clients/edge-01/{hub-ca.pem,client.pem,client.key}` to edge-01 through a trusted channel, plus the publisher's **public** key. Never transfer `publisher.key`, `server.key`, `authority/` or another client's private key. Protect enrollment directories with mode `0700` and private keys with `0600`. Back up CA private keys securely/offline; they are needed only to issue certificates.
+
+Prepare a fresh receiver's `receiver.env` as described in [receiver installation](OPERATIONS.md#receiver-installation-and-trust-transfer). Set `HUB_URL=https://the-configured-host:8443` and the absolute enrollment paths:
+
+```dotenv
+HUB_CA=/etc/edgelab-enrollment/hub-ca.pem
+HUB_CLIENT_CERT=/etc/edgelab-enrollment/client.pem
+HUB_CLIENT_KEY=/etc/edgelab-enrollment/client.key
+```
+
+Then use the normal receiver installation:
 
 ```sh
-cp receiver.env.example receiver.env
-# Set HUB_URL=https://the-configured-host:8443, DEVICE_ID, public key and TLS paths.
 sudo make receiver-up
 sudo make receiver-status
-sudo make receiver-restart
-sudo make receiver-stop
-sudo make receiver-up
 ```
 
-The installer copies TLS enrollment into root-private `/etc/edgelab/tls`.
-Systemd delivers credentials to the DynamicUser service via its private credential
-directory. Its read-only key can be mode `0440`; the launcher copies only that key
-to a new `0600` file inside the service-owned `0700` `/run/edgelab-receiver`
-RuntimeDirectory before executing the client. The directory is checked for owner,
-mode and symlinks; the key is atomically replaced without following a destination
-symlink. Systemd removes this ephemeral copy on stop. The root-private enrollment
-and read-only credentials are unchanged, and the general TLS client's owner-only
-key permission check is **not** relaxed. Values are never command-line arguments.
-Direct CLI callers use `--hub-ca`, `--hub-client-cert`, and `--hub-client-key` with
-those same three enrollment files (key mode `0600` or stricter).
+The installer copies enrollment into root-private `/etc/edgelab/tls`. Systemd delivers credentials to the DynamicUser service through its private credential directory. Because its read-only key can be `0440`, the launcher copies only that key to a new `0600` file in the service-owned `0700` `/run/edgelab-receiver` RuntimeDirectory. It checks ownership, mode and symlinks, then atomically replaces the key without following a destination symlink. Systemd removes the ephemeral copy on stop; root-private enrollment and read-only credentials stay unchanged. The general TLS client's owner-only key check is **not** relaxed, and credential values never become command-line arguments.
+
+Direct CLI callers use `--hub-ca`, `--hub-client-cert` and `--hub-client-key` with those three enrollment files (key mode `0600` or stricter).
 
 ## Persistence, removal and replacement
 
-`hub-up` installs once, then starts retained Compose services. `hub-stop` stops
-without deletion; `hub-restart` restarts. `hub-uninstall` removes containers/network,
-not keys, registry credentials, configuration or state. A later `hub-up` reuses
-the retained directory. Changing hub.env does not rewrite an existing installation.
-
-`receiver-uninstall` disables/removes the service and installed binaries, retaining
-`/etc/edgelab` and `/var/lib/edgelab-receiver`. A later `receiver-up` reinstalls using
-retained trust/configuration. Changing receiver.env does not rewrite retained
-configuration. To deliberately reset enrollment, first uninstall and explicitly
-archive/remove `/etc/edgelab`; preserve verified state unless a reset is intended.
+Use [the base lifecycle guide](OPERATIONS.md#lifecycle) for publisher/receiver restart, uninstall, retained configuration and deliberate re-enrollment. Editing env files does not replace existing enrollment. Wrapper lifecycle is independent:
 
 ```sh
 make mtls-down                 # removes only proxy containers/network
@@ -97,31 +53,12 @@ make hub-status                # hub remains available on loopback
 make mtls-up                   # validate and recreate, same keys
 ```
 
-After `mtls-down`, remote HTTPS must fail until a replacement proxy is started.
-Point that proxy at `127.0.0.1:HUB_PORT`, require and verify client certificates,
-and configure compatible server/client trust. Never solve replacement by exposing
-the hub HTTP port publicly. Remove MTLS_DIRECTORY explicitly only when its trust
-material is backed up or intentionally retired. Do not run broad Docker cleanup.
+After `mtls-down`, remote HTTPS must fail until a replacement proxy starts. Point the replacement at `127.0.0.1:HUB_PORT`, require and verify client certificates, and configure compatible server/client trust. Never expose the hub HTTP port publicly. Remove MTLS_DIRECTORY only when its trust material is backed up or intentionally retired; do not run broad Docker cleanup.
 
-To use publicly trusted HTTPS without client certificates, empty all three HUB_*
-TLS file fields before a **fresh** receiver install. HTTP is rejected unless
-ALLOW_HTTP=true is explicitly set; use it only in isolated tests.
-For a deliberately isolated plain-HTTP registry, set REGISTRY_ALLOW_HTTP=true;
-registry HTTP is otherwise rejected by the packaged installer as well.
+To use publicly trusted HTTPS without client certificates, empty `HUB_CA`, `HUB_CLIENT_CERT` and `HUB_CLIENT_KEY` before a **fresh** receiver install. An existing enrollment needs the deliberate retained-config procedure in Operations, not just an env edit.
 
-## Caddy configuration source
+## Caddy configuration
 
-The shipped Caddyfile uses `client_auth { mode require_and_verify; trust_pool file
-{ pem_file ... } }`, checked against the official
-[TLS directive reference](https://caddyserver.com/docs/caddyfile/directives/tls).
-The image is pinned to `caddy:2.10.2-alpine` (version tag, not immutable digest).
-`mtls-up` runs `caddy validate` before starting. Admin API is disabled, no access
-log is enabled, and the container mounts only runtime server identity and the
-public client CA. Registry credentials and publisher signing keys stay outside it.
+The shipped Caddyfile uses `client_auth { mode require_and_verify; trust_pool file { pem_file ... } }`; see the official [TLS directive reference](https://caddyserver.com/docs/caddyfile/directives/tls). The image is pinned to `caddy:2.10.2-alpine` (a version tag, not an immutable digest). `mtls-up` runs `caddy validate` before starting. The admin API is disabled, no access log is enabled, and the container mounts only runtime server identity and the public client CA. Registry credentials and publisher signing keys stay outside it.
 
-## Validation
-
-[TESTING.md](TESTING.md#new-usability-and-mtls-acceptance) owns the bounded
-installer/Caddy evidence, outstanding full-delivery acceptance and
-[reproduction commands](TESTING.md#installer-and-mtls-checks).
-Source-only build/test targets in the packaged Makefile require a source checkout.
+[TESTING.md](TESTING.md) owns installer/Caddy evidence, acceptance boundaries and reproduction commands.

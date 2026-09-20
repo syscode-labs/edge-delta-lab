@@ -1,10 +1,10 @@
-# Persistent publisher, hub and Linux receiver
+# Operations
 
-The [README](../../README.md) is the short packaged path. This guide covers its prerequisites, trust boundary and lifecycle. Registry v2 → publisher → hub → receiver works without a specific registry vendor, VPN, Helm or Grafana. Setup starts managed services, not foreground terminals.
+The [README](README.md) is the short packaged path. This guide covers its prerequisites, trust boundary and lifecycle. Registry v2 → publisher → hub → receiver works without a specific registry vendor, VPN, Helm or Grafana. Setup starts managed services, not foreground terminals.
 
 ## Install from the Linux bundle
 
-See the [v0.1.1 asset names and download commands](../../README.md#install), or obtain a locally built candidate bundle from a maintainer. Extract the complete Linux archive on each host. Requirements: Python 3, make, local Docker Engine; Compose on the publisher host; systemd and sudo on the receiver. Import requires a `docker` group able to access its local daemon socket.
+Download the published [v0.1.2 Linux bundle](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.2) using the [README download commands](README.md#install), verify `SHA256SUMS`, and extract the complete archive on each host. Requirements: Python 3, make, local Docker Engine; Compose on the publisher host; systemd and sudo on the receiver. Import requires a `docker` group able to access its local daemon socket. Arm64 bundles are available, but arm64 runtime remains unvalidated; see [TESTING.md](TESTING.md).
 
 The simplest interface is `cp hub.env.example hub.env`, edit the values, then `make hub-up`; on the receiver use `cp receiver.env.example receiver.env`, edit, then `sudo make receiver-up`. Keep these env files private. Status/restart/stop/uninstall are `make hub-status`, `make hub-restart`, `make hub-stop`, `make hub-uninstall` and their `sudo make receiver-*` counterparts. These wrappers call the same manager described below; do not run both setup paths on an existing installation.
 
@@ -20,7 +20,7 @@ Use immutable single-platform tags matching receiver architecture. Multi-platfor
 
 Setup creates a new signing identity/state, assembles a runtime container from the **bundled binary** plus Alpine/CA certificates, and starts both services. There is no Go build or source dependency. Registry/base-image/package network access is required. Setup refuses existing paths (including symlinks). A failed setup can leave partial files: inspect and remove only that fresh failed installation before retrying. Never delete a live installation to overcome this check.
 
-Install on the Docker daemon's local host; remote contexts cannot copy these bind mounts. Rootless/user-namespace-remapped Docker and SELinux labeling are not configured by the installer. `--port 18080` changes the loopback hub port. The template `compose.yaml` in this source tree is not a ready installation.
+Install on the Docker daemon's local host; remote contexts cannot copy these bind mounts. Rootless/user-namespace-remapped Docker and SELinux labeling are not configured by the installer. `--port 18080` changes the loopback hub port. The source template `deploy/compose/compose.yaml` is not a ready installation.
 
 ### Registry Basic authentication and retry
 
@@ -61,11 +61,13 @@ server {
 }
 ```
 
-Certificate issuance, renewal, firewall/network access and proxy service management are operator prerequisites, not features of `./install`. Alternatively, use the separately managed [Caddy mTLS wrapper](../../MTLS.md): `make mtls-init`, `make mtls-up`, `make mtls-client`, and `make mtls-down`. It is removable without changing the hub or release-signing keys; follow that guide for certificate distribution and renewal. The installed receiver polls; the nginx block above does not enable WebSocket upgrades for optional push clients. A private CA must be securely installed in the receiver's normal OS trust store. Never turn off certificate verification.
+Certificate issuance, renewal, firewall/network access and proxy service management are operator prerequisites, not features of `./install`. Alternatively, use the separately managed [Caddy mTLS wrapper](MTLS.md): `make mtls-init`, `make mtls-up`, `make mtls-client`, and `make mtls-down`. It is removable without changing the hub or release-signing keys; follow that guide for certificate distribution and renewal. The installed receiver polls; the nginx block above does not enable WebSocket upgrades for optional push clients. A private CA must be securely installed in the receiver's normal OS trust store. Never turn off certificate verification.
 
 TLS encrypts and authenticates the server; it does **not** authenticate receivers. Restrict access to your trusted network or supply a compatible external access boundary. This installer has no HTTP Basic/bearer client-auth flags. For isolated testing or an independently secured persistent tunnel only, use `--hub http://... --allow-http`. A foreground SSH session is not the managed installation path.
 
 ## Receiver installation and trust transfer
+
+For the env/Make interface, set `HUB_URL`, `PUBLISHER_PUBLIC_KEY`, and `DEVICE_ID` in `receiver.env`; set `DOCKER_LOAD=true` only when import is intended. For publicly trusted HTTPS without client certificates, empty `HUB_CA`, `HUB_CLIENT_CERT`, and `HUB_CLIENT_KEY` (the example defaults to mTLS enrollment paths). For mTLS, follow [certificate enrollment](MTLS.md) instead. Env files use plain `KEY=value`, not shell expressions; receiver file paths must be absolute.
 
 Copy **only** `keys/publisher.pub` from the publisher installation over verified SSH or another trusted channel. Verify the host identity independently; downloading this key from the unauthenticated hub would not establish trust. Never transfer `publisher.key`, registry credentials, or the entire installation. The receiver config contains only the hub URL, public key, device ID and opt-ins.
 
@@ -123,19 +125,8 @@ The installation/key directories are `0700`; containers run as UID 100 and the s
 
 Edit repository selection in `watcher.yaml`, then restart; do not regenerate keys or sequence counters for updates. Preserve owner/group permissions on restore. Receiver cache/import markers and monotonic state must likewise survive restart. Markers record previous import, not current inventory.
 
-## Source build alternative
+## Further guides
 
-Developers with Go matching `go.mod` may use the existing checkout-based setup:
-
-```sh
-go build -o bin/edgelab ./cmd/edgelab
-python3 deploy/compose/setup.py --directory "$HOME/edge-delta-source" \
-  --registry https://registry.example.net --repository team/app --allow '^v'
-docker compose -f "$HOME/edge-delta-source/compose.yaml" up -d --build
-```
-
-This alternative builds the checkout's daemon target and needs the checkout at its original location for rebuilds. With `--username`, export `REGISTRY_PASSWORD` for each Compose invocation; unlike the packaged manager this source setup does not persist a password file. Use Compose `ps`, `restart`, `stop`, `up -d`, and `down` for its lifecycle. Native foreground/server and optional Helm instructions are in the [runtime guide](../../docs/DOCKER_RUN.md).
-
-## Validation
-
-[TESTING.md](../../TESTING.md) owns the current test commands, retained proof and pending acceptance. Historical installer execution is not proof that a new bundle or mTLS wrapper has run.
+- [Native/source development and optional Helm](docs/DEVELOPMENT.md) — alternatives to the packaged installation, not extra setup steps.
+- [Optional monitoring](docs/GRAFANA.md) — exporters, collection and dashboard configuration.
+- [TESTING.md](TESTING.md) — test commands, retained proof and remaining limits. Publication alone is not runtime acceptance.
