@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "gate_count": 17,
+  "result_sha256": "265bb3be861ad38cf67673390464baccefa90b78b49fcc67f1aea13b1e4d127d",
+  "deleted_guests": [
+    "ed-use-0bb463abff-hub",
+    "ed-use-0bb463abff-receiver"
+  ],
+  "owned_guests_absent": true,
+  "live_guests": []
+}

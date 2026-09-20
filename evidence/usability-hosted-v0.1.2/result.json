@@ -1,0 +1,263 @@
+{
+  "status": "PASS",
+  "gates": {
+    "two-daemons": [
+      "d8171297-6c6e-4386-bf4b-b9907fbbf49a",
+      "290ac172-fad5-43a7-9df9-e7ddba75447a"
+    ],
+    "packaged-amd64-executed-on-both": true,
+    "registry-v2-anonymous-denied": true,
+    "packaged-compose-bytes-and-signing-key-boundary": {
+      "publisher": [
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/watcher-state",
+          "Destination": "/state",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/watcher.yaml",
+          "Destination": "/config/watcher.yaml",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/keys/publisher.key",
+          "Destination": "/keys/publisher.key",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/origin",
+          "Destination": "/origin",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "hub": [
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/origin",
+          "Destination": "/origin",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "$HOME/hub/hub-state",
+          "Destination": "/state",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "remote-raw-http-inaccessible": true,
+    "mtls-allowed-missing-and-untrusted-client-boundaries": true,
+    "lxc-credential-override": "Restored packaged LoadCredential after OrbStack global clearing; not untouched native-host proof",
+    "systemd-credential-private-runtime-key": true,
+    "version-1-signed-config-and-offline-run": {
+      "image_id": "sha256:063dd3883274f1b93b08179aac2fda56d3d96ae4317f99ebe0d339446e0af7cd",
+      "payload": "edge-delta-version-1"
+    },
+    "docker-load-does-not-activate": true,
+    "version-2-signed-config-and-offline-run": {
+      "image_id": "sha256:3a87a672b87bfa8412b5c141eba032b5c2002e1b2810db8a0cd313935218d0d0",
+      "payload": "edge-delta-version-2"
+    },
+    "publisher-restart-then-new-tag-and-receiver-reuse": {
+      "release": "proof-app-v2-20d07fb1ff78cc58b46d854ea2c9ad99b3938d318f1269a807f632d3bd52cc01",
+      "sequence": 2,
+      "phase": "loaded",
+      "artifact": "/var/lib/edgelab-receiver/staged/ec77f7c1c683ac87469ed17e92d3b08bd3646f12dac0d8f77a329bda3f8113bc.tar",
+      "artifact_sha256": "ec77f7c1c683ac87469ed17e92d3b08bd3646f12dac0d8f77a329bda3f8113bc",
+      "artifact_bytes": 10679808,
+      "unique_chunks": 138,
+      "reused_chunks": 136,
+      "reused_raw_bytes": 10564585,
+      "downloaded_chunks": 2,
+      "downloaded_raw_bytes": 115223,
+      "chunk_response_body_bytes": 111295,
+      "metadata_response_body_bytes": 37049,
+      "useful_encoded_bytes": 111295,
+      "retry_overhead_body_bytes": 0,
+      "chunk_requests": 2,
+      "metadata_requests": 1,
+      "retries": 0,
+      "integrity_failures": 0,
+      "elapsed_seconds": 0.912610369
+    },
+    "receiver-restart-fresh-loaded-summary-zero-downloads": {
+      "summary": {
+        "release": "proof-app-v2-20d07fb1ff78cc58b46d854ea2c9ad99b3938d318f1269a807f632d3bd52cc01",
+        "sequence": 2,
+        "phase": "loaded",
+        "artifact": "/var/lib/edgelab-receiver/staged/ec77f7c1c683ac87469ed17e92d3b08bd3646f12dac0d8f77a329bda3f8113bc.tar",
+        "artifact_sha256": "ec77f7c1c683ac87469ed17e92d3b08bd3646f12dac0d8f77a329bda3f8113bc",
+        "artifact_bytes": 10679808,
+        "unique_chunks": 138,
+        "reused_chunks": 138,
+        "reused_raw_bytes": 10679808,
+        "downloaded_chunks": 0,
+        "downloaded_raw_bytes": 0,
+        "chunk_response_body_bytes": 0,
+        "metadata_response_body_bytes": 0,
+        "useful_encoded_bytes": 0,
+        "retry_overhead_body_bytes": 0,
+        "chunk_requests": 0,
+        "metadata_requests": 1,
+        "retries": 0,
+        "integrity_failures": 0,
+        "elapsed_seconds": 0.143838206
+      },
+      "origin_before": {
+        "origin_started": "2026-09-20T12:59:00.420497302Z",
+        "requests": 4,
+        "chunk_requests": 2,
+        "metadata_requests": 2,
+        "chunk_response_body_bytes": 111295,
+        "metadata_response_body_bytes": 37049,
+        "chunk_retry_response_body_bytes": 0,
+        "injected_disconnects": 0,
+        "injected_503s": 0,
+        "injected_corruptions": 0,
+        "injected_stalls": 0,
+        "object_requests": {
+          "chunks/bd/bd9beb0e07e93e4e655405d479a674cc6f64f9d3eea3a1a9501f2a826ac1e4c4.gz": 1,
+          "chunks/ee/ee4aa3f6dd565e40a37ec38c48d4e68ebba98b1ba9b43b72042ca7868a24abe6.gz": 1
+        }
+      },
+      "origin_after": {
+        "origin_started": "2026-09-20T12:59:00.420497302Z",
+        "requests": 5,
+        "chunk_requests": 2,
+        "metadata_requests": 3,
+        "chunk_response_body_bytes": 111295,
+        "metadata_response_body_bytes": 37049,
+        "chunk_retry_response_body_bytes": 0,
+        "injected_disconnects": 0,
+        "injected_503s": 0,
+        "injected_corruptions": 0,
+        "injected_stalls": 0,
+        "object_requests": {
+          "chunks/bd/bd9beb0e07e93e4e655405d479a674cc6f64f9d3eea3a1a9501f2a826ac1e4c4.gz": 1,
+          "chunks/ee/ee4aa3f6dd565e40a37ec38c48d4e68ebba98b1ba9b43b72042ca7868a24abe6.gz": 1
+        }
+      }
+    },
+    "runtime-key-removed-on-stop": true,
+    "removable-and-independent-replacement-proxy": true,
+    "both-versions-runnable-with-hub-stopped": true,
+    "uninstall-retains-trust-state-data": true
+  },
+  "owned_guests": [
+    "ed-use-0bb463abff-hub",
+    "ed-use-0bb463abff-receiver"
+  ],
+  "limitations": [
+    "OrbStack LXC guests may share a kernel",
+    "classic vfs Docker store",
+    "not WAN or physical-host evidence",
+    "publisher-to-hub mTLS not a packaged Make option; not exercised"
+  ],
+  "bundle": {
+    "archive_sha256": "04b48a478f67cfd489f3c870ade231a0cb3cebc14665029f438ecc6626b7a4a2",
+    "binary_sha256": "4807d57b2bb71e3b8b8e1bc23520bb8beb0b418f8eedc8550cb27b67f9fd6bc6",
+    "architecture": "amd64",
+    "runtime_executed": true,
+    "members": [
+      "GO_EMBEDDING.md",
+      "MTLS.md",
+      "Makefile",
+      "README.md",
+      "TESTING.md",
+      "deploy/compose/Dockerfile.runtime",
+      "deploy/compose/README.md",
+      "deploy/compose/compose.yaml",
+      "deploy/compose/setup.py",
+      "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+      "deploy/helm/edgelab-hub/edgelab-proof.alloy",
+      "deploy/mtls/Caddyfile.template",
+      "docs/ARCHITECTURE.md",
+      "docs/DOCKER_RUN.md",
+      "docs/EXPERIMENTS.md",
+      "docs/GRAFANA.md",
+      "docs/PRODUCTION_GAPS.md",
+      "docs/SOURCES.md",
+      "docs/SYNTHETIC_DEMO.md",
+      "docs/diagrams/architecture.html",
+      "docs/diagrams/architecture.svg",
+      "docs/images/edge-delta-grafana-dashboard.png",
+      "edgelab",
+      "edgelab-exporter",
+      "examples/flaky.json",
+      "examples/go-embedding/go.mod",
+      "examples/go-embedding/go.sum",
+      "examples/go-embedding/lifecycle_test.go",
+      "examples/go-embedding/publisher/main.go",
+      "examples/go-embedding/receiver/main.go",
+      "hub.env.example",
+      "install",
+      "receiver.env.example",
+      "scripts/install.py",
+      "scripts/lifecycle.py",
+      "scripts/mtls.py"
+    ]
+  },
+  "source_url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-linux-amd64.tar.gz",
+  "arm64_inspection_only": {
+    "archive_sha256": "74f09e8d5db7a5574122c5c850ac2066a75bb054a6fc8268a3ac93aaadaf0aef",
+    "binary_sha256": "efdc5be5dcb9f027dec78f52b000fee09963aee4df0d82271257f8c124bb736b",
+    "architecture": "arm64",
+    "runtime_executed": false,
+    "members": [
+      "GO_EMBEDDING.md",
+      "MTLS.md",
+      "Makefile",
+      "README.md",
+      "TESTING.md",
+      "deploy/compose/Dockerfile.runtime",
+      "deploy/compose/README.md",
+      "deploy/compose/compose.yaml",
+      "deploy/compose/setup.py",
+      "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+      "deploy/helm/edgelab-hub/edgelab-proof.alloy",
+      "deploy/mtls/Caddyfile.template",
+      "docs/ARCHITECTURE.md",
+      "docs/DOCKER_RUN.md",
+      "docs/EXPERIMENTS.md",
+      "docs/GRAFANA.md",
+      "docs/PRODUCTION_GAPS.md",
+      "docs/SOURCES.md",
+      "docs/SYNTHETIC_DEMO.md",
+      "docs/diagrams/architecture.html",
+      "docs/diagrams/architecture.svg",
+      "docs/images/edge-delta-grafana-dashboard.png",
+      "edgelab",
+      "edgelab-exporter",
+      "examples/flaky.json",
+      "examples/go-embedding/go.mod",
+      "examples/go-embedding/go.sum",
+      "examples/go-embedding/lifecycle_test.go",
+      "examples/go-embedding/publisher/main.go",
+      "examples/go-embedding/receiver/main.go",
+      "hub.env.example",
+      "install",
+      "receiver.env.example",
+      "scripts/install.py",
+      "scripts/lifecycle.py",
+      "scripts/mtls.py"
+    ]
+  },
+  "cleanup_errors": [],
+  "guests_retained": false
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/SHA256SUMS",
+    "http_status": 200,
+    "name": "SHA256SUMS",
+    "sha256": "f18ef37fe1bb3f449657f8777fce3291b057930ff73238571cb05dc143399c1a"
+  },
+  {
+    "url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-hub-0.1.2.tgz",
+    "http_status": 200,
+    "name": "edgelab-hub-0.1.2.tgz",
+    "sha256": "fad6432f150d46f1024a201f76ab0af84f427cbaaaa81f5051e923bb6ff2d2fc"
+  },
+  {
+    "url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-darwin-arm64.tar.gz",
+    "http_status": 200,
+    "name": "edgelab-v0.1.2-darwin-arm64.tar.gz",
+    "sha256": "afd3f878e758eb24bef0edffbd2cbf4ec825f412e5cf674894b7e01031215037"
+  },
+  {
+    "url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-linux-amd64.tar.gz",
+    "http_status": 200,
+    "name": "edgelab-v0.1.2-linux-amd64.tar.gz",
+    "sha256": "04b48a478f67cfd489f3c870ade231a0cb3cebc14665029f438ecc6626b7a4a2"
+  },
+  {
+    "url": "https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-linux-arm64.tar.gz",
+    "http_status": 200,
+    "name": "edgelab-v0.1.2-linux-arm64.tar.gz",
+    "sha256": "74f09e8d5db7a5574122c5c850ac2066a75bb054a6fc8268a3ac93aaadaf0aef"
+  }
+]

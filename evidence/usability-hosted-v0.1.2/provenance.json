@@ -1,0 +1,50 @@
+{
+  "result.json": {
+    "source": "work/usability-hosted-v012-01/result.json",
+    "source_sha256": "265bb3be861ad38cf67673390464baccefa90b78b49fcc67f1aea13b1e4d127d",
+    "retained_sha256": "c83213c45257abb95268aea3a420874a36cf2ee1f48eae64dc3a930e1e17656a",
+    "transformation": "Replace guest personal home prefix with $HOME"
+  },
+  "summary-1.json": {
+    "source": "work/usability-hosted-v012-01/summary-1.json",
+    "source_sha256": "36f101a7b2a9b804936f28a566dfa913006f30eadc79603cadb9e8dff7294e3e",
+    "retained_sha256": "36f101a7b2a9b804936f28a566dfa913006f30eadc79603cadb9e8dff7294e3e",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "summary-2.json": {
+    "source": "work/usability-hosted-v012-01/summary-2.json",
+    "source_sha256": "821df0dc89ed1b09b177155519899aee8a50346b5e2a482efdce0101529709a9",
+    "retained_sha256": "821df0dc89ed1b09b177155519899aee8a50346b5e2a482efdce0101529709a9",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "summary-2-restart.json": {
+    "source": "work/usability-hosted-v012-01/summary-2-restart.json",
+    "source_sha256": "ba7d8141204fd4b43f759f6835d1c28cdb1110c988ce33f4d86048d46ced935b",
+    "retained_sha256": "ba7d8141204fd4b43f759f6835d1c28cdb1110c988ce33f4d86048d46ced935b",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "cleanup-verification.json": {
+    "source": "work/usability-hosted-v012-01/cleanup-verification.json",
+    "source_sha256": "e3c656c54500de281fe1fb299baa8bff4d74f84a84b79a9992cd3efb6ef5abea",
+    "retained_sha256": "e3c656c54500de281fe1fb299baa8bff4d74f84a84b79a9992cd3efb6ef5abea",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "anonymous-assets.json": {
+    "source": "work/usability-hosted-v012-download/anonymous-assets.json",
+    "source_sha256": "3ad4ce0580f090b10792b8a173315819bb82875fa683a75b18a71ad5121a1678",
+    "retained_sha256": "3ad4ce0580f090b10792b8a173315819bb82875fa683a75b18a71ad5121a1678",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "archive-inspection.json": {
+    "source": "work/usability-hosted-v012-download/archive-inspection.json",
+    "source_sha256": "48a2c802e27effbd45eb91e64bf4d365f35fd1401ee99b5b1cc7ad2de4595c69",
+    "retained_sha256": "48a2c802e27effbd45eb91e64bf4d365f35fd1401ee99b5b1cc7ad2de4595c69",
+    "transformation": "none; byte-for-byte copy"
+  },
+  "SHA256SUMS": {
+    "source": "work/usability-hosted-v012-download/SHA256SUMS",
+    "source_sha256": "f18ef37fe1bb3f449657f8777fce3291b057930ff73238571cb05dc143399c1a",
+    "retained_sha256": "f18ef37fe1bb3f449657f8777fce3291b057930ff73238571cb05dc143399c1a",
+    "transformation": "none; byte-for-byte copy"
+  }
+}

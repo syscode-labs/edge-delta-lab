@@ -1,0 +1,147 @@
+{
+  "edgelab-v0.1.2-darwin-arm64.tar.gz": {
+    "sha256": "afd3f878e758eb24bef0edffbd2cbf4ec825f412e5cf674894b7e01031215037",
+    "members": [
+      "edgelab",
+      "edgelab-exporter"
+    ],
+    "binaries": {
+      "edgelab": {
+        "sha256": "614e1b977da5c2878742856a04ae47037c23b798df4470dace9ae7eee58ecb76",
+        "format": "Mach-O",
+        "architecture": "arm64"
+      },
+      "edgelab-exporter": {
+        "sha256": "8788728272b418e69f6d651ea66599dfcb88c05fe74f7809df4b7e6156ac5d73",
+        "format": "Mach-O",
+        "architecture": "arm64"
+      }
+    },
+    "runtime_executed": false
+  },
+  "edgelab-v0.1.2-linux-amd64.tar.gz": {
+    "sha256": "04b48a478f67cfd489f3c870ade231a0cb3cebc14665029f438ecc6626b7a4a2",
+    "members": [
+      "GO_EMBEDDING.md",
+      "MTLS.md",
+      "Makefile",
+      "README.md",
+      "TESTING.md",
+      "deploy/compose/Dockerfile.runtime",
+      "deploy/compose/README.md",
+      "deploy/compose/compose.yaml",
+      "deploy/compose/setup.py",
+      "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+      "deploy/helm/edgelab-hub/edgelab-proof.alloy",
+      "deploy/mtls/Caddyfile.template",
+      "docs/ARCHITECTURE.md",
+      "docs/DOCKER_RUN.md",
+      "docs/EXPERIMENTS.md",
+      "docs/GRAFANA.md",
+      "docs/PRODUCTION_GAPS.md",
+      "docs/SOURCES.md",
+      "docs/SYNTHETIC_DEMO.md",
+      "docs/diagrams/architecture.html",
+      "docs/diagrams/architecture.svg",
+      "docs/images/edge-delta-grafana-dashboard.png",
+      "edgelab",
+      "edgelab-exporter",
+      "examples/flaky.json",
+      "examples/go-embedding/go.mod",
+      "examples/go-embedding/go.sum",
+      "examples/go-embedding/lifecycle_test.go",
+      "examples/go-embedding/publisher/main.go",
+      "examples/go-embedding/receiver/main.go",
+      "hub.env.example",
+      "install",
+      "receiver.env.example",
+      "scripts/install.py",
+      "scripts/lifecycle.py",
+      "scripts/mtls.py"
+    ],
+    "binaries": {
+      "edgelab": {
+        "sha256": "4807d57b2bb71e3b8b8e1bc23520bb8beb0b418f8eedc8550cb27b67f9fd6bc6",
+        "format": "ELF",
+        "architecture": "amd64"
+      },
+      "edgelab-exporter": {
+        "sha256": "15a0b8db4684d05ab7f37179819f6d4ed77c4c404e1e5a35b8220d025ca93b34",
+        "format": "ELF",
+        "architecture": "amd64"
+      }
+    },
+    "runtime_executed": false
+  },
+  "edgelab-v0.1.2-linux-arm64.tar.gz": {
+    "sha256": "74f09e8d5db7a5574122c5c850ac2066a75bb054a6fc8268a3ac93aaadaf0aef",
+    "members": [
+      "GO_EMBEDDING.md",
+      "MTLS.md",
+      "Makefile",
+      "README.md",
+      "TESTING.md",
+      "deploy/compose/Dockerfile.runtime",
+      "deploy/compose/README.md",
+      "deploy/compose/compose.yaml",
+      "deploy/compose/setup.py",
+      "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+      "deploy/helm/edgelab-hub/edgelab-proof.alloy",
+      "deploy/mtls/Caddyfile.template",
+      "docs/ARCHITECTURE.md",
+      "docs/DOCKER_RUN.md",
+      "docs/EXPERIMENTS.md",
+      "docs/GRAFANA.md",
+      "docs/PRODUCTION_GAPS.md",
+      "docs/SOURCES.md",
+      "docs/SYNTHETIC_DEMO.md",
+      "docs/diagrams/architecture.html",
+      "docs/diagrams/architecture.svg",
+      "docs/images/edge-delta-grafana-dashboard.png",
+      "edgelab",
+      "edgelab-exporter",
+      "examples/flaky.json",
+      "examples/go-embedding/go.mod",
+      "examples/go-embedding/go.sum",
+      "examples/go-embedding/lifecycle_test.go",
+      "examples/go-embedding/publisher/main.go",
+      "examples/go-embedding/receiver/main.go",
+      "hub.env.example",
+      "install",
+      "receiver.env.example",
+      "scripts/install.py",
+      "scripts/lifecycle.py",
+      "scripts/mtls.py"
+    ],
+    "binaries": {
+      "edgelab": {
+        "sha256": "efdc5be5dcb9f027dec78f52b000fee09963aee4df0d82271257f8c124bb736b",
+        "format": "ELF",
+        "architecture": "arm64"
+      },
+      "edgelab-exporter": {
+        "sha256": "2d3a5d29bfe0ee467a520ff3620ebbf476651337d132d8d1dd1d47393d22c603",
+        "format": "ELF",
+        "architecture": "arm64"
+      }
+    },
+    "runtime_executed": false
+  },
+  "edgelab-hub-0.1.2.tgz": {
+    "sha256": "fad6432f150d46f1024a201f76ab0af84f427cbaaaa81f5051e923bb6ff2d2fc",
+    "members": [
+      "edgelab-hub/Chart.yaml",
+      "edgelab-hub/dashboards/edgelab-delivery-cache.json",
+      "edgelab-hub/edgelab-proof.alloy",
+      "edgelab-hub/templates/NOTES.txt",
+      "edgelab-hub/templates/_helpers.tpl",
+      "edgelab-hub/templates/deployment.yaml",
+      "edgelab-hub/templates/pvc.yaml",
+      "edgelab-hub/templates/service.yaml",
+      "edgelab-hub/values.yaml"
+    ],
+    "chart_yaml": "apiVersion: v2\nappVersion: v0.1.2\ndescription: Edge Delta Lab hub \u2014 signed chunk origin, hub multiplex/cache, push announce\n  channel, unix admin socket under /state.\nkeywords:\n- delta\n- chunks\n- edge\n- delivery\n- lab\nname: edgelab-hub\ntype: application\nversion: 0.1.2\n",
+    "values_yaml": "# Default values for the edgelab-hub chart.\nimage:\n  repository: edge-delta-lab\n  tag: local\n  pullPolicy: IfNotPresent\n\n# Where the hub state lives: admin socket + durable event log (VOLUME /state).\nstate:\n  size: 1Gi\n  storageClass: \"\"\n\n# The origin is mounted read-only; the hub never writes published bytes.\norigin:\n  size: 5Gi\n  storageClass: \"\"\n  # A real deployment populates the origin by running the publisher\n  # (`edgelab publish` / watch-registry) against this PVC or by syncing\n  # release objects into it. The chart mounts it read-only.\n\nservice:\n  type: ClusterIP\n  port: 8080\n\nadmin:\n  # Unix socket path UNDER /state (the state volume). Not network-exposed;\n  # operators reach it with kubectl exec + edgelab-tui --admin <path>.\n  socketPath: /state/admin.sock\n  eventLogPath: /state/events.jsonl\n  eventLogMib: 8\n\nnotifiers:\n  # Credential values are read from a Secret, never from values directly.\n  # Create the secret first (see templates/NOTES.txt).\n  telegramTokenEnv: EDGELAB_TELEGRAM_TOKEN\n  telegramChatEnv: EDGELAB_TELEGRAM_CHAT\n  slackWebhookEnv: EDGELAB_SLACK_WEBHOOK\n  existingSecret: edgelab-notifiers\n\nresources:\n  requests:\n    cpu: 100m\n    memory: 128Mi\n  limits:\n    memory: 512Mi\n\nhub:\n  events: true      # expose /events websocket announce channel\n  cacheMib: 128     # hub object cache budget\n  rateKbit: 0       # 0 = unlimited\n\nexporter:\n  enabled: false\n  image:\n    repository: edge-delta-lab\n    tag: local\n    pullPolicy: IfNotPresent\n  port: 9108\n  instance: edgelab-hub\n\nnodeSelector: {}\ntolerations: []\naffinity: {}\npodSecurityContext:\n  runAsNonRoot: true\n  # Numeric UID of the daemon image's edgelab user: kubelet cannot verify a name.\n  runAsUser: 100\nsecurityContext:\n  allowPrivilegeEscalation: false\n  readOnlyRootFilesystem: true\n  capabilities:\n    drop: [\"ALL\"]\n",
+    "runtime_executed": false
+  }
+}
