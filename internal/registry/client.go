@@ -17,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"example.com/edge-delta-lab/internal/httptransport"
 )
 
 // Registry API media types we accept when resolving a manifest digest.
@@ -62,7 +64,7 @@ func NewClient(base string, auth AuthConfig) (*Client, error) {
 		return nil, fmt.Errorf("registry url must be http(s): %q", base)
 	}
 	// Registry and token authorities must never receive the hub's mTLS identity.
-	client := &http.Client{Timeout: 60 * time.Second}
+	client := &http.Client{Transport: httptransport.New(), Timeout: 60 * time.Second}
 	return &Client{Base: u, HTTP: client, tok: map[string]tokenEntry{}, auth: auth}, nil
 }
 

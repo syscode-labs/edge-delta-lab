@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"os"
 	"time"
+
+	"example.com/edge-delta-lab/internal/httptransport"
 )
 
 // Config contains PEM file paths, never inline credentials. The zero value uses
@@ -95,7 +97,7 @@ func New(c Config, timeout time.Duration) (*http.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	tr := http.DefaultTransport.(*http.Transport).Clone()
+	tr := httptransport.New()
 	tr.TLSClientConfig = cfg
 	return &http.Client{Transport: &transport{base: tr, config: c}, Timeout: timeout,
 		CheckRedirect: func(*http.Request, []*http.Request) error { return errors.New("hub redirects disabled") }}, nil
