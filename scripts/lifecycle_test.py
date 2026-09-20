@@ -30,6 +30,10 @@ class LifecycleTest(unittest.TestCase):
                 lifecycle.environment(path)
 
     def test_make_contract(self):
+        default = subprocess.run(['make', '-n'], cwd=ROOT,
+                                 capture_output=True, text=True, check=True)
+        self.assertIn('go build', default.stdout)
+        self.assertNotIn('lifecycle.py', default.stdout)
         for role in ('hub', 'receiver'):
             for action in ('up', 'status', 'restart', 'stop', 'uninstall'):
                 result = subprocess.run(['make', '-n', f'{role}-{action}'], cwd=ROOT,
@@ -51,6 +55,29 @@ class LifecycleTest(unittest.TestCase):
                 lifecycle.main()
                 self.assertEqual(hub.call_args.args[0].action, 'start')
                 run.assert_not_called()
+
+    def test_example_home_paths_expand_only_at_directory_use(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp).resolve()
+            env = home / 'hub.env'
+            env.write_text((ROOT / 'hub.env.example').read_text() +
+                           '\nREGISTRY_USERNAME=$USER\nREGISTRY_PASSWORD_FILE=$(not-a-command)\n')
+            values = lifecycle.environment(env)
+            self.assertEqual(values['HUB_DIRECTORY'], '~/edgelab-hub')
+            self.assertEqual(values['MTLS_DIRECTORY'], '~/edgelab-mtls')
+            (home / 'edgelab').touch()  # emulate a bundled binary; no build
+            with patch.dict(os.environ, {'HOME': tmp}), patch.object(lifecycle, 'ROOT', home), patch.object(sys, 'argv', ['lifecycle', 'hub', 'up', '--env-file', str(env)]), patch.object(lifecycle.install, 'hub') as hub:
+                lifecycle.main()
+                opts = hub.call_args.args[0]
+                self.assertEqual(opts.directory, str(home / 'edgelab-hub'))
+                self.assertEqual(opts.username, '$USER')
+                self.assertEqual(opts.password_file, '$(not-a-command)')
+                self.assertEqual(opts.action, 'setup')
+            with patch.dict(os.environ, {'HOME': tmp}), patch.object(sys, 'argv', ['mtls', 'init', '--env-file', str(env)]), patch.object(mtls, 'initialize') as initialize:
+                mtls.main()
+                self.assertEqual(initialize.call_args.args[0], home / 'edgelab-mtls')
+            self.assertFalse((home / 'edgelab-hub').exists())
+            self.assertFalse((home / 'edgelab-mtls').exists())
 
     def test_source_build_is_static_for_alpine_runtime(self):
         with tempfile.TemporaryDirectory() as tmp:

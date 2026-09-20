@@ -2,14 +2,51 @@
 import hashlib
 import os
 from pathlib import Path
+import posixpath
+import re
 import shutil
 import subprocess
 import tarfile
 import tempfile
 import unittest
 from unittest.mock import patch
+from urllib.parse import urlsplit
 
 import release
+
+
+class DocumentationTest(unittest.TestCase):
+    def test_bundled_guides_assets_and_versioned_source_links(self):
+        root = Path(__file__).resolve().parents[1]
+        entries = {name: data for name, data, _ in release.install_entries(root, 'v0.1.1')}
+        required = {'TESTING.md', 'GO_EMBEDDING.md', 'docs/ARCHITECTURE.md',
+                    'docs/DOCKER_RUN.md', 'docs/GRAFANA.md',
+                    'docs/diagrams/architecture.html', 'docs/diagrams/architecture.svg',
+                    'docs/images/edge-delta-grafana-dashboard.png',
+                    'examples/go-embedding/go.mod', 'examples/go-embedding/go.sum',
+                    'examples/go-embedding/publisher/main.go',
+                    'examples/go-embedding/receiver/main.go', 'examples/flaky.json'}
+        self.assertTrue(required <= entries.keys())
+        for name, data in entries.items():
+            if not name.endswith('.md'):
+                self.assertEqual(data, (root / release.INSTALL_FILES[name][0]).read_bytes())
+                continue
+            for target in re.findall(r'\]\(([^)]+)\)', data.decode()):
+                parsed = urlsplit(target)
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    continue
+                resolved = posixpath.normpath(posixpath.join(posixpath.dirname(name), parsed.path))
+                self.assertIn(resolved, entries, (name, target))
+            # Do not silently turn a source typo into a broken versioned web link.
+            for target in re.findall(r'\]\(([^)]+)\)', (root / name).read_text()):
+                parsed = urlsplit(target)
+                if not parsed.scheme and not parsed.netloc and parsed.path:
+                    self.assertTrue((root / name).parent.joinpath(parsed.path).exists(), (name, target))
+        self.assertIn(b'](docs/diagrams/architecture.svg)', entries['README.md'])
+        self.assertIn(b'](examples/go-embedding/publisher/main.go)', entries['GO_EMBEDDING.md'])
+        self.assertIn(b'https://github.com/syscode-labs/edge-delta-lab/tree/v0.1.1/evidence/v0.1.1-install/README.md', entries['TESTING.md'])
+        self.assertIn(b'https://github.com/syscode-labs/edge-delta-lab/tree/v0.1.1/internal/registry/publish.go', entries['docs/ARCHITECTURE.md'])
+        self.assertIn(b'../TESTING.md#retained-proof', entries['docs/DOCKER_RUN.md'])
 
 
 @unittest.skipUnless(shutil.which("helm"), "Helm is required for packaging tests")
@@ -24,7 +61,7 @@ class ReleaseTest(unittest.TestCase):
             destination = self.root / source
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source_root / source, destination)
-        shutil.copytree(Path(__file__).resolve().parents[1] / "deploy/helm/edgelab-hub", self.chart)
+        shutil.copytree(source_root / "deploy/helm/edgelab-hub", self.chart, dirs_exist_ok=True)
         self.dist = self.root / "dist"
         self.dist.mkdir()
         (self.dist / "stale").write_text("remove on successful validation")
@@ -135,6 +172,12 @@ class ReleaseTest(unittest.TestCase):
         self.assertIn('--public-key', result.stdout)
         self.assertIn('--allow-http', result.stdout)
         self.assertIn('--docker-load', result.stdout)
+        for name, data, _ in release.install_entries(self.root, 'v0.1.1'):
+            self.assertEqual((directory / name).read_bytes(), data)
+        default = subprocess.run(['make', '-n'], cwd=directory,
+                                 text=True, capture_output=True, check=True)
+        self.assertIn('go build', default.stdout)
+        self.assertNotIn('lifecycle.py', default.stdout)
 
     def test_failed_build_has_no_checksum_manifest(self):
         def fail_build(args, **kwargs):

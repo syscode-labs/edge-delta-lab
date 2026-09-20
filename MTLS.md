@@ -21,7 +21,7 @@ From the source tree or extracted Linux release directory:
 
 ```sh
 cp hub.env.example hub.env
-# Edit hub.env: absolute writable HUB_DIRECTORY and MTLS_DIRECTORY, registry,
+# Edit hub.env: writable HUB_DIRECTORY and MTLS_DIRECTORY (~/ is supported), registry,
 # repository, allow regex, MTLS_HOST matching DNS, and distinct ports.
 # REGISTRY_PASSWORD_FILE points to a chmod-600 file, never a password argument.
 make hub-up
@@ -32,8 +32,11 @@ make hub-status
 ```
 
 Use an unprivileged operator with Docker access and writable installation paths.
-Docker access is root-equivalent. The example `/opt` paths may need to be created
-or assigned by an administrator. Permit inbound TCP on MTLS_PORT (default 8443),
+Docker access is root-equivalent. Defaults create new directories under that
+operator's home; only the directory paths expand `~`, never shell expressions or
+secret values. For a custom location, provision/assign its **parent** to the
+operator, not HUB_DIRECTORY or MTLS_DIRECTORY themselves: both initializers
+refuse existing installation directories. Permit inbound TCP on MTLS_PORT (default 8443),
 not HUB_PORT. No HTTP redirect listener is created. DNS must resolve MTLS_HOST to
 the Linux host; the generated server certificate covers that exact name/IP.
 
@@ -110,21 +113,9 @@ The image is pinned to `caddy:2.10.2-alpine` (version tag, not immutable digest)
 log is enabled, and the container mounts only runtime server identity and the
 public client CA. Registry credentials and publisher signing keys stay outside it.
 
-## Repeatable checks
+## Validation
 
-From a source checkout, `make install-contract` runs filesystem/installer/packaging
-contracts (systemd calls mocked). `python3 scripts/mtls_smoke.py --work /tmp/unique-proof`
-uses owned disposable containers to test real Caddy TLS: allowed client, missing
-certificate, wrong CA, restart, removal, independent proxy replacement and recreation.
-It probes the Linux Docker host network, not a remote Internet connection, and
-leaves no owned containers. It retains test-only credentials under the supplied
-work directory; do not distribute or commit them.
-
-After `make release VERSION=v0.1.1`, run
-`python3 scripts/package_smoke.py --archive dist/edgelab-v0.1.1-linux-arm64.tar.gz`
-(choose amd64 on an amd64 Docker daemon). This exercises extracted native keygen,
-installer help, Make dispatch and real enrollment without Go/source or a Docker
-socket in the test container. It does **not** prove systemd operation or full
-registry-to-receiver delivery. Full mTLS receiver delivery must be verified after
-the Go client transport changes are integrated. Source-only build/test targets
-in the packaged Makefile are not supported without the source checkout.
+[TESTING.md](TESTING.md#new-usability-and-mtls-acceptance) owns the bounded
+installer/Caddy evidence, outstanding full-delivery acceptance and
+[reproduction commands](TESTING.md#installer-and-mtls-checks).
+Source-only build/test targets in the packaged Makefile require a source checkout.

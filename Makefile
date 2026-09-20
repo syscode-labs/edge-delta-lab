@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := build
 .PHONY: build test race vet check demo docker-smoke container container-multi compose-prepare compose-up release-binaries
 GO ?= go
 PYTHON ?= python3

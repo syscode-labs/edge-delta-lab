@@ -5,11 +5,13 @@ import hashlib
 import io
 import os
 from pathlib import Path
+import posixpath
 import re
 import shutil
 import subprocess
 import tarfile
 import tempfile
+from urllib.parse import urlsplit
 
 PLATFORMS = ("linux/amd64", "linux/arm64", "darwin/arm64")
 BINARIES = ("edgelab", "edgelab-exporter")
@@ -29,6 +31,42 @@ INSTALL_FILES = {
     "deploy/compose/compose.yaml": ("deploy/compose/compose.yaml", 0o644),
     "deploy/compose/Dockerfile.runtime": ("deploy/compose/Dockerfile.runtime", 0o644),
 }
+
+# Keep operator-facing links usable offline without shipping the whole source or
+# historical evidence corpus. Other Markdown links get a versioned web target.
+for name in (
+    "TESTING.md", "GO_EMBEDDING.md",
+    "docs/ARCHITECTURE.md", "docs/DOCKER_RUN.md", "docs/GRAFANA.md",
+    "docs/EXPERIMENTS.md", "docs/PRODUCTION_GAPS.md", "docs/SOURCES.md",
+    "docs/SYNTHETIC_DEMO.md", "docs/diagrams/architecture.html",
+    "docs/diagrams/architecture.svg", "docs/images/edge-delta-grafana-dashboard.png",
+    "examples/flaky.json", "examples/go-embedding/go.mod",
+    "examples/go-embedding/go.sum", "examples/go-embedding/lifecycle_test.go",
+    "examples/go-embedding/publisher/main.go", "examples/go-embedding/receiver/main.go",
+    "deploy/helm/edgelab-hub/edgelab-proof.alloy",
+    "deploy/helm/edgelab-hub/dashboards/edgelab-delivery-cache.json",
+):
+    INSTALL_FILES[name] = (name, 0o644)
+
+
+def install_entries(root, version):
+    """Bundle local guides/assets; link omitted source/evidence at the release tag."""
+    for name, (source, mode) in INSTALL_FILES.items():
+        data = (root / source).read_bytes()
+        if name.endswith('.md'):
+            def link(match):
+                target = match.group(1)
+                parsed = urlsplit(target)
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    return match.group(0)
+                resolved = posixpath.normpath(posixpath.join(posixpath.dirname(name), parsed.path))
+                if resolved in INSTALL_FILES:
+                    return match.group(0)
+                return '](' + f'https://github.com/syscode-labs/edge-delta-lab/tree/{version}/{resolved}' + (
+                    '?' + parsed.query if parsed.query else '') + (
+                    '#' + parsed.fragment if parsed.fragment else '') + ')'
+            data = re.sub(r'\]\(([^)]+)\)', link, data.decode('utf-8')).encode('utf-8')
+        yield name, data, mode
 
 
 def archive(path, entries, epoch):
@@ -77,8 +115,7 @@ def release(root, version, epoch=0, go="go", helm="helm"):
                                 f"./cmd/{binary}"], cwd=root, env=env, check=True)
                 entries.append((binary, output.read_bytes(), 0o755))
             if system == "linux":
-                entries.extend((name, (root / source).read_bytes(), mode)
-                               for name, (source, mode) in INSTALL_FILES.items())
+                entries.extend(install_entries(root, version))
             archive(dist / f"edgelab-{version}-{system}-{arch}.tar.gz", entries, epoch)
         subprocess.run([helm, "package", str(chart), "--destination", str(work)], check=True)
         chart_name = f"edgelab-hub-{version[1:]}.tgz"

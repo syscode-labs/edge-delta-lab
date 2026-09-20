@@ -22,7 +22,9 @@ The historical [closeout](evidence/intended-install/packaged-linux/VALIDATION.md
 
 ### New usability and mTLS acceptance
 
-**Do not treat the historical installer proof as execution of the v0.1.1 env/Make wrappers or optional Caddy mTLS path.** Their fresh bundle-to-service lifecycle, rejected unauthenticated client, authenticated cold/update transfers, proxy removal and cleanup need separately retained results. No such new execution is claimed by this documentation consolidation. Public release URLs in the README are the v0.1.1 delivery target; a URL or successful local package build alone does not prove publication.
+**Do not treat the historical installer proof as execution of the v0.1.1 env/Make wrappers or optional Caddy mTLS path.** The separate [bounded installer/Caddy run](evidence/v0.1.1-install/README.md) records real cross-builds/checksums, extracted Linux arm64 keygen/installer-help/Make dispatch and OpenSSL enrollment without Go/source or a Docker socket in the test container. Installer contracts passed with **mocked systemd calls**. The [Caddy boundary result](evidence/v0.1.1-install/mtls-result.json) records an allowed client, absent/wrong-CA rejection, restart, removal preserving the loopback backend, independent proxy replacement and recreation. Its backend was a disposable HTTP test server, not the artifact hub.
+
+That bounded run predates the integrated Go API changes and does **not** prove live v0.1.1 systemd installation/reboot or two-guest registry-to-Docker cold/update delivery through mTLS. Those remain **NOT RUN** here, as do remote DNS/firewall access and production certificate rotation/revocation. Rebuild and rerun acceptance for the integrated candidate; a merged harness is not an execution receipt. Public release URLs in the README are the v0.1.1 delivery target; a URL or successful local package build alone does not prove publication.
 
 ## Measurements and their meaning
 
@@ -76,7 +78,7 @@ Body bytes exclude HTTP headers, IP/TCP/TLS framing, acknowledgements, lower-lev
 | Boundary | Current limitation |
 |---|---|
 | Production-scale performance | Representative 1–2 GiB images and measured ordinary registry pulls **NOT RUN**. Small fixtures do not predict your savings. |
-| Architecture | `linux/arm64` built/inspected, runtime **NOT RUN**. macOS coordinated Linux tests; it is not Linux service proof. |
+| Architecture | `linux/arm64` extracted-bundle keygen/enrollment ran in the bounded installer smoke test; full arm64 receiver delivery/systemd operation remains **NOT RUN**. macOS coordinated Linux tests; it is not Linux service proof. |
 | Image formats | Registry tags must resolve directly to a single-platform image manifest. Multi-platform indexes/manifest lists are unsupported. Original registry digest associations and all OCI referrer/signature artifacts are not preserved by archive conversion. |
 | Security | No core TLS, device enrollment, managed key/certificate rotation, TUF-style expiry/delegation/freeze protection or hardware monotonic counter. Optional external mTLS authenticates transport, not fleet policy or release freshness. |
 | Storage | Unbounded chunk/archive retention; no quota or GC. Reserve space for raw cache, complete archive and Docker's extra storage. Each reconciliation rehashes referenced content. |
@@ -92,7 +94,7 @@ This independent Gear-style chunker is not desync/casync compatible or a full Fa
 
 For this consolidation, the canonical diagram passed the installed diagram-design self-check and the repository's export/accessibility/geometry checks. Deliberately malformed connector, label-gap and accessible-ID cases were rejected. The actual browser render was visually inspected both as inline HTML (Chakra Petch / IBM Plex Mono loaded) and as a README-style SVG image with fallback fonts; no text clipping or hidden paths was observed. Browser text bounds also stayed inside the frame and nodes.
 
-Local OpenSpec structural checks passed (42 requirements and three preserved historical editable scenes). The retained Linux-evidence verifier passed; it does not rerun Linux services. Markdown local links/anchors and shell-fence syntax were checked, with `MTLS.md` and `GO_EMBEDDING.md` pending sibling-workstream integration. These checks do **not** exercise the new installer, mTLS service or release download URLs.
+Local OpenSpec structural checks passed (42 requirements and three preserved historical editable scenes). The retained Linux-evidence verifier passed; it does not rerun Linux services. The original documentation pass checked Markdown local links/anchors and shell-fence syntax before sibling-workstream integration. `MTLS.md` and `GO_EMBEDDING.md` are now integrated; package contracts check bundled documentation link targets. These checks do **not** exercise live services or release download URLs.
 
 ## Run checks yourself
 
@@ -128,6 +130,29 @@ python3 scripts/diagrams.py --check
 ```
 
 The release workflow may publish archive and container assets in independent jobs; a local build is not proof of either. Identical archive bytes need identical source/dependencies/toolchain and `SOURCE_DATE_EPOCH`. Linux bundles include the installer; Darwin binaries do not provide Linux systemd setup.
+
+### Installer and mTLS checks
+
+Run these from a **source checkout**, after building/checksumming the local candidate
+as above. Choose amd64 instead of arm64 when that matches the disposable daemon.
+
+```sh
+make install-contract
+python3 scripts/package_smoke.py --archive dist/edgelab-v0.1.1-linux-arm64.tar.gz
+python3 scripts/mtls_smoke.py --work /tmp/edgelab-mtls-proof-fresh
+```
+
+The package smoke checks native keygen, installer help, Make dispatch and real
+enrollment without Go/source or a Docker socket in its test container. The TLS
+smoke uses owned disposable containers to test Caddy authentication, restart,
+removal, replacement and recreation on the Linux Docker host network, not a
+remote Internet path. It removes owned containers but retains test-only private
+credentials under its fresh work directory: do not distribute or commit them.
+Neither smoke proves systemd operation or full registry-to-receiver delivery.
+Linux bundles carry documentation, diagram assets and embedding examples for
+reference; source build/test/reproduction commands (including the example module's
+local replacement of the main module) require a checkout. Links to omitted source
+and historical evidence become explicit versioned web links in bundled Markdown.
 
 ### Fresh installation acceptance recipe (planned)
 
