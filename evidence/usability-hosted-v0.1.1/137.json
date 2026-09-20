@@ -1,0 +1,7 @@
+{
+  "step": 137,
+  "probe": "runtime-key-removed-on-stop",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

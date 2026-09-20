@@ -1,0 +1,7 @@
+{
+  "step": 132,
+  "probe": "receiver-restart",
+  "exit_code": 0,
+  "stdout": "python3 scripts/lifecycle.py receiver restart --env-file \"receiver.env\"\n",
+  "stderr": ""
+}

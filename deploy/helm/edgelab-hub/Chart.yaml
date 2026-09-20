@@ -2,6 +2,6 @@ apiVersion: v2
 name: edgelab-hub
 description: Edge Delta Lab hub — signed chunk origin, hub multiplex/cache, push announce channel, unix admin socket under /state.
 type: application
-version: 0.1.1
-appVersion: "v0.1.1"
+version: 0.1.2
+appVersion: "v0.1.2"
 keywords: [delta, chunks, edge, delivery, lab]

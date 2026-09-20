@@ -1,0 +1,7 @@
+{
+  "step": 159,
+  "probe": "hub-uninstall-retention",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

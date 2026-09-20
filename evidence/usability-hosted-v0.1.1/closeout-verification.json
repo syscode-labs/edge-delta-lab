@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "owned_guests_absent": [
+    "ed-use-983ed48e38-hub",
+    "ed-use-983ed48e38-receiver"
+  ],
+  "cleanup_errors": [],
+  "gate_count": 17,
+  "json_files_scanned": 170,
+  "secret_pattern_matches": [],
+  "scan_categories": [
+    "private_key_pem",
+    "signed_redirect",
+    "github_token",
+    "basic_bearer_header"
+  ]
+}

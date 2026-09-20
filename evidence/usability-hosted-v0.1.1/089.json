@@ -1,0 +1,7 @@
+{
+  "step": 89,
+  "probe": "private-runtime-key",
+  "exit_code": 0,
+  "stdout": "runtime-key-mode=600 uid=64995\n",
+  "stderr": ""
+}

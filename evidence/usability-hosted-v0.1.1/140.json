@@ -1,0 +1,7 @@
+{
+  "step": 140,
+  "probe": "raw-hub-survives-proxy-removal",
+  "exit_code": 0,
+  "stdout": "ok\n",
+  "stderr": ""
+}

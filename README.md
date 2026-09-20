@@ -14,15 +14,15 @@ A publisher watches a standard Registry v2 repository and signs releases. A rece
 
 Use two Linux hosts: a publisher/hub with Docker Compose, and a receiver with systemd and a local Docker daemon. Both need Python 3, make and the complete Linux bundle; receiver installation needs sudo. No Go or source checkout is required. Use **single-platform image tags matching the receiver architecture**; multi-platform indexes are unsupported. Arm64 bundles exist, but arm64 runtime remains unvalidated; see [testing and limits](TESTING.md).
 
-On each host, download [v0.1.1](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.1) (replace `linux-amd64` with `linux-arm64` if needed):
+The commands below target [v0.1.2](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.2), **pending publication and hosted acceptance**. See [release delivery status](TESTING.md#hosted-v011-acceptance-and-v012-delivery-status) for the verified v0.1.1 archives and failed container publication. After v0.1.2 is published, download on each host (replace `linux-amd64` with `linux-arm64` if needed):
 
 ```sh
-curl -fLO https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.1/edgelab-v0.1.1-linux-amd64.tar.gz
-curl -fLO https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.1/SHA256SUMS
+curl -fLO https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/edgelab-v0.1.2-linux-amd64.tar.gz
+curl -fLO https://github.com/syscode-labs/edge-delta-lab/releases/download/v0.1.2/SHA256SUMS
 sha256sum --ignore-missing -c SHA256SUMS
-mkdir edgelab-v0.1.1
-tar xzf edgelab-v0.1.1-linux-amd64.tar.gz -C edgelab-v0.1.1
-cd edgelab-v0.1.1
+mkdir edgelab-v0.1.2
+tar xzf edgelab-v0.1.2-linux-amd64.tar.gz -C edgelab-v0.1.2
+cd edgelab-v0.1.2
 ```
 
 ### Publisher and hub

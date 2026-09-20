@@ -1,0 +1,22 @@
+{
+  "release": "proof-app-v1-f00e3f453c5ceac91af4ea1dd12be7f337569376061a1e7eb5885600fd5f7d32",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "/var/lib/edgelab-receiver/staged/68e167f53dff5ef24e703fbf8e08b685d701d62781a77a8bbf767ee6ef7f9014.tar",
+  "artifact_sha256": "68e167f53dff5ef24e703fbf8e08b685d701d62781a77a8bbf767ee6ef7f9014",
+  "artifact_bytes": 10679808,
+  "unique_chunks": 137,
+  "reused_chunks": 0,
+  "reused_raw_bytes": 0,
+  "downloaded_chunks": 137,
+  "downloaded_raw_bytes": 10679808,
+  "chunk_response_body_bytes": 10679017,
+  "metadata_response_body_bytes": 36785,
+  "useful_encoded_bytes": 10679017,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 137,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 18.26593463
+}

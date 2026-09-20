@@ -44,7 +44,25 @@ The historical [closeout](evidence/intended-install/packaged-linux/VALIDATION.md
 
 **Go embedding and HTTP mTLS:** [GO_EMBEDDING.md](GO_EMBEDDING.md) and [MTLS.md](MTLS.md) are integrated guides, not pending integrations. The fresh [make-check log](evidence/usability-mtls-20260920/make-check.txt) records Go vet, uncached Go tests and race tests (including `embedding` and `hubclient`), 82 Python tests and 3 Compose setup tests passing. Go integration covers the public publisher/receiver agents, registry publication, receiver-to-hub HTTP mTLS staging and receipt delivery. It does not establish a remote HTTP publisher upload, Docker activation or the separate example module's test execution. Keep that Go integration scope separate from packaged registry-to-Docker acceptance.
 
-**Still NOT RUN:** anonymous download and full acceptance of published release bytes, independent-kernel/native-host hardening, reboot, remote DNS/firewall access and production certificate rotation/revocation. Local builds and README release URLs do not establish publication. Hosted proof must follow publication.
+#### Hosted v0.1.1 acceptance and v0.1.2 delivery status
+
+**Hosted v0.1.1 Linux amd64 acceptance: PASS, 2026-09-20.** Attempt `work/usability-hosted-01` executed the anonymously downloaded release archive, not a local rebuild, and passed all 17 gates. The [retained result](evidence/usability-hosted-v0.1.1/result.json) records archive SHA-256 `6590faf05c1d15da0d54120a2a0ac4e1b703b83ae76092b19a11888f4d15f356` and executable SHA-256 `4807d57b2bb71e3b8b8e1bc23520bb8beb0b418f8eedc8550cb27b67f9fd6bc6`. [Anonymous asset records](evidence/usability-hosted-v0.1.1/anonymous-assets.json) retain five HTTP-200 public downloads with hashes; all four archive/chart entries matched the downloaded [SHA256SUMS](evidence/usability-hosted-v0.1.1/SHA256SUMS). Downloads used `curl -q` without auth headers, netrc, cookies or token environment variables; signed redirect URLs were not retained.
+
+| Hosted first completion | Reused chunks | Downloaded chunks | Result |
+|---|---:|---:|---|
+| [Cold v1](evidence/usability-hosted-v0.1.1/summary-1.json) | 0 | 137 | Signed config identity checked from receiver Docker bytes; explicit offline payload `edge-delta-version-1`. |
+| [v2 after publisher restart](evidence/usability-hosted-v0.1.1/summary-2.json) | 135 | 2 | Distinct signed config identity and offline payload `edge-delta-version-2`. |
+| [Fresh receiver restart](evidence/usability-hosted-v0.1.1/summary-2-restart.json) | 137 | 0 | New loaded completion; origin chunk-request count remained 2. |
+
+All three completions had zero integrity failures and retries. The 17 gates cover package-only execution on both guests, distinct Docker daemons, registry authentication, publisher-only signing key, inaccessible remote raw HTTP, enrolled/absent/wrong-CA mTLS clients, private runtime-key lifecycle, import without activation, restarts and reuse, removable/replacement proxy, offline execution of both versions with the hub stopped, and uninstall retaining trust/state/data. Both owned guests were deleted; `cleanup_errors: []`, `guests_retained: false`, and the [independent closeout](evidence/usability-hosted-v0.1.1/closeout-verification.json) confirmed their absence. The [evidence index](evidence/usability-hosted-v0.1.1/README.md) describes the sanitized selected raw records; it does not duplicate this proof narrative.
+
+Scope remains two Ubuntu 24.04 amd64 OrbStack LXC guests with independent classic `vfs` Docker stores and a shared kernel. The fixture restored packaged `LoadCredential` declarations cleared globally by OrbStack; this is not untouched native-host hardening. Arm64 archive members and ELF architecture were inspected only. Publisher-to-hub mTLS is not a packaged Make option and was not exercised; receiver-to-hub mTLS was. Import did not activate containers; the harness explicitly ran them offline.
+
+**v0.1.1 delivery was partial.** Release workflow [35509755784](https://github.com/syscode-labs/edge-delta-lab/actions/runs/35509755784), source `bf56aaf2019189085c6eb9b141e4885e107f4776`, concluded **failure**: `validate` and `github-release` succeeded, but both `containers (client, edgelab-client)` and `containers (daemon, edgelab)` failed. The source-build Dockerfile omitted `hubclient`, causing `no required module provides package example.com/edge-delta-lab/hubclient`. Successful hosted archive/Make acceptance does not prove those GHCR container images were published: the packaged runtime path uses the bundled binary, not the failed source-build path.
+
+**v0.1.2 is an unpublished superseding patch target.** Chart metadata and README download commands target v0.1.2; successful archive publication, both container jobs/manifests and anonymous hosted v0.1.2 acceptance remain **PENDING**. The v0.1.1 acceptance above cannot be relabeled as v0.1.2 proof. Preserve the immutable v0.1.1 and v0.1.0 assets and tags; do not replace them to repair container delivery.
+
+**Still NOT RUN:** full arm64 receiver lifecycle, independent-kernel/native-host hardening, reboot, remote DNS/firewall access and production certificate rotation/revocation. Local metadata and README URLs do not establish publication.
 
 #### Why the installer needed a private runtime key
 
@@ -149,7 +167,7 @@ python3 scripts/helm_kind_lifecycle.py --evidence work/helm-kind-fresh
 # Inspect the historical Linux evidence with its independent verifier.
 python3 scripts/verify_sustainability.py
 # Local artifacts only: no upload, push or tag.
-make release VERSION=v0.1.1
+make release VERSION=v0.1.2
 (cd dist && shasum -a 256 -c SHA256SUMS)
 # Canonical diagram export consistency and deterministic geometry checks.
 python3 scripts/diagrams.py --check
@@ -164,7 +182,7 @@ as above. Choose amd64 instead of arm64 when that matches the disposable daemon.
 
 ```sh
 make install-contract
-python3 scripts/package_smoke.py --archive dist/edgelab-v0.1.1-linux-arm64.tar.gz
+python3 scripts/package_smoke.py --archive dist/edgelab-v0.1.2-linux-arm64.tar.gz
 python3 scripts/mtls_smoke.py --work /tmp/edgelab-mtls-proof-fresh
 ```
 
@@ -185,11 +203,11 @@ and historical evidence become explicit versioned web links in bundled Markdown.
 The [local acceptance above](#new-usability-and-mtls-acceptance) executed this boundary on disposable OrbStack guests. For a fresh local run, use Go matching `go.mod`, Python 3.10+, make, Helm and the OrbStack CLI, with capacity for two owned Ubuntu guests. The command creates and deletes those guests; never point it at production infrastructure. Keep work directories private: full transcripts and enrollment material are not publication-safe.
 
 ```sh
-make release VERSION=v0.1.1
+make release VERSION=v0.1.2
 (cd dist && shasum -a 256 -c SHA256SUMS)
 python3 scripts/usability_e2e.py run \
-  --bundle dist/edgelab-v0.1.1-linux-amd64.tar.gz \
-  --arm64-bundle dist/edgelab-v0.1.1-linux-arm64.tar.gz \
+  --bundle dist/edgelab-v0.1.2-linux-amd64.tar.gz \
+  --arm64-bundle dist/edgelab-v0.1.2-linux-arm64.tar.gz \
   --work work/usability-new-attempt --create-guests --delete-guests
 make -j1 check
 ```
@@ -198,7 +216,7 @@ Select compatible Go/Python tools through your own environment rather than copyi
 
 Manual acceptance checklist:
 
-1. Package and checksum the candidate v0.1.1 source. Record the commit/toolchain and exact extracted bundle members. Use two disposable Linux hosts with independent Docker stores; record kernel, effective unit and storage driver.
+1. Package and checksum the candidate v0.1.2 source. Record the commit/toolchain and exact extracted bundle members. Use two disposable Linux hosts with independent Docker stores; record kernel, effective unit and storage driver.
 2. Follow only [README](README.md) env/Make installation commands. Confirm publisher-only private signing key/registry credentials and receiver-only public signing trust. Keep credentials out of logs.
 3. Publish two immutable, single-platform real images. Require signed archive/image identity checks, first loaded summaries and actual offline payload execution using `docker run --pull never --network none IMAGE_ID`.
 4. Preserve first cold/update measurements and compare them from the same cache. Restart both sides; verify keys/sequence/cache continuity and no new chunk requests for unchanged content. Run status/stop/start/uninstall and assert retained data.
