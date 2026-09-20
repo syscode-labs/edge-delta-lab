@@ -62,6 +62,12 @@ class ReleaseTest(unittest.TestCase):
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source_root / source, destination)
         shutil.copytree(source_root / "deploy/helm/edgelab-hub", self.chart, dirs_exist_ok=True)
+        # The package tests use a fixed fixture version, independent of the
+        # current release metadata. Keep real chart content but pin its identity.
+        chart_file = self.chart / "Chart.yaml"
+        chart = re.sub(r'(?m)^version:.*$', 'version: 0.1.1', chart_file.read_text())
+        chart = re.sub(r'(?m)^appVersion:.*$', 'appVersion: "v0.1.1"', chart)
+        chart_file.write_text(chart)
         self.dist = self.root / "dist"
         self.dist.mkdir()
         (self.dist / "stale").write_text("remove on successful validation")
