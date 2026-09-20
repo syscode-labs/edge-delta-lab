@@ -190,9 +190,8 @@ func remoteImage(ctx context.Context, c *Client, req PublishRequest) (v1.Image, 
 	if c.auth.Username != "" || c.auth.Password != "" {
 		opts = append(opts, remote.WithAuth(&basicAuther{c.auth}))
 	}
-	opts = append(opts, remote.WithContext(ctx))
-	// Ping so token-based flows hit our challenge parser path through remote's
-	// own transport; remote handles the distribution token dance itself.
+	opts = append(opts, remote.WithContext(ctx), remote.WithTransport(exportTransport{c}))
+	// remote handles authentication only after our transport validates realms.
 	img, err := remote.Image(ref, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("remote image: %w", err)

@@ -153,9 +153,9 @@ func splitChallengeParams(s string) []string {
 
 // fetchToken performs the realm token exchange and returns the token.
 func (c *Client) fetchToken(ctx context.Context, ch challenge, scope string) (string, time.Time, error) {
-	u, err := url.Parse(ch.realm)
+	u, err := c.tokenRealm(ch.realm)
 	if err != nil {
-		return "", time.Time{}, fmt.Errorf("token realm: %w", err)
+		return "", time.Time{}, err
 	}
 	q := u.Query()
 	if ch.service != "" {
