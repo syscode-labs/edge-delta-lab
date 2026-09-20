@@ -14,6 +14,15 @@ import tempfile
 PLATFORMS = ("linux/amd64", "linux/arm64", "darwin/arm64")
 BINARIES = ("edgelab", "edgelab-exporter")
 INSTALL_FILES = {
+    "Makefile": ("Makefile", 0o644),
+    "README.md": ("README.md", 0o644),
+    "MTLS.md": ("MTLS.md", 0o644),
+    "hub.env.example": ("hub.env.example", 0o644),
+    "receiver.env.example": ("receiver.env.example", 0o644),
+    "scripts/lifecycle.py": ("scripts/lifecycle.py", 0o755),
+    "scripts/mtls.py": ("scripts/mtls.py", 0o755),
+    "deploy/mtls/Caddyfile.template": ("deploy/mtls/Caddyfile.template", 0o644),
+    "deploy/compose/README.md": ("deploy/compose/README.md", 0o644),
     "install": ("scripts/install.sh", 0o755),
     "scripts/install.py": ("scripts/install.py", 0o755),
     "deploy/compose/setup.py": ("deploy/compose/setup.py", 0o644),

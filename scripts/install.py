@@ -57,7 +57,7 @@ def receiver_config(args):
                 allow_http=args.allow_http, docker_load=args.docker_load), key + '\n'
 
 
-def service(docker_load=False):
+def service(docker_load=False, tls=False):
     # Docker group is root-equivalent and deliberately opt-in. No root receiver.
     return '''[Unit]
 Description=Edge Delta signed artifact receiver
@@ -84,7 +84,9 @@ ProtectKernelModules=yes
 ProtectControlGroups=yes
 RestrictSUIDSGID=yes
 UMask=0077
-''' + ('SupplementaryGroups=docker\n' if docker_load else '') + '''
+''' + ('SupplementaryGroups=docker\n' if docker_load else '') + (''.join(
+        f'LoadCredential={name}:{CONFIG.parent}/tls/{name}\n'
+        for name in ('hub-ca.pem', 'client.pem', 'client.key')) if tls else '') + '''
 [Install]
 WantedBy=multi-user.target
 '''
@@ -101,6 +103,10 @@ def receiver(args):
             cmd.append('--allow-http')
         if cfg['docker_load']:
             cmd.append('--docker-load')
+        if cfg.get('mtls'):
+            credentials = Path(os.environ['CREDENTIALS_DIRECTORY'])
+            for flag, name in [('hub-ca', 'hub-ca.pem'), ('hub-client-cert', 'client.pem'), ('hub-client-key', 'client.key')]:
+                cmd.extend(['--' + flag, str(credentials / name)])
         os.execv(cmd[0], cmd)
     if platform.system() != 'Linux':
         raise ValueError('receiver installation requires Linux with systemd')
@@ -108,14 +114,31 @@ def receiver(args):
         raise ValueError('receiver lifecycle requires root; run with sudo')
     require('systemctl')
     if args.action == 'setup':
-        cfg, key = receiver_config(args)
-        if CONFIG.exists() or UNIT.exists() or BINARY.exists() or MANAGER.exists():
+        if UNIT.exists() or BINARY.exists() or MANAGER.exists():
             raise ValueError('existing installation or binary; refusing overwrite (uninstall first; retain keys/state)')
+        retained = CONFIG.exists()
+        if retained:
+            cfg = json.loads(CONFIG.read_text())
+            key = CONFIG.with_name('publisher.pub').read_text()
+            args.docker_load = cfg['docker_load']
+        else:
+            cfg, key = receiver_config(args)
         run('systemctl', 'show', '--property=Version', '--value', stdout=subprocess.DEVNULL)
         binary = BUNDLE / 'edgelab'
         if not binary.is_file():
+            binary = BUNDLE / 'bin/edgelab'
+        if not binary.is_file():
             raise ValueError('missing bundled edgelab; extract the complete Linux release archive')
         run(binary, 'watch', '--help', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        tls = [getattr(args, field, None) for field in ('hub_ca', 'hub_client_cert', 'hub_client_key')]
+        if retained:
+            tls = [str(CONFIG.parent / 'tls' / name) for name in ('hub-ca.pem', 'client.pem', 'client.key')] if cfg.get('mtls') else [None] * 3
+        if any(tls) and not all(tls):
+            raise ValueError('mTLS requires --hub-ca, --hub-client-cert and --hub-client-key together')
+        if any(tls) and cfg['hub'].startswith('http:'):
+            raise ValueError('mTLS requires HTTPS')
+        tls_data = [Path(path).read_bytes() for path in tls] if all(tls) else []
+        cfg['mtls'] = bool(tls_data)
         if args.docker_load:
             require('docker')
             import grp
@@ -133,7 +156,12 @@ def receiver(args):
         write(CONFIG, json.dumps(cfg, indent=2) + '\n', 0o644)
         CONFIG.parent.chmod(0o755)  # DynamicUser must read config even under root's umask 077.
         write(CONFIG.with_name('publisher.pub'), key, 0o644)
-        write(UNIT, service(args.docker_load), 0o644)
+        if tls_data:
+            directory = CONFIG.parent / 'tls'
+            directory.mkdir(mode=0o700, exist_ok=True)
+            for name, data in zip(('hub-ca.pem', 'client.pem', 'client.key'), tls_data):
+                write(directory / name, data.decode(), 0o600)
+        write(UNIT, service(args.docker_load, bool(tls_data)), 0o644)
         run('systemctl', 'daemon-reload')
         run('systemctl', 'enable', '--now', 'edgelab-receiver.service')
         print('Installed. Manage: sudo edgelab-manage receiver status|start|stop|restart|uninstall')
@@ -157,7 +185,7 @@ def hub(args):
         spec = importlib.util.spec_from_file_location('compose_setup', BUNDLE / 'deploy/compose/setup.py')
         setup = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(setup)
-        args.binary = str(BUNDLE / 'edgelab')
+        args.binary = str(BUNDLE / ('edgelab' if (BUNDLE / 'edgelab').is_file() else 'bin/edgelab'))
         args.runtime_bundle = str(BUNDLE)
         setup.install(args)
         shutil.copyfile(Path(__file__), directory / 'manage')
@@ -187,6 +215,9 @@ def main():
             sub.add_argument('--device-id', default=platform.node())
             sub.add_argument('--allow-http', action='store_true')
             sub.add_argument('--docker-load', action='store_true')
+            sub.add_argument('--hub-ca')
+            sub.add_argument('--hub-client-cert')
+            sub.add_argument('--hub-client-key')
         else:
             sub.add_argument('--directory', required=True)
             sub.add_argument('--registry')

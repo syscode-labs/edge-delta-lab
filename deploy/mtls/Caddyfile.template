@@ -1,0 +1,15 @@
+{
+	admin off
+	auto_https off
+}
+https://@HOST@:@PORT@ {
+	tls /etc/caddy/server.pem /etc/caddy/server.key {
+		client_auth {
+			mode require_and_verify
+			trust_pool file {
+				pem_file /etc/caddy/client-ca.pem
+			}
+		}
+	}
+	reverse_proxy 127.0.0.1:@HUB_PORT@
+}

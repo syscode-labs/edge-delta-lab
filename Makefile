@@ -7,6 +7,17 @@ SOURCE_DATE_EPOCH ?= 0
 SIZE_MIB ?= 16
 RATE_KBIT ?= 5000
 
+# Same entry points in a checkout and an extracted Linux archive. Env is data.
+HUB_ENV ?= hub.env
+RECEIVER_ENV ?= receiver.env
+.PHONY: hub-up hub-status hub-restart hub-stop hub-uninstall receiver-up receiver-status receiver-restart receiver-stop receiver-uninstall mtls-init mtls-up mtls-down mtls-client
+hub-up hub-status hub-restart hub-stop hub-uninstall:
+	$(PYTHON) scripts/lifecycle.py hub $(@:hub-%=%) --env-file "$(HUB_ENV)"
+receiver-up receiver-status receiver-restart receiver-stop receiver-uninstall:
+	$(PYTHON) scripts/lifecycle.py receiver $(@:receiver-%=%) --env-file "$(RECEIVER_ENV)"
+mtls-init mtls-up mtls-down mtls-client:
+	$(PYTHON) scripts/mtls.py $(@:mtls-%=%) --env-file "$(HUB_ENV)" --client "$(CLIENT)"
+
 build:
 	$(GO) build -trimpath -o bin/edgelab ./cmd/edgelab
 	$(GO) build -trimpath -o bin/edgelab-exporter ./cmd/edgelab-exporter
