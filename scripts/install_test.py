@@ -112,6 +112,73 @@ class InstallerTest(unittest.TestCase):
         self.assertIn('SupplementaryGroups=docker', install.service(True))
 
     @patch.object(install, 'require')
+    def test_http_registry_needs_explicit_opt_in(self, *_):
+        args = argparse.Namespace(action='setup', directory=str(self.root / 'hub'), registry='http://registry.test')
+        with patch.object(install, 'run'), self.assertRaisesRegex(ValueError, 'allow-registry-http'):
+            install.hub(args)
+        self.assertFalse(Path(args.directory).exists())
+
+    @patch.object(install, 'require')
+    @patch.object(install.os, 'geteuid', return_value=0)
+    @patch.object(install.platform, 'system', return_value='Linux')
+    def test_old_systemd_rejects_mtls_before_writes(self, *_):
+        for field in ('hub_ca', 'hub_client_cert', 'hub_client_key'):
+            path = self.root / field
+            path.write_text('test-only')
+            setattr(self.args, field, str(path))
+        with patch.object(install, 'run', return_value=subprocess.CompletedProcess([], 0, stdout='systemd 246\n')), self.assertRaisesRegex(ValueError, '247'):
+            install.receiver(self.args)
+        self.assertFalse(install.CONFIG.exists())
+        self.assertFalse(install.BINARY.exists())
+
+    @patch.object(install, 'require')
+    @patch.object(install.os, 'geteuid', return_value=0)
+    @patch.object(install.platform, 'system', return_value='Linux')
+    def test_mtls_private_systemd_credentials_and_retained_reinstall(self, *_):
+        # Certificate contents are opaque to installer; real X.509 tested by lifecycle_test/mtls_smoke.
+        for field in ('hub_ca', 'hub_client_cert', 'hub_client_key'):
+            path = self.root / field
+            path.write_text('test credential ' + field)
+            setattr(self.args, field, str(path))
+        real_run = install.run
+        def run(*cmd, **kwargs):
+            if str(cmd[0]) == 'systemctl':
+                return subprocess.CompletedProcess(cmd, 0, stdout='systemd 252\n')
+            return real_run(*cmd, **kwargs)
+        with patch.object(install, 'run', side_effect=run):
+            install.receiver(self.args)
+            self.assertIn('LoadCredential=client.key:', install.UNIT.read_text())
+            key = install.CONFIG.parent / 'tls/client.key'
+            original = key.read_bytes()
+            self.assertEqual(key.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(key.parent.stat().st_mode & 0o777, 0o700)
+            self.args.action = 'run'
+            with patch.dict(os.environ, CREDENTIALS_DIRECTORY='/run/credentials/test'), patch.object(install.os, 'execv', side_effect=RuntimeError('exec')) as execute:
+                with self.assertRaises(RuntimeError):
+                    install.receiver(self.args)
+                argv = execute.call_args.args[1]
+                self.assertIn('--hub-client-key', argv)
+                self.assertIn('/run/credentials/test/client.key', argv)
+                self.assertNotIn('test credential', repr(argv))
+            self.args.action = 'uninstall'
+            install.receiver(self.args)
+            self.args.action = 'setup'
+            self.args.hub = 'https://changed-but-not-applied.test'
+            install.receiver(self.args)
+            self.assertEqual(key.read_bytes(), original)
+            self.assertEqual(json.loads(install.CONFIG.read_text())['hub'], 'https://hub.example.net')
+
+    @patch.object(install, 'require')
+    @patch.object(install.os, 'geteuid', return_value=0)
+    @patch.object(install.platform, 'system', return_value='Linux')
+    def test_partial_mtls_fails_before_writes(self, *_):
+        self.args.hub_ca = 'a.pem'
+        with patch.object(install, 'run'), self.assertRaisesRegex(ValueError, 'together'):
+            install.receiver(self.args)
+        self.assertFalse(install.CONFIG.exists())
+        self.assertFalse(install.BINARY.exists())
+
+    @patch.object(install, 'require')
     @patch.object(install.os, 'geteuid', return_value=0)
     @patch.object(install.platform, 'system', return_value='Linux')
     def test_missing_systemd_fails_before_writes(self, *_):

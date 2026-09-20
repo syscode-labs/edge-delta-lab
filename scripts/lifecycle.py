@@ -3,6 +3,7 @@
 import argparse
 import os
 from pathlib import Path
+import platform
 import subprocess
 import sys
 import install
@@ -46,6 +47,7 @@ def main():
         opts = dict(directory=str(directory), registry=values.get('REGISTRY'), repository=values.get('REPOSITORY'),
                     allow=values.get('ALLOW'), username=values.get('REGISTRY_USERNAME') or None,
                     password_file=values.get('REGISTRY_PASSWORD_FILE') or None, port=int(values.get('HUB_PORT', '8080')))
+        opts['allow_registry_http'] = boolean(values, 'REGISTRY_ALLOW_HTTP')
     else:
         action = ('start' if install.UNIT.exists() else 'setup') if action == 'up' else action
         opts = dict(hub=values.get('HUB_URL'), public_key=values.get('PUBLISHER_PUBLIC_KEY'),
@@ -53,10 +55,13 @@ def main():
                     docker_load=boolean(values, 'DOCKER_LOAD'), hub_ca=values.get('HUB_CA') or None,
                     hub_client_cert=values.get('HUB_CLIENT_CERT') or None, hub_client_key=values.get('HUB_CLIENT_KEY') or None)
     if action == 'setup' and not (ROOT / 'edgelab').exists():
+        if platform.system() != 'Linux':
+            raise ValueError('persistent source installation requires a Linux host; use container-multi on other systems')
         if not (ROOT / 'go.mod').exists():
             raise ValueError('missing bundled edgelab binary')
         install.require('go')
-        subprocess.run(['go', 'build', '-trimpath', '-o', str(ROOT / 'bin/edgelab'), './cmd/edgelab'], cwd=ROOT, check=True)
+        subprocess.run(['go', 'build', '-trimpath', '-o', str(ROOT / 'bin/edgelab'), './cmd/edgelab'],
+                       cwd=ROOT, env=dict(os.environ, CGO_ENABLED='0'), check=True)
     getattr(install, args.role)(argparse.Namespace(action=action, **opts))
 
 

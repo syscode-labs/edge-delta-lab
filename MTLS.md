@@ -97,6 +97,8 @@ material is backed up or intentionally retired. Do not run broad Docker cleanup.
 To use publicly trusted HTTPS without client certificates, empty all three HUB_*
 TLS file fields before a **fresh** receiver install. HTTP is rejected unless
 ALLOW_HTTP=true is explicitly set; use it only in isolated tests.
+For a deliberately isolated plain-HTTP registry, set REGISTRY_ALLOW_HTTP=true;
+registry HTTP is otherwise rejected by the packaged installer as well.
 
 ## Caddy configuration source
 
@@ -107,3 +109,22 @@ The image is pinned to `caddy:2.10.2-alpine` (version tag, not immutable digest)
 `mtls-up` runs `caddy validate` before starting. Admin API is disabled, no access
 log is enabled, and the container mounts only runtime server identity and the
 public client CA. Registry credentials and publisher signing keys stay outside it.
+
+## Repeatable checks
+
+From a source checkout, `make install-contract` runs filesystem/installer/packaging
+contracts (systemd calls mocked). `python3 scripts/mtls_smoke.py --work /tmp/unique-proof`
+uses owned disposable containers to test real Caddy TLS: allowed client, missing
+certificate, wrong CA, restart, removal, independent proxy replacement and recreation.
+It probes the Linux Docker host network, not a remote Internet connection, and
+leaves no owned containers. It retains test-only credentials under the supplied
+work directory; do not distribute or commit them.
+
+After `make release VERSION=v0.1.1`, run
+`python3 scripts/package_smoke.py --archive dist/edgelab-v0.1.1-linux-arm64.tar.gz`
+(choose amd64 on an amd64 Docker daemon). This exercises extracted native keygen,
+installer help, Make dispatch and real enrollment without Go/source or a Docker
+socket in the test container. It does **not** prove systemd operation or full
+registry-to-receiver delivery. Full mTLS receiver delivery must be verified after
+the Go client transport changes are integrated. Source-only build/test targets
+in the packaged Makefile are not supported without the source checkout.

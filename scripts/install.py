@@ -139,6 +139,11 @@ def receiver(args):
             raise ValueError('mTLS requires HTTPS')
         tls_data = [Path(path).read_bytes() for path in tls] if all(tls) else []
         cfg['mtls'] = bool(tls_data)
+        if tls_data:
+            version = run('systemctl', '--version', capture_output=True, text=True).stdout
+            match = re.match(r'systemd (\d+)', version)
+            if not match or int(match.group(1)) < 247:
+                raise ValueError('mTLS receiver requires systemd 247 or newer (LoadCredential)')
         if args.docker_load:
             require('docker')
             import grp
@@ -181,6 +186,8 @@ def hub(args):
     run('docker', 'compose', 'version', stdout=subprocess.DEVNULL)
     directory = Path(args.directory).expanduser().resolve()
     if args.action == 'setup':
+        if urlsplit(args.registry).scheme == 'http' and not getattr(args, 'allow_registry_http', False):
+            raise ValueError('HTTP registry requires explicit --allow-registry-http (isolated networks only)')
         run('docker', 'info', stdout=subprocess.DEVNULL)
         spec = importlib.util.spec_from_file_location('compose_setup', BUNDLE / 'deploy/compose/setup.py')
         setup = importlib.util.module_from_spec(spec)
@@ -221,6 +228,7 @@ def main():
         else:
             sub.add_argument('--directory', required=True)
             sub.add_argument('--registry')
+            sub.add_argument('--allow-registry-http', action='store_true')
             sub.add_argument('--repository')
             sub.add_argument('--allow')
             sub.add_argument('--username')

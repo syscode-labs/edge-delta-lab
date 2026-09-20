@@ -6,3 +6,5 @@ __pycache__/
 *.pyc
 *.test
 .DS_Store
+/hub.env
+/receiver.env

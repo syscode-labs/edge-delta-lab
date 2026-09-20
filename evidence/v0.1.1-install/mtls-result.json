@@ -1,0 +1,15 @@
+{
+  "allowed_client": true,
+  "missing_client_denied": true,
+  "wrong_ca_client_denied": true,
+  "restart_preserves_access": true,
+  "removal_closes_tls_preserves_backend": true,
+  "independent_replacement_verified": true,
+  "wrapper_recreated_same_trust": true,
+  "image_identity": [
+    "caddy@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d"
+  ],
+  "status": "PASS",
+  "proxy_cleanup_exit_code": 0,
+  "remaining_owned_containers": ""
+}

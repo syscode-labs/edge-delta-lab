@@ -72,7 +72,8 @@ def initialize(directory, values):
     private_write(runtime / 'Caddyfile', template.replace('@HOST@', host).replace('@PORT@', str(port)).replace('@HUB_PORT@', str(backend)))
     compose = {'name': 'edgelab-mtls-' + hashlib.sha256(str(directory).encode()).hexdigest()[:12],
                'services': {'proxy': {'image': IMAGE, 'network_mode': 'host', 'restart': 'unless-stopped',
-                 'user': f'{os.getuid()}:{os.getgid()}', 'read_only': True, 'cap_drop': ['ALL'],
+                 # Official Caddy binary carries this file capability; an empty bounding set causes exec EPERM.
+                 'user': f'{os.getuid()}:{os.getgid()}', 'read_only': True, 'cap_drop': ['ALL'], 'cap_add': ['NET_BIND_SERVICE'],
                  'security_opt': ['no-new-privileges:true'], 'tmpfs': ['/data', '/config'],
                  'volumes': [{'type': 'bind', 'source': './runtime', 'target': '/etc/caddy', 'read_only': True,
                               'bind': {'create_host_path': False}}]}}}

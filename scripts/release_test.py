@@ -46,13 +46,13 @@ class ReleaseTest(unittest.TestCase):
 
     def package(self, epoch=0):
         with patch.object(release.subprocess, "run", side_effect=self.run_command):
-            release.release(self.root, "v0.1.0", epoch)
+            release.release(self.root, "v0.1.1", epoch)
 
     def test_version_mismatch_fails_before_clear_or_build(self):
         chart_file = self.chart / "Chart.yaml"
         original = chart_file.read_text()
-        for old, new, field in (("version: 0.1.0", "version: 0.2.0", "version"),
-                                ('appVersion: "v0.1.0"', 'appVersion: "v3"', "appVersion")):
+        for old, new, field in (("version: 0.1.1", "version: 0.2.0", "version"),
+                                ('appVersion: "v0.1.1"', 'appVersion: "v3"', "appVersion")):
             with self.subTest(field=field):
                 chart_file.write_text(original.replace(old, new))
                 with self.assertRaisesRegex(ValueError, f"Chart.yaml {field} must equal"):
@@ -61,18 +61,18 @@ class ReleaseTest(unittest.TestCase):
                 self.assertEqual(self.builds, [])
 
     def test_invalid_version_and_epoch(self):
-        for version in ("", "0.1.0", "v01.1.0", "v0.1.0/../bad"):
+        for version in ("", "0.1.1", "v01.1.0", "v0.1.1/../bad"):
             with self.subTest(version=version), self.assertRaises(ValueError):
                 release.release(self.root, version)
         for epoch in (-1, 2**32):
             with self.subTest(epoch=epoch), self.assertRaises(ValueError):
-                release.release(self.root, "v0.1.0", epoch)
+                release.release(self.root, "v0.1.1", epoch)
         self.assertTrue((self.dist / "stale").exists())
 
     def test_artifacts_members_and_checksums(self):
         self.package(epoch=1234567890)
-        expected = {"edgelab-v0.1.0-linux-amd64.tar.gz", "edgelab-v0.1.0-linux-arm64.tar.gz",
-                    "edgelab-v0.1.0-darwin-arm64.tar.gz", "edgelab-hub-0.1.0.tgz"}
+        expected = {"edgelab-v0.1.1-linux-amd64.tar.gz", "edgelab-v0.1.1-linux-arm64.tar.gz",
+                    "edgelab-v0.1.1-darwin-arm64.tar.gz", "edgelab-hub-0.1.1.tgz"}
         self.assertEqual({p.name for p in self.dist.iterdir()}, expected | {"SHA256SUMS"})
         self.assertEqual(len(self.builds), 6)
         sums = (self.dist / "SHA256SUMS").read_text().splitlines()
@@ -92,15 +92,15 @@ class ReleaseTest(unittest.TestCase):
                 if name.endswith(".tar.gz"):
                     extras = list(release.INSTALL_FILES) if "-linux-" in name else []
                     self.assertEqual(tar.getnames(), sorted(["edgelab", "edgelab-exporter"] + extras))
-                    platform = name.removeprefix("edgelab-v0.1.0-").removesuffix(".tar.gz").replace("-", "/")
+                    platform = name.removeprefix("edgelab-v0.1.1-").removesuffix(".tar.gz").replace("-", "/")
                     for binary in release.BINARIES:
                         self.assertEqual(tar.extractfile(binary).read(), f"{platform}:./cmd/{binary}".encode())
                 else:
                     self.assertIn("edgelab-hub/templates/deployment.yaml", tar.getnames())
                     self.assertIn("edgelab-hub/values.yaml", tar.getnames())
                     metadata = tar.extractfile("edgelab-hub/Chart.yaml").read().decode()
-                    self.assertIn("version: 0.1.0", metadata)
-                    self.assertIn("appVersion: v0.1.0", metadata)
+                    self.assertIn("version: 0.1.1", metadata)
+                    self.assertIn("appVersion: v0.1.1", metadata)
         # Independent checksum reader accepts the manifest and rejects modified bytes.
         checker = shutil.which("shasum") or shutil.which("sha256sum")
         if checker:
@@ -123,7 +123,7 @@ class ReleaseTest(unittest.TestCase):
         self.package()
         directory = self.root / 'extracted'
         directory.mkdir()
-        with tarfile.open(self.dist / 'edgelab-v0.1.0-linux-amd64.tar.gz') as tar:
+        with tarfile.open(self.dist / 'edgelab-v0.1.1-linux-amd64.tar.gz') as tar:
             # Contents are generated in this test, not an untrusted archive.
             for member in tar.getmembers():
                 path = directory / member.name
@@ -143,7 +143,7 @@ class ReleaseTest(unittest.TestCase):
             return self.real_run(args, **kwargs)
         with patch.object(release.subprocess, "run", side_effect=fail_build):
             with self.assertRaises(subprocess.CalledProcessError):
-                release.release(self.root, "v0.1.0")
+                release.release(self.root, "v0.1.1")
         self.assertFalse((self.dist / "SHA256SUMS").exists())
 
 
