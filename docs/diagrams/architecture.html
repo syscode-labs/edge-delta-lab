@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Delta — delivery outside Docker</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600&amp;family=IBM+Plex+Mono:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #f3f1ed; color: #20140f; }
+main { max-width: 1280px; margin: auto; }
+svg { display: block; width: 100%; height: auto; }
+footer { padding: 16px 40px; font: 12px/1.6 'Chakra Petch', Arial, sans-serif; }
+a { color: #8f2b16; }
+</style>
+</head>
+<body>
+<main>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="architecture-title architecture-desc">
 <title id="architecture-title">Edge Delta: delivery outside Docker</title>
 <desc id="architecture-desc">Registry images pass through a signing publisher and hub, optionally through a removable mTLS proxy, to a receiver that verifies with its pinned public key before loading Docker; only the publisher holds the signing private key, and loading never starts containers.</desc>
@@ -78,3 +94,7 @@ text { fill: #20140f; font-family: 'Chakra Petch', Arial, sans-serif; }
 <text x="304" y="680" class="technical muted" font-size="12">DASHED: OPTIONAL / BOUNDARY</text>
 <text x="752" y="680" class="muted" font-size="12">HTTPS is required remotely; mTLS does not replace release signatures.</text>
 </svg>
+<footer>Canonical editable source · Architecture / doc-wide / simplified / engineer + mixed · Light IMP profile.<br>Remote fonts are optional; README image renderers and offline viewers use Arial/monospace fallbacks. Edit this file, then run <code>python3 scripts/diagrams.py</code> from the repository root.</footer>
+</main>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Synthetic transport demonstration
 
-This developer exercise does not deliver runnable Docker images. For the intended-use installation, start with [the README](../README.md#install-a-publisher-and-hub).
+This developer exercise does not deliver runnable Docker images. For the intended-use installation, start with [the README](../README.md#publisher-and-hub).
 
 From the source checkout, with Go, make and port 8080 available, use a fresh `work/quickstart` directory.
 

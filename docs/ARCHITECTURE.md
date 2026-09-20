@@ -10,11 +10,9 @@ It rebuilds the complete archive and checks its exact bytes before using it.
 If you explicitly enable Docker import, the client loads the archive into the local Docker daemon.
 Loading makes an image available; it does not start a container or prove the application is healthy.
 
-```text
-Image registry → publisher → published files → hub → client → verified archive
-                                                ↑               ↓
-                                  optional wake-up hint     optional docker load
-```
+![Registry to publisher to hub, optional mTLS proxy, receiver and Docker; only the publisher signs and the receiver independently verifies.](diagrams/architecture.svg)
+
+[Editable HTML source](diagrams/architecture.html). The optional mTLS proxy can be removed without changing publication, signing or verification; replace it with your existing trusted HTTPS boundary. It does not hold the release-signing private key.
 
 The client downloads from the hub. Docker does not pull from the hub, and the hub is not a Docker registry. The [README](../README.md) is the starting point for trying this flow. The [runtime guide](DOCKER_RUN.md) covers publication and deployment commands.
 
@@ -136,10 +134,6 @@ The Docker socket is a different interface and grants highly privileged host acc
 
 Source: [HTTP server](../internal/lab/server.go), [local status server](../internal/admin/server.go), [runtime guide](DOCKER_RUN.md).
 
-## What has been demonstrated
+## Tests and scope
 
-Linux is the primary runtime validation target. Static Linux amd64 and arm64 binaries were built and inspected; only amd64 runtime execution is retained. macOS was a coordinating workstation, not the required deployment platform.
-
-The [sustainability results](../SUSTAINABILITY.md) distinguish local Linux-VM measurements from the completed bounded standalone-Linux/Tailscale delivery proof. Neither establishes production readiness. Arm64 execution and a longer multi-client packet-loss soak remain unmeasured.
-
-See [production gaps](PRODUCTION_GAPS.md) before designing a deployment around this experiment. The [editable diagrams](diagrams/) illustrate the underlying sender, piece-reuse, and recovery experiment, not the full product deployment.
+[TESTING.md](../TESTING.md) is the single current home for retained proof, measurement definitions and remaining limits. [Operations](../deploy/compose/README.md) covers installation; [MTLS.md](../MTLS.md) covers the optional transport wrapper. Neither a transport certificate nor a WebSocket hint replaces release-signature verification.

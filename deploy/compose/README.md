@@ -4,7 +4,9 @@ The [README](../../README.md) is the short packaged path. This guide covers its 
 
 ## Install from the Linux bundle
 
-Public v0.1.0 publication is **pending**, not an existing download promise. See the [exact asset names and download commands](../../README.md#get-the-linux-bundle), or obtain the identical locally built bundle from a maintainer. Extract the complete Linux archive on each host. Requirements: Python 3, local Docker Engine; Compose on the publisher host; systemd and sudo on the receiver. Import requires a `docker` group able to access its local daemon socket.
+See the [v0.1.1 asset names and download commands](../../README.md#install), or obtain a locally built candidate bundle from a maintainer. Extract the complete Linux archive on each host. Requirements: Python 3, make, local Docker Engine; Compose on the publisher host; systemd and sudo on the receiver. Import requires a `docker` group able to access its local daemon socket.
+
+The simplest interface is `cp hub.env.example hub.env`, edit the values, then `make hub-up`; on the receiver use `cp receiver.env.example receiver.env`, edit, then `sudo make receiver-up`. Keep these env files private. Status/restart/stop/uninstall are `make hub-status`, `make hub-restart`, `make hub-stop`, `make hub-uninstall` and their `sudo make receiver-*` counterparts. These wrappers call the same manager described below; do not run both setup paths on an existing installation.
 
 From the extracted bundle on the publisher host:
 
@@ -59,7 +61,7 @@ server {
 }
 ```
 
-Certificate issuance, renewal, firewall/network access and proxy service management are operator prerequisites, not features of `./install`. The installed receiver polls; this block does not enable WebSocket upgrades for optional push clients. A private CA must be securely installed in the receiver's normal OS trust store. Never turn off certificate verification.
+Certificate issuance, renewal, firewall/network access and proxy service management are operator prerequisites, not features of `./install`. Alternatively, use the separately managed [Caddy mTLS wrapper](../../MTLS.md): `make mtls-init`, `make mtls-up`, `make mtls-client`, and `make mtls-down`. It is removable without changing the hub or release-signing keys; follow that guide for certificate distribution and renewal. The installed receiver polls; the nginx block above does not enable WebSocket upgrades for optional push clients. A private CA must be securely installed in the receiver's normal OS trust store. Never turn off certificate verification.
 
 TLS encrypts and authenticates the server; it does **not** authenticate receivers. Restrict access to your trusted network or supply a compatible external access boundary. This installer has no HTTP Basic/bearer client-auth flags. For isolated testing or an independently secured persistent tunnel only, use `--hub http://... --allow-http`. A foreground SSH session is not the managed installation path.
 
@@ -136,4 +138,4 @@ This alternative builds the checkout's daemon target and needs the checkout at i
 
 ## Validation
 
-`make install-contract` tests installer/setup/release contracts; `make -j1 check` runs the canonical exclusive regression suite. These tests are not live installation proof. The [packaged Linux evidence](../../evidence/intended-install/packaged-linux/README.md) records the actual two-daemon service lifecycle, trusted HTTPS, authenticated registry and offline image execution; [earlier integration](../../evidence/intended-install/README.md) is a different same-daemon test.
+[TESTING.md](../../TESTING.md) owns the current test commands, retained proof and pending acceptance. Historical installer execution is not proof that a new bundle or mTLS wrapper has run.

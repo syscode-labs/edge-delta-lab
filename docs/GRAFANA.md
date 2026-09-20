@@ -13,7 +13,16 @@ Hub or client → local Unix admin socket → edgelab-exporter /metrics
 
 An **exporter** turns the daemon's status into numeric metrics. **Prometheus** collects these numbers periodically (a “scrape”) and stores their history. Grafana queries that history through a Prometheus datasource; it does not read the admin socket or collect the metrics itself.
 
-For native daemons, follow the [README exporter commands](../README.md#observe-delivery). Start both a hub exporter and a client exporter: **hub metrics alone cannot tell you what a client verified or reused**. The exporters read local admin sockets, not remote receiver files. Clients do not need inbound delivery connections; monitoring still needs either a local collector or a secured route to the exporter.
+For native daemons, start one exporter beside each daemon with permission to read its admin socket. For the [native runtime example](DOCKER_RUN.md), run each command under your supervisor (or in separate terminals for a local exercise):
+
+```sh
+./bin/edgelab-exporter --socket work/registry/hub/admin.sock \
+  --listen 127.0.0.1:9109 --role hub --instance hub-01
+./bin/edgelab-exporter --socket work/registry/client/admin.sock \
+  --listen 127.0.0.1:9110 --role client --instance client-01
+```
+
+For packaged services, use the bundled `edgelab-exporter` and the service's actual socket path/permissions, not these source-demo paths. **Hub metrics alone cannot tell you what a client verified or reused**. The exporters read local admin sockets, not remote receiver files. Clients do not need inbound delivery connections; monitoring still needs either a local collector or a secured route to the exporter.
 
 Alternatively, the [Alloy example](../deploy/helm/edgelab-hub/edgelab-proof.alloy) scrapes exporters and uses **remote write**: sending collected samples to another metrics store. Adapt its addresses and instance labels; supply `EDGELAB_REMOTE_WRITE_URL`, `EDGELAB_REMOTE_WRITE_USER`, and `EDGELAB_REMOTE_WRITE_TOKEN` privately. The example sends only metrics matching `edgelab_.*|up`. This is a Prometheus metrics path, not an OpenTelemetry setup.
 
@@ -74,7 +83,7 @@ scrape_configs:
           role: hub
 ```
 
-The address assumes the release and namespace above and the usual `cluster.local` DNS suffix. Change it for your cluster. `honor_labels: true` preserves the exporter's `job`, `instance`, and `role` labels. Use a distinct stable instance label for each daemon. This job collects **only the hub**; add client targets reachable from your collector or run a collector beside each client. For the native README example, a collector on the same host can reach the client at `127.0.0.1:9110` and the hub at `127.0.0.1:9109`. Loopback addresses inside another container or host refer to that container or host, not your daemon.
+The address assumes the release and namespace above and the usual `cluster.local` DNS suffix. Change it for your cluster. `honor_labels: true` preserves the exporter's `job`, `instance`, and `role` labels. Use a distinct stable instance label for each daemon. This job collects **only the hub**; add client targets reachable from your collector or run a collector beside each client. For the native exporter example above, a collector on the same host can reach the client at `127.0.0.1:9110` and the hub at `127.0.0.1:9109`. Loopback addresses inside another container or host refer to that container or host, not your daemon.
 
 Then, in your own Grafana:
 
@@ -110,24 +119,14 @@ Last-sync values describe the most recently completed check, not an immutable re
 
 This is a **3938 × 625 pixel crop** of the latest user-supplied Desktop capture, `Screenshot 2026-09-19 at 17.35.17.png`. The filename records the capture's local wall-clock time; its timezone is not established here. Only the two top panels are included. Browser chrome, URLs, identity, and lower panels containing private machine names are excluded. The visible graph window is wider than the dashboard JSON's saved default.
 
-The crop illustrates the cold-download peaks and subsequent reuse. Exact values below come from [retained query evidence](../evidence/v4-productization/v31-grafana/README.md), not estimates read from the picture:
+The crop illustrates cold-download peaks and subsequent reuse. **[TESTING.md](../TESTING.md#daemon-link-and-dashboard-measurements) records the exact measurements and evidence limits**, rather than inferring values from pixels.
 
-The unchanged historical crop predates the panel-unit correction: its yellow line in the left panel is verified **bytes per second**, not another byte total. The current dashboard JSON removes that rate from the bytes panel; use the separate throughput panel for rates.
-
-| Measurement | Cold delivery | Later update |
-| --- | ---: | ---: |
-| Downloaded chunk body bytes | 16,791,337 | 249,778 |
-| Newly downloaded and verified chunks | 202 | 3 |
-| Reused chunks | — | 202 |
-
-Across that measured proof, integrity failures stayed **0** and successful syncs reached **2**. Those totals are in retained evidence; their panels are deliberately outside this crop. The proof used a Linux hub and Linux client over Tailscale with a 5 Mbit/s client ingress cap, staging synthetic Docker archives. It was not a production-image benchmark or a registry-pull comparison. Byte counts exclude metadata, headers, retransmissions, and VPN overhead; see [experiment boundaries](EXPERIMENTS.md).
-
-The earlier evidence run recorded authenticated dashboard screenshot/render verification as **NOT RUN**. This later user-supplied screenshot is now included after privacy-safe cropping and local visual inspection; it does not retroactively establish automated capture or authenticated rendering. It is historical evidence, **not proof that a hosted dashboard or service is currently available**. No fresh live dashboard query, authenticated capture, or cluster deployment is claimed by this documentation update.
+The unchanged historical crop predates the panel-unit correction: its yellow line in the left panel is verified **bytes per second**, not another byte total. The current dashboard JSON removes that rate from the bytes panel; use the separate throughput panel for rates. This user-supplied crop is not proof that a hosted service is currently available or that authenticated automated capture ran.
 
 ## If panels are empty
 
 1. **Check the datasource and time range first.** The imported JSON's old time window and fixed client filter are common causes. Look for `edgelab_source_up` in Explore without the instance filter, then inspect its labels.
-2. **Check the exporter endpoint.** With the native README client exporter running, use:
+2. **Check the exporter endpoint.** With the native client exporter above running, use:
 
    ```sh
    curl -fsS http://127.0.0.1:9110/metrics

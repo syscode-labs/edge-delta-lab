@@ -1,6 +1,6 @@
 # Deliver images with a persistent hub and client
 
-**Start with the [publisher + hub installation](../README.md#install-a-publisher-and-hub).** It packages the registry watcher and hub together with persistent data and real keys. This page documents lower-level native commands and optional container/Helm alternatives, not additional prerequisites for the main install.
+**Start with the [publisher + hub installation](../README.md#publisher-and-hub).** It packages the registry watcher and hub together with persistent data and real keys. This page documents lower-level native commands and optional container/Helm alternatives, not additional prerequisites for the main install.
 
 Use this guide to publish images from a registry, keep a hub serving them, and run a client that checks for updates. The client downloads and verifies an archive first; loading it into Docker is a separate, optional step. Later sections show how to run the hub in Docker or Kubernetes.
 
@@ -8,7 +8,7 @@ Edge Delta is a runnable experiment, not a production-ready updater. A **publish
 
 ## Packaged service lifecycle (recommended)
 
-Extract the Linux bundle from the [README](../README.md#get-the-linux-bundle) on both hosts. Public v0.1.0 publication is pending; the same locally packaged archives are usable without Go/source. With Python 3, local Docker/Compose and an existing single-platform Registry v2 repository on the publisher host:
+Use the env/Make path in the [README](../README.md#install). The underlying installer commands below are an alternative interface, not extra steps to run after Make setup. Extract the complete v0.1.1 Linux bundle on both hosts. With Python 3, local Docker/Compose and an existing single-platform Registry v2 repository on the publisher host:
 
 ```sh
 ./install hub setup --directory "$HOME/edge-delta-install" \
@@ -42,7 +42,7 @@ The numbered sections below intentionally use source builds and foreground proce
 - Start with a fresh `work/registry` directory. On subsequent runs, keep its keys, publisher state, sequence counter, and client state; do not regenerate them as a routine restart step.
 - Docker is needed only for image loading or container deployment. Use a compatible Linux Docker daemon and a Docker CLI with explicit permission to access it. Docker access is privileged.
 
-Linux is the primary validated runtime. Linux arm64 artifacts have been built and inspected, but arm64 runtime execution remains **NOT RUN**. See the [retained results](../SUSTAINABILITY.md) for the scope of runtime testing.
+See [TESTING.md](../TESTING.md) for platform coverage and retained execution evidence.
 
 Build the host programs:
 
@@ -163,7 +163,7 @@ For an unchanged signed manifest, the client skips another import only when its 
 
 ### Alternative: try delivery without a registry
 
-Use the [local quickstart](../README.md#quickstart-local-hub-and-persistent-client) for small synthetic archives. It includes manual publication, a hub, and a persistent client. Those archives are not runnable Docker images, so do not enable Docker loading for them. Use its `work/quickstart` paths instead of this guide's `work/registry` paths.
+Use the [synthetic demonstration](SYNTHETIC_DEMO.md) for small synthetic archives. It includes manual publication, a hub, and a persistent client. Those archives are not runnable Docker images, so do not enable Docker loading for them. Use its `work/quickstart` paths instead of this guide's `work/registry` paths.
 
 ### Alternative: one check from a YAML file
 
@@ -203,7 +203,7 @@ No Docker socket is mounted into the hub. The client image has no Docker CLI and
 
 ## 7. Deploy the hub with Helm instead
 
-Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. Its install, upgrade, pod restart, rollback and uninstall lifecycle has been [verified on disposable Kind with local-path storage](../evidence/helm-kind-lifecycle/README.md). The same test also verifies signed synthetic delivery through Kubernetes; it does not prove production storage portability or Docker image loading.
+Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. See [TESTING.md](../TESTING.md#retained-proof) for the exact lifecycle proof and scope.
 
 Before installing, arrange:
 
@@ -228,15 +228,9 @@ Arrange a secure path to that service before pointing external clients at it. Th
 
 Metrics are disabled by default. To enable them, set `exporter.enabled=true` and set both `exporter.image.repository` and `exporter.image.tag` to your built hub image; they are independent of `image.*`. The exporter is a second container that reads the admin socket and exposes metrics on service port 9108. It explicitly starts `/usr/local/bin/edgelab-exporter` instead of the image's normal entrypoint. No ServiceMonitor or PodMonitor scraper configuration is supplied. See the [Grafana setup and troubleshooting guide](GRAFANA.md).
 
-### Run the real disposable cluster test
+### Lifecycle testing
 
-With a local Docker daemon, Kind, Helm and kubectl installed:
-
-```sh
-python3 scripts/helm_kind_lifecycle.py --evidence work/helm-kind-run
-```
-
-Choose a new evidence directory for each run. The test builds the daemon and host CLI from source, generates a small signed synthetic release with `keygen`, `fixtures`, `publish` and `promote`, and loads only published objects into the chart-managed origin PVC through a separate short-lived writable loader pod. The hub mount stays read-only. A real in-cluster `edgelab watch` client uses only the publisher public key against the Helm Service; the gate requires `phase: staged` and a reconstructed archive SHA-256 and size matching the host fixture. The private signing key never enters Kubernetes. All origin objects are checked over HTTP again after upgrade, restart and rollback, alongside exporter metrics and state persistence. Finally it uninstalls the release and deletes its uniquely owned cluster, image and temporary host state. It uses a private temporary kubeconfig, not your current Kubernetes context. This proves signed synthetic archive delivery, not Docker import/activation, an image-version upgrade, or production CSI/multi-node durability. Go is also required for the host CLI build; its executable and `GOROOT` must refer to the same toolchain.
+The disposable Kind test and prerequisites are documented in [TESTING.md](../TESTING.md#run-checks-yourself), with the retained scope separated from reproduction commands.
 
 **Storage and upgrade warning:** Helm uninstall deletes both chart-managed PVCs; with a `Delete` reclaim policy this also deletes their data. Back up origin and state before uninstalling a real deployment. PVCs survive the tested upgrade, restart and rollback, not uninstall. Existing installations of the older `ReadOnlyMany` origin claim cannot change that immutable access mode in place: plan a backed-up volume migration/recreation, rather than forcing a Helm upgrade or deleting live data. The default claim now uses `ReadWriteOnce`.
 
