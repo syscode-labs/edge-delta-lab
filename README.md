@@ -8,7 +8,7 @@ Loading is **not** starting or replacing containers. This is an experimental del
 
 ## Get the Linux bundle
 
-**Public v0.1.0 release pending:** the downloads below work only after the tag and successful release workflow. Until then, obtain a [locally packaged bundle](#local-release-packaging) from a maintainer. Neither path needs Go or a source checkout on the installation hosts.
+Download the [public v0.1.0 release](https://github.com/syscode-labs/edge-delta-lab/releases/tag/v0.1.0) using the commands below, or obtain a [locally packaged bundle](#local-release-packaging) from a maintainer. Neither path needs Go or a source checkout on the installation hosts.
 
 On each Linux host, download/extract the bundle for its CPU. This example is amd64; use `linux-arm64` for arm64 (packaged, runtime not yet validated):
 
