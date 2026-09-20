@@ -108,6 +108,50 @@ class InstallerTest(unittest.TestCase):
             self.assertTrue(install.CONFIG.with_name('publisher.pub').exists())
             self.assertFalse(install.BINARY.exists())
 
+    def test_runtime_key_is_private_rotatable_and_symlink_safe(self):
+        credentials = self.root / 'credentials'
+        credentials.mkdir()
+        source = credentials / 'client.key'
+        source.write_bytes(b'opaque test credential')
+        source.chmod(0o440)
+        runtime = self.root / 'runtime'
+        runtime.mkdir(mode=0o700)
+        victim = self.root / 'not-the-key'
+        victim.write_text('unchanged')
+        (runtime / 'client.key').symlink_to(victim)
+        key = install.runtime_client_key(credentials, runtime)
+        self.assertFalse(key.is_symlink())
+        self.assertEqual(key.read_bytes(), source.read_bytes())
+        self.assertEqual(key.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(source.stat().st_mode & 0o777, 0o440)
+        self.assertEqual(victim.read_text(), 'unchanged')
+        source.chmod(0o600)
+        source.write_bytes(b'rotated test credential')
+        self.assertEqual(install.runtime_client_key(credentials, runtime).read_bytes(), source.read_bytes())
+        self.assertEqual(list(runtime.iterdir()), [key])
+        source.unlink()
+        with self.assertRaises(FileNotFoundError):
+            install.runtime_client_key(credentials, runtime)
+        self.assertEqual(list(runtime.iterdir()), [key])
+
+    def test_runtime_key_refuses_nonprivate_or_unowned_directory(self):
+        runtime = self.root / 'runtime'
+        runtime.mkdir(mode=0o700)
+        credentials = self.root / 'missing-credentials'
+        for mode in (0o755, 0o750, 0o770):
+            runtime.chmod(mode)
+            with self.assertRaisesRegex(ValueError, 'service-owned and mode 0700'):
+                install.runtime_client_key(credentials, runtime)
+        runtime.chmod(0o700)
+        with patch.object(install.os, 'geteuid', return_value=runtime.stat().st_uid + 1):
+            with self.assertRaisesRegex(ValueError, 'service-owned'):
+                install.runtime_client_key(credentials, runtime)
+        link = self.root / 'runtime-link'
+        link.symlink_to(runtime)
+        with self.assertRaisesRegex(ValueError, 'service-owned'):
+            install.runtime_client_key(credentials, link)
+        self.assertEqual(list(runtime.iterdir()), [])
+
     def test_explicit_docker_group(self):
         self.assertIn('SupplementaryGroups=docker', install.service(True))
 
@@ -153,12 +197,18 @@ class InstallerTest(unittest.TestCase):
             self.assertEqual(key.stat().st_mode & 0o777, 0o600)
             self.assertEqual(key.parent.stat().st_mode & 0o777, 0o700)
             self.args.action = 'run'
-            with patch.dict(os.environ, CREDENTIALS_DIRECTORY='/run/credentials/test'), patch.object(install.os, 'execv', side_effect=RuntimeError('exec')) as execute:
-                with self.assertRaises(RuntimeError):
+            runtime = self.root / 'runtime'
+            runtime.mkdir(mode=0o700)
+            self.assertIn('RuntimeDirectory=edgelab-receiver', install.UNIT.read_text())
+            self.assertIn('RuntimeDirectoryMode=0700', install.UNIT.read_text())
+            with patch.dict(os.environ, CREDENTIALS_DIRECTORY=str(key.parent), RUNTIME_DIRECTORY=str(runtime)), patch.object(install.os, 'geteuid', return_value=runtime.stat().st_uid), patch.object(install.os, 'execv', side_effect=RuntimeError('exec')) as execute:
+                with self.assertRaisesRegex(RuntimeError, 'exec'):
                     install.receiver(self.args)
                 argv = execute.call_args.args[1]
                 self.assertIn('--hub-client-key', argv)
-                self.assertIn('/run/credentials/test/client.key', argv)
+                self.assertIn(str(runtime / 'client.key'), argv)
+                self.assertEqual((runtime / 'client.key').read_bytes(), original)
+                self.assertEqual((runtime / 'client.key').stat().st_mode & 0o777, 0o600)
                 self.assertNotIn('test credential', repr(argv))
             self.args.action = 'uninstall'
             install.receiver(self.args)

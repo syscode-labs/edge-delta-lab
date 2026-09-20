@@ -51,7 +51,8 @@ def archive_info(path, architecture):
             p = Path(m.name)
             if p.is_absolute() or '..' in p.parts or not (m.isfile() or m.isdir()):
                 raise ValueError('unsafe archive member: ' + m.name)
-        files = {m.name.removeprefix('./'): m for m in members if m.isfile()}
+        files = {(m.name[2:] if m.name.startswith('./') else m.name): m
+                 for m in members if m.isfile()}
         for required in ('edgelab', 'Makefile', 'hub.env.example', 'receiver.env.example',
                          'scripts/lifecycle.py', 'scripts/install.py', 'scripts/mtls.py'):
             if required not in files:
@@ -224,7 +225,7 @@ class Harness:
     def tls_probe(self, identity=True, wrong=False):
         client = 'rogue' if wrong else 'enrollment'
         flags = f' --cert {client}/client.pem --key {client}/client.key' if identity else ''
-        return self.remote(self.receiver, f'curl -fsS --max-time 5 --cacert enrollment/hub-ca.pem{flags} https://{self.ip}:8443/healthz', check=False)
+        return self.remote(self.receiver, f'curl -fsS --max-time 5 --cacert enrollment/hub-ca.pem{flags} https://{self.tls_host}:8443/healthz', check=False)
 
     def prove_image(self, summary, version):
         # Signed metadata is stored alongside artifact; locate it by sequence,
@@ -278,6 +279,9 @@ with tarfile.open('loaded.tar') as t:
         self.ip = self.remote(self.hub, "ip -j -4 route get 1.1.1.1 | python3 -c 'import json,sys; print(json.load(sys.stdin)[0][\"prefsrc\"])'").stdout.decode().strip()
         import ipaddress
         ipaddress.ip_address(self.ip)
+        # Caddy requires matching SNI with client auth. IP literals omit SNI;
+        # use the guest's real DNS name rather than disabling that protection.
+        self.tls_host = self.hub + '.orb.local'
         # Replace broad bootstrap insecure ranges with this sole owned registry.
         for host in (self.hub, self.receiver):
             self.put(host, '/etc/docker/daemon.json', json.dumps({'storage-driver': 'vfs',
@@ -304,7 +308,7 @@ with tarfile.open('loaded.tar') as t:
         self.edit_env(self.hub, 'hub', {'HUB_DIRECTORY': self.hh + '/hub', 'REGISTRY': 'http://' + self.ip + ':5000',
                      'REGISTRY_ALLOW_HTTP': 'true', 'REPOSITORY': 'proof/app', 'ALLOW': '^v[0-9]+$',
                      'REGISTRY_USERNAME': 'publisher', 'REGISTRY_PASSWORD_FILE': self.hh + '/registry/password',
-                     'MTLS_DIRECTORY': self.hh + '/mtls', 'MTLS_HOST': self.ip})
+                     'MTLS_DIRECTORY': self.hh + '/mtls', 'MTLS_HOST': self.tls_host})
         self.make('hub', 'up')
         self.make('hub', 'status')
         mounts = {}
@@ -342,16 +346,37 @@ with tarfile.open('loaded.tar') as t:
         if self.tls_probe(wrong=True).returncode == 0:
             raise ValueError('untrusted client certificate accepted')
         self.gate('mtls-allowed-missing-and-untrusted-client-boundaries')
-        self.edit_env(self.receiver, 'receiver', {'HUB_URL': 'https://' + self.ip + ':8443', 'DEVICE_ID': 'proof-receiver',
+        self.edit_env(self.receiver, 'receiver', {'HUB_URL': 'https://' + self.tls_host + ':8443', 'DEVICE_ID': 'proof-receiver',
                      'PUBLISHER_PUBLIC_KEY': self.rh + '/enrollment/publisher.pub',
                      'HUB_CA': self.rh + '/enrollment/hub-ca.pem', 'HUB_CLIENT_CERT': self.rh + '/enrollment/client.pem',
                      'HUB_CLIENT_KEY': self.rh + '/enrollment/client.key', 'DOCKER_LOAD': 'true'})
         self.make('receiver', 'up')
-        self.make('receiver', 'status')
+        # OrbStack clears LoadCredential globally. Restore only this unit's
+        # packaged declarations, preserving real systemd credential delivery.
+        override = self.remote(self.receiver,
+            'test ! -f /run/systemd/system/service.d/zzz-lxc-service.conf || '
+            'cat /run/systemd/system/service.d/zzz-lxc-service.conf').stdout.decode()
+        if 'LoadCredential=' in override:
+            self.put(self.receiver,
+                '/run/systemd/system/edgelab-receiver.service.d/zzzz-proof-credentials.conf',
+                '[Service]\nExecStartPre=/usr/bin/stat -Lc "credential-key-mode=%%a" ${CREDENTIALS_DIRECTORY}/client.key\n' +
+                ''.join('LoadCredential={0}:/etc/edgelab/tls/{0}\n'.format(n)
+                    for n in ('hub-ca.pem', 'client.pem', 'client.key')), root=True)
+            self.remote(self.receiver, 'systemctl daemon-reload; systemctl restart edgelab-receiver', root=True)
+            self.gate('lxc-credential-override', 'Restored packaged LoadCredential after OrbStack global clearing; not untouched native-host proof')
         self.remote(self.receiver, 'systemctl cat edgelab-receiver; systemctl show edgelab-receiver '
                     '-p DropInPaths -p DynamicUser -p ProtectSystem -p ProtectHome -p PrivateTmp -p NoNewPrivileges',
-                    evidence='effective-receiver-systemd-including-lxc-overrides')
+                    root=True, evidence='effective-receiver-systemd-including-lxc-overrides')
+        self.make('receiver', 'status')
         one = self.first_summary()
+        self.remote(self.receiver,
+                    'test "$(stat -c %a /run/edgelab-receiver)" = 700; '
+                    'test "$(stat -c %a /run/edgelab-receiver/client.key)" = 600; '
+                    'test "$(stat -c %u /run/edgelab-receiver/client.key)" = '
+                    '"$(stat -c %u /proc/$(systemctl show edgelab-receiver -p MainPID --value))"; '
+                    'stat -c "runtime-key-mode=%a uid=%u" /run/edgelab-receiver/client.key',
+                    root=True, evidence='private-runtime-key')
+        self.gate('systemd-credential-private-runtime-key')
         image_one = self.prove_image(one, 1)
         if one['downloaded_chunks'] <= 0:
             raise ValueError('cold transfer had no downloaded chunks')
@@ -376,6 +401,9 @@ with tarfile.open('loaded.tar') as t:
         self.gate('receiver-restart-fresh-loaded-summary-zero-downloads',
                   {'summary': repeat, 'origin_before': origin_before, 'origin_after': origin_after})
         self.make('receiver', 'stop')
+        self.remote(self.receiver, 'test ! -e /run/edgelab-receiver/client.key', root=True,
+                    evidence='runtime-key-removed-on-stop')
+        self.gate('runtime-key-removed-on-stop')
         self.make('mtls', 'down')
         if self.tls_probe().returncode == 0:
             raise ValueError('removed wrapper still serves TLS')
@@ -431,6 +459,11 @@ def main():
         h.discover() if args.action == 'discover' else h.run()
     except Exception as exc:
         h.results.update(status='FAILED', error=str(exc))
+        if hasattr(h, 'receiver'):
+            try:
+                h.journal()
+            except Exception as diagnostic_error:
+                h.results['diagnostic_error'] = type(diagnostic_error).__name__
         h.save('result.json', h.results)
         print(str(exc), file=sys.stderr)
         return 1

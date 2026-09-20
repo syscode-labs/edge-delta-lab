@@ -68,9 +68,15 @@ sudo make receiver-up
 
 The installer copies TLS enrollment into root-private `/etc/edgelab/tls`.
 Systemd delivers credentials to the DynamicUser service via its private credential
-directory; private keys are not world-readable and values are never command-line
-arguments. Direct CLI callers use `--hub-ca`, `--hub-client-cert`, and
-`--hub-client-key` with those same three files.
+directory. Its read-only key can be mode `0440`; the launcher copies only that key
+to a new `0600` file inside the service-owned `0700` `/run/edgelab-receiver`
+RuntimeDirectory before executing the client. The directory is checked for owner,
+mode and symlinks; the key is atomically replaced without following a destination
+symlink. Systemd removes this ephemeral copy on stop. The root-private enrollment
+and read-only credentials are unchanged, and the general TLS client's owner-only
+key permission check is **not** relaxed. Values are never command-line arguments.
+Direct CLI callers use `--hub-ca`, `--hub-client-cert`, and `--hub-client-key` with
+those same three enrollment files (key mode `0600` or stricter).
 
 ## Persistence, removal and replacement
 

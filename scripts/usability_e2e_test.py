@@ -19,7 +19,7 @@ class Contracts(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.h = e2e.Harness(argparse.Namespace(work=self.root / 'evidence'))
 
-    def archive(self, architecture=62, extra=None):
+    def archive(self, architecture=62, extra=None, prefix=''):
         path = self.root / 'bundle.tar.gz'
         binary = bytearray(64)
         binary[:6] = b'\x7fELF\x02\x01'
@@ -29,7 +29,7 @@ class Contracts(unittest.TestCase):
                  'scripts/install.py': b'', 'scripts/mtls.py': b''}
         with tarfile.open(path, 'w:gz') as t:
             for name, data in files.items():
-                member = tarfile.TarInfo(name)
+                member = tarfile.TarInfo(prefix + name)
                 member.size = len(data)
                 member.mode = 0o755
                 t.addfile(member, io.BytesIO(data))
@@ -47,6 +47,21 @@ class Contracts(unittest.TestCase):
         self.assertFalse(e2e.archive_info(path, 'arm64')['runtime_executed'])
         with self.assertRaises(ValueError):
             e2e.archive_info(path, 'amd64')
+
+    def test_dot_prefixed_members_are_supported(self):
+        value = e2e.archive_info(self.archive(prefix='./'), 'amd64')
+        self.assertIn('edgelab', value['members'])
+
+    def test_tls_probe_uses_dns_sni_and_keeps_verification(self):
+        self.h.receiver = 'receiver'
+        self.h.tls_host = 'owned-hub.orb.local'
+        with patch.object(self.h, 'remote') as run:
+            self.h.tls_probe()
+            script = run.call_args.args[1]
+            self.assertIn('https://owned-hub.orb.local:8443/healthz', script)
+            self.assertIn('--cacert enrollment/hub-ca.pem', script)
+            self.assertIn('--cert enrollment/client.pem', script)
+            self.assertNotIn('--insecure', script)
 
     def test_path_traversal_and_links_rejected_before_guest_creation(self):
         for name, kind in (('../escape', tarfile.REGTYPE), ('/absolute', tarfile.REGTYPE),

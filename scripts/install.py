@@ -9,7 +9,9 @@ import platform
 import re
 import shutil
 import subprocess
+import stat
 import sys
+import tempfile
 from urllib.parse import urlsplit
 
 BUNDLE = Path(__file__).resolve().parents[1]
@@ -86,10 +88,36 @@ RestrictSUIDSGID=yes
 UMask=0077
 ''' + ('SupplementaryGroups=docker\n' if docker_load else '') + (''.join(
         f'LoadCredential={name}:{CONFIG.parent}/tls/{name}\n'
-        for name in ('hub-ca.pem', 'client.pem', 'client.key')) if tls else '') + '''
+        for name in ('hub-ca.pem', 'client.pem', 'client.key')) +
+        'RuntimeDirectory=edgelab-receiver\nRuntimeDirectoryMode=0700\n'
+        if tls else '') + '''
 [Install]
 WantedBy=multi-user.target
 '''
+
+
+def runtime_client_key(credentials, runtime):
+    """Adapt systemd's read-only credentials to the client's owner-only key rule.
+
+    Never relax the general TLS validator or chmod the credential mount. Stage
+    only the key in systemd's ephemeral, service-owned 0700 RuntimeDirectory.
+    Exclusive creation gives 0600 from the first byte; replace never follows an
+    old destination symlink. systemd removes the runtime directory on stop.
+    """
+    info = runtime.lstat()
+    if (not stat.S_ISDIR(info.st_mode) or info.st_uid != os.geteuid()
+            or stat.S_IMODE(info.st_mode) != 0o700):
+        raise ValueError('mTLS runtime directory must be service-owned and mode 0700')
+    fd, temporary = tempfile.mkstemp(prefix='.client-key-', dir=runtime)
+    try:
+        with os.fdopen(fd, 'wb') as output, (credentials / 'client.key').open('rb') as source:
+            shutil.copyfileobj(source, output)
+        key = runtime / 'client.key'
+        os.replace(temporary, key)
+        return key
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
 
 def receiver(args):
@@ -105,8 +133,10 @@ def receiver(args):
             cmd.append('--docker-load')
         if cfg.get('mtls'):
             credentials = Path(os.environ['CREDENTIALS_DIRECTORY'])
-            for flag, name in [('hub-ca', 'hub-ca.pem'), ('hub-client-cert', 'client.pem'), ('hub-client-key', 'client.key')]:
+            key = runtime_client_key(credentials, Path(os.environ['RUNTIME_DIRECTORY']))
+            for flag, name in [('hub-ca', 'hub-ca.pem'), ('hub-client-cert', 'client.pem')]:
                 cmd.extend(['--' + flag, str(credentials / name)])
+            cmd.extend(['--hub-client-key', str(key)])
         os.execv(cmd[0], cmd)
     if platform.system() != 'Linux':
         raise ValueError('receiver installation requires Linux with systemd')
