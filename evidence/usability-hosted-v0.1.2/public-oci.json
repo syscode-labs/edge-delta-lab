@@ -1,0 +1,158 @@
+{
+  "observed_at": "2026-09-20T13:03:36.241545+00:00",
+  "access": "anonymous public registry and public git refs; no Docker credentials",
+  "expected_revision": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+  "images": [
+    {
+      "ref": "ghcr.io/syscode-labs/edge-delta-lab/edgelab:v0.1.2",
+      "index_digest": "sha256:a5001081c885de3237987822728b25af5bcf1abeabed20de8e97f93129f20cc0",
+      "index_media_type": "application/vnd.oci.image.index.v1+json",
+      "index_hash_verified": true,
+      "platforms": [
+        {
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          },
+          "manifest_digest": "sha256:2df9b5adfffb2f863e6040a628b461186762272ffeb7c59d2230d751b8363007",
+          "config_digest": "sha256:2449c2cc4514c5e66ffeba45b2a76a47b09844f82b0afd0096147bbb62fd71fb",
+          "manifest_and_config_hashes_verified": true,
+          "labels": {
+            "org.opencontainers.image.revision": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+            "org.opencontainers.image.source": "https://github.com/syscode-labs/edge-delta-lab",
+            "org.opencontainers.image.version": "v0.1.2"
+          }
+        },
+        {
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          },
+          "manifest_digest": "sha256:7229c609533de939a7ba0494af22be912bcfbae6d9d0f4872f6f8fcb89fdfbf8",
+          "config_digest": "sha256:edf9783e48df1728e95bf121eb2987d079f62b941ff992699b841a2a8974300b",
+          "manifest_and_config_hashes_verified": true,
+          "labels": {
+            "org.opencontainers.image.revision": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+            "org.opencontainers.image.source": "https://github.com/syscode-labs/edge-delta-lab",
+            "org.opencontainers.image.version": "v0.1.2"
+          }
+        }
+      ],
+      "other_descriptors": [
+        {
+          "digest": "sha256:398b4a26c07aaa43a9149f7bd42fb44bd92451121763129933cc7a415f87ff4c",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          },
+          "annotations": {
+            "vnd.docker.reference.digest": "sha256:2df9b5adfffb2f863e6040a628b461186762272ffeb7c59d2230d751b8363007",
+            "vnd.docker.reference.type": "attestation-manifest"
+          }
+        },
+        {
+          "digest": "sha256:77f37861dd97be9c4fe5f71f453ce88ca83d0c6ea155146c1f95a3b6f034ffaf",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          },
+          "annotations": {
+            "vnd.docker.reference.digest": "sha256:7229c609533de939a7ba0494af22be912bcfbae6d9d0f4872f6f8fcb89fdfbf8",
+            "vnd.docker.reference.type": "attestation-manifest"
+          }
+        }
+      ]
+    },
+    {
+      "ref": "ghcr.io/syscode-labs/edge-delta-lab/edgelab-client:v0.1.2",
+      "index_digest": "sha256:9b80443dee4a0458f7eda711d43c7af2493825eba8f6ef117d27e3cb23f6be17",
+      "index_media_type": "application/vnd.oci.image.index.v1+json",
+      "index_hash_verified": true,
+      "platforms": [
+        {
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          },
+          "manifest_digest": "sha256:662416cebf29a09887fbb1302c998937c80892d4b22607e1a8de58e8a18cf037",
+          "config_digest": "sha256:d90f18175ea5ecd579f12386a27dd283e44e07aaccd4463badf9bd05e72c7843",
+          "manifest_and_config_hashes_verified": true,
+          "labels": {
+            "org.opencontainers.image.revision": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+            "org.opencontainers.image.source": "https://github.com/syscode-labs/edge-delta-lab",
+            "org.opencontainers.image.version": "v0.1.2"
+          }
+        },
+        {
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          },
+          "manifest_digest": "sha256:f296bca3cdbeec83b41a97c4b8ad0a9a2afe4a3a52642e260d2df6b601815884",
+          "config_digest": "sha256:7668ddab07dabc7e63feb33cba629f7ce53e3199b1592af7e9ffb16517dad511",
+          "manifest_and_config_hashes_verified": true,
+          "labels": {
+            "org.opencontainers.image.revision": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+            "org.opencontainers.image.source": "https://github.com/syscode-labs/edge-delta-lab",
+            "org.opencontainers.image.version": "v0.1.2"
+          }
+        }
+      ],
+      "other_descriptors": [
+        {
+          "digest": "sha256:470c351c1bf76ebeea0aaf73b9f5ab72a06a4c0d5ad3b08f82483e616d99f2b9",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          },
+          "annotations": {
+            "vnd.docker.reference.digest": "sha256:662416cebf29a09887fbb1302c998937c80892d4b22607e1a8de58e8a18cf037",
+            "vnd.docker.reference.type": "attestation-manifest"
+          }
+        },
+        {
+          "digest": "sha256:821193081a2faa901d3552a33e1908ba7ffdcba964bae0f0e90f0048ec37cedb",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          },
+          "annotations": {
+            "vnd.docker.reference.digest": "sha256:f296bca3cdbeec83b41a97c4b8ad0a9a2afe4a3a52642e260d2df6b601815884",
+            "vnd.docker.reference.type": "attestation-manifest"
+          }
+        }
+      ]
+    }
+  ],
+  "git_tags": [
+    {
+      "tag": "v0.1.0",
+      "tag_object": "9429ffe711e52c040b991f8b6ad929f365bc48b1",
+      "peeled_commit": "e1ffb0d6b9af9a74bf44990d8c37a4e4c4439cca",
+      "annotated": true,
+      "expected_tag_prefix": "9429ffe",
+      "matches_supplied_baseline": true
+    },
+    {
+      "tag": "v0.1.1",
+      "tag_object": "0df7c191cf97d68180132bdb7735bd637dee0c11",
+      "peeled_commit": "bf56aaf2019189085c6eb9b141e4885e107f4776",
+      "annotated": true,
+      "expected_tag_prefix": "0df7c191",
+      "matches_supplied_baseline": true
+    },
+    {
+      "tag": "v0.1.2",
+      "tag_object": "e07c069efdb84facfb31eaf1362011b945a0e83a",
+      "peeled_commit": "2d860aecf5f33c00d553a775b7f99d7e7ca7b16c",
+      "annotated": true,
+      "expected_tag_prefix": "e07c",
+      "matches_supplied_baseline": true
+    }
+  ],
+  "limitations": [
+    "Read-only public descriptor/config verification, no layers pulled and no containers run.",
+    "Arm64 runtime not tested.",
+    "Old tag immutability means current refs match supplied baseline prefixes; no continuous historical monitoring claimed."
+  ]
+}
