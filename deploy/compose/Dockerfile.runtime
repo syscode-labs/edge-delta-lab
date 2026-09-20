@@ -1,0 +1,7 @@
+# Assemble the released static binary; no Go compiler or source checkout.
+FROM alpine:3.20 AS daemon
+RUN apk add --no-cache ca-certificates
+COPY edgelab /usr/local/bin/edgelab
+USER 100:100
+WORKDIR /state
+ENTRYPOINT ["/usr/local/bin/edgelab"]

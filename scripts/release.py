@@ -13,6 +13,13 @@ import tempfile
 
 PLATFORMS = ("linux/amd64", "linux/arm64", "darwin/arm64")
 BINARIES = ("edgelab", "edgelab-exporter")
+INSTALL_FILES = {
+    "install": ("scripts/install.sh", 0o755),
+    "scripts/install.py": ("scripts/install.py", 0o755),
+    "deploy/compose/setup.py": ("deploy/compose/setup.py", 0o644),
+    "deploy/compose/compose.yaml": ("deploy/compose/compose.yaml", 0o644),
+    "deploy/compose/Dockerfile.runtime": ("deploy/compose/Dockerfile.runtime", 0o644),
+}
 
 
 def archive(path, entries, epoch):
@@ -60,6 +67,9 @@ def release(root, version, epoch=0, go="go", helm="helm"):
                                 "-ldflags=-s -w -buildid=", "-o", str(output),
                                 f"./cmd/{binary}"], cwd=root, env=env, check=True)
                 entries.append((binary, output.read_bytes(), 0o755))
+            if system == "linux":
+                entries.extend((name, (root / source).read_bytes(), mode)
+                               for name, (source, mode) in INSTALL_FILES.items())
             archive(dist / f"edgelab-{version}-{system}-{arch}.tar.gz", entries, epoch)
         subprocess.run([helm, "package", str(chart), "--destination", str(work)], check=True)
         chart_name = f"edgelab-hub-{version[1:]}.tgz"

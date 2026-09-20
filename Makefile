@@ -56,6 +56,14 @@ release: export HELM := $(HELM)
 release:
 	$(PYTHON) scripts/release.py
 
+# Linux release archives include ./install and all runtime/Compose assets.
+.PHONY: install-contract
+install-contract:
+	$(PYTHON) -m unittest discover -s scripts -p 'install_test.py' -v
+	$(PYTHON) -m unittest discover -s scripts -p 'release_test.py' -v
+	$(PYTHON) deploy/compose/test_setup.py -v
+	sh -n scripts/install.sh
+
 # Cross-compiled release binaries (static, path-trimmed, size-stripped).
 # Matrix covers linux/amd64, linux/arm64 and darwin/arm64.
 release-binaries:

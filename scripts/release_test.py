@@ -19,6 +19,11 @@ class ReleaseTest(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.chart = self.root / "deploy/helm/edgelab-hub"
+        source_root = Path(__file__).resolve().parents[1]
+        for source, _ in release.INSTALL_FILES.values():
+            destination = self.root / source
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source_root / source, destination)
         shutil.copytree(Path(__file__).resolve().parents[1] / "deploy/helm/edgelab-hub", self.chart)
         self.dist = self.root / "dist"
         self.dist.mkdir()
@@ -82,9 +87,11 @@ class ReleaseTest(unittest.TestCase):
                     self.assertTrue(member.isfile())
                     self.assertEqual((member.uid, member.gid, member.uname, member.gname), (0, 0, "", ""))
                     self.assertEqual(member.mtime, 1234567890)
-                    self.assertEqual(member.mode, 0o644 if name.endswith(".tgz") else 0o755)
+                    expected_mode = release.INSTALL_FILES.get(member.name, (None, 0o755))[1]
+                    self.assertEqual(member.mode, 0o644 if name.endswith(".tgz") else expected_mode)
                 if name.endswith(".tar.gz"):
-                    self.assertEqual(tar.getnames(), ["edgelab", "edgelab-exporter"])
+                    extras = list(release.INSTALL_FILES) if "-linux-" in name else []
+                    self.assertEqual(tar.getnames(), sorted(["edgelab", "edgelab-exporter"] + extras))
                     platform = name.removeprefix("edgelab-v0.1.0-").removesuffix(".tar.gz").replace("-", "/")
                     for binary in release.BINARIES:
                         self.assertEqual(tar.extractfile(binary).read(), f"{platform}:./cmd/{binary}".encode())
@@ -111,6 +118,23 @@ class ReleaseTest(unittest.TestCase):
         (self.dist / "stale").write_text("not distributable")
         self.package()
         self.assertEqual(first, {p.name: p.read_bytes() for p in self.dist.iterdir()})
+
+    def test_extracted_linux_installer_needs_no_checkout(self):
+        self.package()
+        directory = self.root / 'extracted'
+        directory.mkdir()
+        with tarfile.open(self.dist / 'edgelab-v0.1.0-linux-amd64.tar.gz') as tar:
+            # Contents are generated in this test, not an untrusted archive.
+            for member in tar.getmembers():
+                path = directory / member.name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(tar.extractfile(member).read())
+                path.chmod(member.mode)
+        result = subprocess.run([str(directory / 'install'), 'receiver', '--help'],
+                                cwd='/', text=True, capture_output=True, check=True)
+        self.assertIn('--public-key', result.stdout)
+        self.assertIn('--allow-http', result.stdout)
+        self.assertIn('--docker-load', result.stdout)
 
     def test_failed_build_has_no_checksum_manifest(self):
         def fail_build(args, **kwargs):

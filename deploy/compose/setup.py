@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import shlex
+import shutil
 import subprocess
 import sys
 from urllib.parse import urlsplit
@@ -40,7 +41,14 @@ def install(args):
         raise ValueError("--port must be between 1 and 65535")
     binary = Path(args.binary).expanduser().resolve()
     if not binary.is_file() or not os.access(binary, os.X_OK):
-        raise ValueError(f"build the native binary first: go build -o {binary} ./cmd/edgelab")
+        raise ValueError(f"native edgelab binary missing or not executable: {binary}")
+    bundle = getattr(args, "runtime_bundle", None)
+    password_file = getattr(args, "password_file", None)
+    password = Path(password_file).read_text().rstrip("\r\n") if password_file else None
+    if password_file and (not args.username or not password):
+        raise ValueError("--password-file requires --username and a nonempty password")
+    if bundle and args.username and password is None:
+        raise ValueError("--username requires --password-file for persistent unattended registry authentication")
     # Bind mounts are local to the Docker daemon. Host GID access avoids root,
     # chown, world-writable state, and world-readable signing keys on Linux.
     gid = os.getgid()
@@ -63,7 +71,7 @@ def install(args):
     compose = json.loads(TEMPLATE.read_text())
     for service in compose["services"].values():
         # Compose interpolation must not reinterpret dollar signs in checkout paths.
-        service["build"]["context"] = str(CHECKOUT).replace("$", "$$")
+        service["build"]["context"] = "./runtime" if bundle else str(CHECKOUT).replace("$", "$$")
         service["user"] = f"100:{gid}"
     compose["services"]["hub"]["ports"] = [f"127.0.0.1:{args.port}:8080"]
     if args.username:
@@ -71,14 +79,26 @@ def install(args):
         compose["services"]["publisher"]["environment"]["REGISTRY_PASSWORD"] = "${REGISTRY_PASSWORD:?Export REGISTRY_PASSWORD for publisher registry authentication}"
     write_json(directory / "watcher.yaml", config)
     write_json(directory / "compose.yaml", compose)
+    if bundle:
+        runtime = directory / "runtime"
+        runtime.mkdir(mode=0o700)
+        shutil.copyfile(binary, runtime / "edgelab")
+        (runtime / "edgelab").chmod(0o755)
+        shutil.copyfile(Path(bundle) / "deploy/compose/Dockerfile.runtime", runtime / "Dockerfile")
+    if password is not None:
+        with (directory / "registry-password").open("x") as stream:
+            stream.write(password)
+        (directory / "registry-password").chmod(0o600)
     print("WARNING: hub uses unauthenticated HTTP, bound to loopback only. Do not expose it publicly.", file=sys.stderr)
     if url.scheme == "http":
         print("WARNING: registry HTTP is unencrypted; use a trusted isolated network only.", file=sys.stderr)
     command = f"docker compose -f {shlex.quote(str(directory / 'compose.yaml'))}"
     print(f"Created {directory}; containers run as UID 100, host GID {gid}.")
-    print(f"Start: {command} up -d --build")
+    manage = f"{shlex.quote(str(directory / 'manage'))} hub"
+    suffix = f"--directory {shlex.quote(str(directory))}"
+    print(f"Start: {manage} start {suffix}" if bundle else f"Start: {command} up -d --build")
     print(f"Logs:  {command} logs -f publisher hub")
-    print(f"Stop:  {command} down   # preserves all host state and keys")
+    print(f"Stop:  {manage} stop {suffix}" if bundle else f"Stop:  {command} down   # preserves all host state and keys")
     print(f"Trust: distribute only {directory / 'keys/publisher.pub'} to receivers")
 
 
