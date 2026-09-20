@@ -24,7 +24,33 @@ The historical [closeout](evidence/intended-install/packaged-linux/VALIDATION.md
 
 **Do not treat the historical installer proof as execution of the v0.1.1 env/Make wrappers or optional Caddy mTLS path.** The separate [bounded installer/Caddy run](evidence/v0.1.1-install/README.md) records real cross-builds/checksums, extracted Linux arm64 keygen/installer-help/Make dispatch and OpenSSL enrollment without Go/source or a Docker socket in the test container. Installer contracts passed with **mocked systemd calls**. The [Caddy boundary result](evidence/v0.1.1-install/mtls-result.json) records an allowed client, absent/wrong-CA rejection, restart, removal preserving the loopback backend, independent proxy replacement and recreation. Its backend was a disposable HTTP test server, not the artifact hub.
 
-That bounded run predates the integrated Go API changes and does **not** prove live v0.1.1 systemd installation/reboot or two-guest registry-to-Docker cold/update delivery through mTLS. Those remain **NOT RUN** here, as do remote DNS/firewall access and production certificate rotation/revocation. Rebuild and rerun acceptance for the integrated candidate; a merged harness is not an execution receipt. Public release URLs in the README are the v0.1.1 delivery target; a URL or successful local package build alone does not prove publication.
+**Fresh local packaged acceptance: PASS, 2026-09-20.** Attempt `work/usability-local-08` passed all 17 gates with `cleanup_errors: []` and `guests_retained: false`. The [result](evidence/usability-mtls-20260920/result.json) records the exact locally rebuilt v0.1.1 archive/binary hashes. Its source was integration commit `4a8c5cc60eeb00f73b512c7348f2ca853c8e1a50` plus the installer/harness repair identified by [source hashes](evidence/usability-mtls-20260920/source-sha256.json), not the unchanged commit alone. Documentation consolidation happened afterward; bundled documentation is a historical snapshot.
+
+| Executed boundary | Observed result |
+|---|---|
+| Package-only setup | Linux amd64 release binary executed on both guests through Make/env setup; unprivileged hub workflow and explicit receiver sudo, no guest compiler/source checkout. |
+| Trust boundaries | Anonymous registry access denied; signing key mounted only in publisher; remote raw HTTP inaccessible; enrolled mTLS client accepted, absent/wrong-CA client rejected. |
+| Cold delivery | Signed config identity matched receiver Docker bytes; explicit offline execution returned `edge-delta-version-1`; 128 chunks downloaded. |
+| Publisher restart and new tag | Distinct signed v2 config identity and offline payload `edge-delta-version-2`; 126 chunks reused, 2 downloaded. |
+| Receiver restart | Fresh loaded summary reused all 128 chunks, downloaded none; origin chunk requests stayed at 2. |
+| Runtime key lifecycle | Key mode `0600`, correct live DynamicUser ownership, private runtime directory; key absent after stop. |
+| Proxy lifecycle | Removal closed TLS while preserving loopback hub; independent replacement accepted enrolled client and rejected anonymous access; packaged wrapper recreated. |
+| Offline availability and uninstall | Both versions executed with `--pull never --network none` after hub shutdown. Services/binaries removed while signing trust, client state, origin data and TLS material were retained before teardown. |
+| Cleanup | Both exact owned guests deleted successfully; no retained guests or cleanup errors. |
+
+[Cold](evidence/usability-mtls-20260920/summary-1.json), [update](evidence/usability-mtls-20260920/summary-2.json) and [restart](evidence/usability-mtls-20260920/summary-2-restart.json) summaries preserve first-completion measurements. [Lifecycle probes](evidence/usability-mtls-20260920/lifecycle-probes.json) retain effective units and key metadata; [installed byte comparison](evidence/usability-mtls-20260920/installed-receiver-bytes.json) matched the receiver binary to the archive and installed manager to repaired source. Import did **not** activate containers: offline execution was an explicit harness action.
+
+**Scope:** two Ubuntu 24.04 amd64 OrbStack LXC guests with independent classic `vfs` Docker stores, but a shared kernel—not independent physical hosts or a WAN. OrbStack globally clears `LoadCredential`; a disclosed receiver-only fixture drop-in restored the packaged declarations and added a nonsecret mode diagnostic. This is not untouched native-host sandbox or reboot proof. Only amd64 executed in this run; arm64 was archive/ELF inspection only. The packaged publisher writes the shared local hub filesystem; it has no outbound publisher-to-hub mTLS option, and that path was not exercised.
+
+**Go embedding and HTTP mTLS:** [GO_EMBEDDING.md](GO_EMBEDDING.md) and [MTLS.md](MTLS.md) are integrated guides, not pending integrations. The fresh [make-check log](evidence/usability-mtls-20260920/make-check.txt) records Go vet, uncached Go tests and race tests (including `embedding` and `hubclient`), 82 Python tests and 3 Compose setup tests passing. Go integration covers the public publisher/receiver agents, registry publication, receiver-to-hub HTTP mTLS staging and receipt delivery. It does not establish a remote HTTP publisher upload, Docker activation or the separate example module's test execution. Keep that Go integration scope separate from packaged registry-to-Docker acceptance.
+
+**Still NOT RUN:** anonymous download and full acceptance of published release bytes, independent-kernel/native-host hardening, reboot, remote DNS/firewall access and production certificate rotation/revocation. Local builds and README release URLs do not establish publication. Hosted proof must follow publication.
+
+#### Why the installer needed a private runtime key
+
+The [original failure](evidence/usability-mtls-20260920/original-0440-failure.json) captured systemd's read-only credential key at `0440`. The shared Go TLS client correctly rejected it; its owner-only validator was **not relaxed**. The installed launcher stages only the client key in the service-owned `0700` RuntimeDirectory, rejecting unsafe directory mode, owner or symlinks. Exclusive temporary creation is `0600` from the first byte; atomic replacement does not follow a destination symlink. Enrollment and source credential remain unchanged, restart refreshes the runtime copy and systemd removes it on stop. The live key was `0600` with receiver UID `64995`.
+
+Regression tests cover `0440` input, unchanged source mode, rotation, destination symlinks, unsafe directory permissions/ownership/symlinks, failed-copy cleanup and the installed launcher contract. Earlier local attempts are not acceptance receipts: attempt 06 found the permission rejection; attempt 07 failed an unprivileged diagnostic read of the fixture's root-private drop-in. The final capture ran as root. Harness repairs retained DNS/SNI verification and normalized archive members for older Python; they did not disable TLS verification.
 
 ## Measurements and their meaning
 
@@ -154,7 +180,23 @@ reference; source build/test/reproduction commands (including the example module
 local replacement of the main module) require a checkout. Links to omitted source
 and historical evidence become explicit versioned web links in bundled Markdown.
 
-### Fresh installation acceptance recipe (planned)
+### Packaged installation acceptance reproduction
+
+The [local acceptance above](#new-usability-and-mtls-acceptance) executed this boundary on disposable OrbStack guests. For a fresh local run, use Go matching `go.mod`, Python 3.10+, make, Helm and the OrbStack CLI, with capacity for two owned Ubuntu guests. The command creates and deletes those guests; never point it at production infrastructure. Keep work directories private: full transcripts and enrollment material are not publication-safe.
+
+```sh
+make release VERSION=v0.1.1
+(cd dist && shasum -a 256 -c SHA256SUMS)
+python3 scripts/usability_e2e.py run \
+  --bundle dist/edgelab-v0.1.1-linux-amd64.tar.gz \
+  --arm64-bundle dist/edgelab-v0.1.1-linux-arm64.tar.gz \
+  --work work/usability-new-attempt --create-guests --delete-guests
+make -j1 check
+```
+
+Select compatible Go/Python tools through your own environment rather than copying workstation paths; the retained regression log is test output, not a toolchain inventory. Inspect the new `result.json`, every gate and cleanup errors. For hosted acceptance, separately download and checksum the published assets before exercising them; the local-build recipe is not hosted proof.
+
+Manual acceptance checklist:
 
 1. Package and checksum the candidate v0.1.1 source. Record the commit/toolchain and exact extracted bundle members. Use two disposable Linux hosts with independent Docker stores; record kernel, effective unit and storage driver.
 2. Follow only [README](README.md) env/Make installation commands. Confirm publisher-only private signing key/registry credentials and receiver-only public signing trust. Keep credentials out of logs.

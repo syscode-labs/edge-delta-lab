@@ -1,0 +1,51 @@
+[
+  {
+    "step": 77,
+    "probe": "effective-receiver-systemd-including-lxc-overrides",
+    "exit_code": 0,
+    "stdout": "# /etc/systemd/system/edgelab-receiver.service\n[Unit]\nDescription=Edge Delta signed artifact receiver\nWants=network-online.target\nAfter=network-online.target\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nDynamicUser=yes\nUser=edgelab-receiver\nStateDirectory=edgelab-receiver\nStateDirectoryMode=0700\nExecStart=/usr/local/bin/edgelab-manage receiver run\nRestart=always\nRestartSec=10\nEnvironment=PATH=/usr/local/bin:/usr/bin:/bin\nNoNewPrivileges=yes\nProtectSystem=strict\nProtectHome=yes\nPrivateTmp=yes\nProtectKernelTunables=yes\nProtectKernelModules=yes\nProtectControlGroups=yes\nRestrictSUIDSGID=yes\nUMask=0077\nSupplementaryGroups=docker\nLoadCredential=hub-ca.pem:/etc/edgelab/tls/hub-ca.pem\nLoadCredential=client.pem:/etc/edgelab/tls/client.pem\nLoadCredential=client.key:/etc/edgelab/tls/client.key\nRuntimeDirectory=edgelab-receiver\nRuntimeDirectoryMode=0700\n\n[Install]\nWantedBy=multi-user.target\n\n# /run/systemd/system/service.d/zzz-lxc-service.conf\n[Service]\nProcSubset=all\nProtectProc=default\nProtectControlGroups=no\nProtectKernelTunables=no\nNoNewPrivileges=no\nLoadCredential=\nPrivateNetwork=no\nProtectHome=no\nProtectSystem=no\nPrivateDevices=no\nPrivateTmp=no\nProtectKernelLogs=no\nProtectKernelModules=no\nReadWritePaths=\nReadOnlyPaths=\nImportCredential=\n\n# /run/systemd/system/edgelab-receiver.service.d/zzzz-proof-credentials.conf\n[Service]\nExecStartPre=/usr/bin/stat -Lc \"credential-key-mode=%%a\" ${CREDENTIALS_DIRECTORY}/client.key\nLoadCredential=hub-ca.pem:/etc/edgelab/tls/hub-ca.pem\nLoadCredential=client.pem:/etc/edgelab/tls/client.pem\nLoadCredential=client.key:/etc/edgelab/tls/client.key\nDynamicUser=yes\nPrivateTmp=yes\nProtectHome=read-only\nProtectSystem=strict\nNoNewPrivileges=yes\nDropInPaths=/run/systemd/system/service.d/zzz-lxc-service.conf /run/systemd/system/edgelab-receiver.service.d/zzzz-proof-credentials.conf\n",
+    "stderr": ""
+  },
+  {
+    "step": 89,
+    "probe": "private-runtime-key",
+    "exit_code": 0,
+    "stdout": "runtime-key-mode=600 uid=64995\n",
+    "stderr": ""
+  },
+  {
+    "step": 138,
+    "probe": "runtime-key-removed-on-stop",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": 158,
+    "probe": "receiver-uninstall-retention",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": 159,
+    "probe": "hub-uninstall-retention",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": 161,
+    "probe": "owned-guest-delete",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": 162,
+    "probe": "owned-guest-delete",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

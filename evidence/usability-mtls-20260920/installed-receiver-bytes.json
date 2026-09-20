@@ -1,0 +1,7 @@
+{
+  "verified": true,
+  "sha256sum": [
+    "640daf641dd96619e18f45316e0c236168df44156fa411f69aacdd97bf2a491f  /usr/local/bin/edgelab",
+    "abb45e42a96732f9572bec0f27e9cffd2d039ba0c19c2960d8e57d045939d4f4  /usr/local/bin/edgelab-manage"
+  ]
+}

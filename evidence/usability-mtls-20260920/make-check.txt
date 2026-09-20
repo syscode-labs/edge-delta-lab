@@ -1,0 +1,167 @@
+go vet ./...
+go test -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-exporter	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-tui	[no test files]
+ok  	example.com/edge-delta-lab/cmd/v3e2e	29.037s
+ok  	example.com/edge-delta-lab/embedding	3.388s
+ok  	example.com/edge-delta-lab/hubclient	3.108s
+ok  	example.com/edge-delta-lab/internal/admin	7.562s
+ok  	example.com/edge-delta-lab/internal/clientconf	11.417s
+ok  	example.com/edge-delta-lab/internal/exporter	6.740s
+?   	example.com/edge-delta-lab/internal/httptransport	[no test files]
+ok  	example.com/edge-delta-lab/internal/hub	3.646s
+ok  	example.com/edge-delta-lab/internal/lab	98.335s
+ok  	example.com/edge-delta-lab/internal/notify	6.205s
+ok  	example.com/edge-delta-lab/internal/push	13.250s
+?   	example.com/edge-delta-lab/internal/receiverloop	[no test files]
+ok  	example.com/edge-delta-lab/internal/registry	19.133s
+?   	example.com/edge-delta-lab/internal/testtls	[no test files]
+?   	example.com/edge-delta-lab/publisher	[no test files]
+?   	example.com/edge-delta-lab/receiver	[no test files]
+python3 -m unittest discover -s scripts -p '*_test.py' -v
+test_classic_config_id_and_raw_layer_identity (docker_identity_test.IdentityTest.test_classic_config_id_and_raw_layer_identity) ... ok
+test_containerd_index_is_provenance_not_signed_config_id (docker_identity_test.IdentityTest.test_containerd_index_is_provenance_not_signed_config_id) ... ok
+test_selected_platform_must_match (docker_identity_test.IdentityTest.test_selected_platform_must_match) ... ok
+test_source_diffids_must_match_saved_config (docker_identity_test.IdentityTest.test_source_diffids_must_match_saved_config) ... ok
+test_unrelated_source_id_is_not_accepted (docker_identity_test.IdentityTest.test_unrelated_source_id_is_not_accepted) ... ok
+test_connection_failure_is_not_image_absence (docker_identity_test.LocalBoundaryTest.test_connection_failure_is_not_image_absence) ... ok
+test_loaded_reference_and_platform_are_still_mandatory (docker_identity_test.LocalBoundaryTest.test_loaded_reference_and_platform_are_still_mandatory) ... ok
+test_present_image_fails_absence_gate (docker_identity_test.LocalBoundaryTest.test_present_image_fails_absence_gate) ... ok
+test_remote_context_rejected_before_daemon_access (docker_identity_test.LocalBoundaryTest.test_remote_context_rejected_before_daemon_access) ... ok
+test_remote_docker_host_rejected_before_daemon_access (docker_identity_test.LocalBoundaryTest.test_remote_docker_host_rejected_before_daemon_access) ... ok
+test_byte_totals_and_rates_are_separate (helm_contract_test.DashboardContractTest.test_byte_totals_and_rates_are_separate) ... ok
+test_chart_contracts (helm_contract_test.HelmContractTest.test_chart_contracts) ... PASS helm lint/render: exporter=False events=True rate=0 (defaults)
+PASS helm lint/render: exporter=False events=False rate=0
+PASS helm lint/render: exporter=False events=False rate=7500
+PASS helm lint/render: exporter=False events=True rate=0
+PASS helm lint/render: exporter=False events=True rate=7500
+PASS helm lint/render: exporter=True events=False rate=0
+PASS helm lint/render: exporter=True events=False rate=7500
+PASS helm lint/render: exporter=True events=True rate=0
+PASS helm lint/render: exporter=True events=True rate=7500
+ok
+test_proof_pod_has_no_ambient_credentials_or_extra_mounts (helm_kind_lifecycle_test.SignedProofTests.test_proof_pod_has_no_ambient_credentials_or_extra_mounts) ... ok
+test_staged_requires_expected_release_sequence_and_safe_artifact (helm_kind_lifecycle_test.SignedProofTests.test_staged_requires_expected_release_sequence_and_safe_artifact) ... ok
+test_explicit_docker_group (install_test.InstallerTest.test_explicit_docker_group) ... ok
+test_http_registry_needs_explicit_opt_in (install_test.InstallerTest.test_http_registry_needs_explicit_opt_in) ... ok
+test_https_and_public_only (install_test.InstallerTest.test_https_and_public_only) ... ok
+test_missing_systemd_fails_before_writes (install_test.InstallerTest.test_missing_systemd_fails_before_writes) ... ok
+test_mtls_private_systemd_credentials_and_retained_reinstall (install_test.InstallerTest.test_mtls_private_systemd_credentials_and_retained_reinstall) ... Installed. Manage: sudo edgelab-manage receiver status|start|stop|restart|uninstall
+Service/binaries removed. Retained /etc/edgelab and /var/lib/edgelab-receiver; remove explicitly to reset trust/state.
+Installed. Manage: sudo edgelab-manage receiver status|start|stop|restart|uninstall
+ok
+test_old_systemd_rejects_mtls_before_writes (install_test.InstallerTest.test_old_systemd_rejects_mtls_before_writes) ... ok
+test_partial_mtls_fails_before_writes (install_test.InstallerTest.test_partial_mtls_fails_before_writes) ... ok
+test_receiver_lifecycle_and_launcher (install_test.InstallerTest.test_receiver_lifecycle_and_launcher) ... Installed. Manage: sudo edgelab-manage receiver status|start|stop|restart|uninstall
+Service/binaries removed. Retained /etc/edgelab and /var/lib/edgelab-receiver; remove explicitly to reset trust/state.
+ok
+test_released_hub_security_and_persistent_credentials (install_test.InstallerTest.test_released_hub_security_and_persistent_credentials) ... WARNING: hub uses unauthenticated HTTP, bound to loopback only. Do not expose it publicly.
+Created $TMPDIR/tmpte1e0ar7/hub; containers run as UID 100, host GID 20.
+Start: $TMPDIR/tmpte1e0ar7/hub/manage hub start --directory $TMPDIR/tmpte1e0ar7/hub
+Logs:  docker compose -f $TMPDIR/tmpte1e0ar7/hub/compose.yaml logs -f publisher hub
+Stop:  $TMPDIR/tmpte1e0ar7/hub/manage hub stop --directory $TMPDIR/tmpte1e0ar7/hub
+Trust: distribute only $TMPDIR/tmpte1e0ar7/hub/keys/publisher.pub to receivers
+Containers removed; keys/config/data retained in $TMPDIR/tmpte1e0ar7/hub. Remove that directory explicitly to purge.
+ok
+test_runtime_key_is_private_rotatable_and_symlink_safe (install_test.InstallerTest.test_runtime_key_is_private_rotatable_and_symlink_safe) ... ok
+test_runtime_key_refuses_nonprivate_or_unowned_directory (install_test.InstallerTest.test_runtime_key_refuses_nonprivate_or_unowned_directory) ... ok
+test_distinct_authorities_permissions_eku_and_client_only_distribution (lifecycle_test.EnrollmentTest.test_distinct_authorities_permissions_eku_and_client_only_distribution) ... ok
+test_env_is_data_and_boolean_is_strict (lifecycle_test.LifecycleTest.test_env_is_data_and_boolean_is_strict) ... ok
+test_example_home_paths_expand_only_at_directory_use (lifecycle_test.LifecycleTest.test_example_home_paths_expand_only_at_directory_use) ... ok
+test_hub_up_reuses_existing_install_without_build_or_config_rewrite (lifecycle_test.LifecycleTest.test_hub_up_reuses_existing_install_without_build_or_config_rewrite) ... ok
+test_make_contract (lifecycle_test.LifecycleTest.test_make_contract) ... ok
+test_source_build_is_static_for_alpine_runtime (lifecycle_test.LifecycleTest.test_source_build_is_static_for_alpine_runtime) ... ok
+test_duplicate_diffid_does_not_skip_different_corrupt_member (normalize_archive_test.NormalizeTest.test_duplicate_diffid_does_not_skip_different_corrupt_member) ... ok
+test_gzip_layers_preserve_exact_uncompressed_bytes (normalize_archive_test.NormalizeTest.test_gzip_layers_preserve_exact_uncompressed_bytes) ... ok
+test_normalization_is_repeatable (normalize_archive_test.NormalizeTest.test_normalization_is_repeatable) ... ok
+test_raw_layers_preserve_exact_bytes (normalize_archive_test.NormalizeTest.test_raw_layers_preserve_exact_bytes) ... ok
+test_wrong_diffid_is_rejected (normalize_archive_test.NormalizeTest.test_wrong_diffid_is_rejected) ... ok
+test_bundled_guides_assets_and_versioned_source_links (release_test.DocumentationTest.test_bundled_guides_assets_and_versioned_source_links) ... ok
+test_artifacts_members_and_checksums (release_test.ReleaseTest.test_artifacts_members_and_checksums) ... Successfully packaged chart and saved it to: $TMPDIR/edgelab-release-7ksydel3/edgelab-hub-0.1.1.tgz
+Release v0.1.1 written to $TMPDIR/tmpqtvhm7f6/dist
+ok
+test_deterministic_despite_source_mtime_and_stale_outputs (release_test.ReleaseTest.test_deterministic_despite_source_mtime_and_stale_outputs) ... Successfully packaged chart and saved it to: $TMPDIR/edgelab-release-t2wn56vn/edgelab-hub-0.1.1.tgz
+Release v0.1.1 written to $TMPDIR/tmpiih8ddks/dist
+Successfully packaged chart and saved it to: $TMPDIR/edgelab-release-ln4gvmty/edgelab-hub-0.1.1.tgz
+Release v0.1.1 written to $TMPDIR/tmpiih8ddks/dist
+ok
+test_extracted_linux_installer_needs_no_checkout (release_test.ReleaseTest.test_extracted_linux_installer_needs_no_checkout) ... Successfully packaged chart and saved it to: $TMPDIR/edgelab-release-2vp1nton/edgelab-hub-0.1.1.tgz
+Release v0.1.1 written to $TMPDIR/tmppsywz2d6/dist
+ok
+test_failed_build_has_no_checksum_manifest (release_test.ReleaseTest.test_failed_build_has_no_checksum_manifest) ... ok
+test_invalid_version_and_epoch (release_test.ReleaseTest.test_invalid_version_and_epoch) ... ok
+test_version_mismatch_fails_before_clear_or_build (release_test.ReleaseTest.test_version_mismatch_fails_before_clear_or_build) ... ok
+test_exact_release_assets (release_workflow_test.ReleaseWorkflowTest.test_exact_release_assets) ... ok
+test_identity_policy_executed (release_workflow_test.ReleaseWorkflowTest.test_identity_policy_executed) ... ok
+test_images_and_stable_only_latest_executed (release_workflow_test.ReleaseWorkflowTest.test_images_and_stable_only_latest_executed) ... ok
+test_least_permissions_and_token_only (release_workflow_test.ReleaseWorkflowTest.test_least_permissions_and_token_only) ... ok
+test_tag_only_trigger (release_workflow_test.ReleaseWorkflowTest.test_tag_only_trigger) ... ok
+test_validation_precedes_publication_and_shared_packaging (release_workflow_test.ReleaseWorkflowTest.test_validation_precedes_publication_and_shared_packaging) ... ok
+test_cli_stale_threshold_is_configurable_and_rejects_invalid_values (sender_test.SenderTests.test_cli_stale_threshold_is_configurable_and_rejects_invalid_values) ... ok
+test_collector_retains_offline_history (sender_test.SenderTests.test_collector_retains_offline_history) ... ok
+test_empty_report_and_no_ack_history_remain_unknown (sender_test.SenderTests.test_empty_report_and_no_ack_history_remain_unknown) ... ok
+test_full_history_exports_survive_reopen_and_preserve_legacy_files (sender_test.SenderTests.test_full_history_exports_survive_reopen_and_preserve_legacy_files) ... ok
+test_higher_sequence_staged_is_not_promoted_by_previous_loaded_release (sender_test.SenderTests.test_higher_sequence_staged_is_not_promoted_by_previous_loaded_release) ... ok
+test_loaded_wins_both_receipt_orders_and_delayed_staged (sender_test.SenderTests.test_loaded_wins_both_receipt_orders_and_delayed_staged) ... ok
+test_no_samples_and_never_successful_are_unknown_not_zero_counters (sender_test.SenderTests.test_no_samples_and_never_successful_are_unknown_not_zero_counters) ... ok
+test_origin_identity_and_receipt_histories_are_isolated (sender_test.SenderTests.test_origin_identity_and_receipt_histories_are_isolated) ... ok
+test_rate_is_reset_aware (sender_test.SenderTests.test_rate_is_reset_aware) ... ok
+test_rate_rejects_counter_regression_and_zero_time_window (sender_test.SenderTests.test_rate_rejects_counter_regression_and_zero_time_window) ... ok
+test_rate_with_recent_end_but_old_start_is_historical (sender_test.SenderTests.test_rate_with_recent_end_but_old_start_is_historical) ... ok
+test_receipt_freshness_uses_first_observation_and_reported_event_age (sender_test.SenderTests.test_receipt_freshness_uses_first_observation_and_reported_event_age) ... ok
+test_receipt_poll_error_is_persistent_without_discarding_stats (sender_test.SenderTests.test_receipt_poll_error_is_persistent_without_discarding_stats) ... ok
+test_receipt_unknown_and_recent_freshness_are_not_health_or_identity_trust (sender_test.SenderTests.test_receipt_unknown_and_recent_freshness_are_not_health_or_identity_trust) ... ok
+test_recent_failure_does_not_make_old_counters_or_rate_current (sender_test.SenderTests.test_recent_failure_does_not_make_old_counters_or_rate_current) ... ok
+test_release_history_survives_newer_sequence_and_reopen (sender_test.SenderTests.test_release_history_survives_newer_sequence_and_reopen) ... ok
+test_same_phase_event_selection_does_not_depend_on_poll_order (sender_test.SenderTests.test_same_phase_event_selection_does_not_depend_on_poll_order) ... ok
+test_same_sequence_conflicts_do_not_claim_a_winning_identity (sender_test.SenderTests.test_same_sequence_conflicts_do_not_claim_a_winning_identity) ... ok
+test_sender_bytes_do_not_claim_delivery (sender_test.SenderTests.test_sender_bytes_do_not_claim_delivery) ... ok
+test_stale_samples_keep_history_but_not_current_reachability_or_rate (sender_test.SenderTests.test_stale_samples_keep_history_but_not_current_reachability_or_rate) ... ok
+test_amd64_archive_identity_is_inspection_not_execution (usability_e2e_test.Contracts.test_amd64_archive_identity_is_inspection_not_execution) ... ok
+test_arm64_is_inspected_only_and_mismatch_rejected (usability_e2e_test.Contracts.test_arm64_is_inspected_only_and_mismatch_rejected) ... ok
+test_dot_prefixed_members_are_supported (usability_e2e_test.Contracts.test_dot_prefixed_members_are_supported) ... ok
+test_first_summary_preserved_in_mixed_journal (usability_e2e_test.Contracts.test_first_summary_preserved_in_mixed_journal) ... ok
+test_incomplete_and_staged_summaries_not_success (usability_e2e_test.Contracts.test_incomplete_and_staged_summaries_not_success) ... ok
+test_make_uses_documented_default_env_and_receiver_sudo (usability_e2e_test.Contracts.test_make_uses_documented_default_env_and_receiver_sudo) ... ok
+test_path_traversal_and_links_rejected_before_guest_creation (usability_e2e_test.Contracts.test_path_traversal_and_links_rejected_before_guest_creation) ... ok
+test_private_failure_does_not_disclose_output (usability_e2e_test.Contracts.test_private_failure_does_not_disclose_output) ... ok
+test_private_operation_does_not_retain_output_or_stdin (usability_e2e_test.Contracts.test_private_operation_does_not_retain_output_or_stdin) ... ok
+test_remote_anchors_in_guest_home_not_translated_host_cwd (usability_e2e_test.Contracts.test_remote_anchors_in_guest_home_not_translated_host_cwd) ... ok
+test_tls_probe_uses_dns_sni_and_keeps_verification (usability_e2e_test.Contracts.test_tls_probe_uses_dns_sni_and_keeps_verification) ... ok
+test_unowned_guest_refused_even_for_root (usability_e2e_test.Contracts.test_unowned_guest_refused_even_for_root) ... ok
+test_work_directory_must_be_fresh (usability_e2e_test.Contracts.test_work_directory_must_be_fresh) ... ok
+
+----------------------------------------------------------------------
+Ran 82 tests in 13.636s
+
+OK
+python3 deploy/compose/test_setup.py -v
+test_auth_only_publisher (__main__.InstallTest.test_auth_only_publisher) ... ok
+test_install_and_refuse_overwrite (__main__.InstallTest.test_install_and_refuse_overwrite) ... ok
+test_invalid_input_does_not_create_directory (__main__.InstallTest.test_invalid_input_does_not_create_directory) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.608s
+
+OK
+go test -race -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-exporter	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-tui	[no test files]
+ok  	example.com/edge-delta-lab/cmd/v3e2e	30.813s
+ok  	example.com/edge-delta-lab/embedding	3.854s
+ok  	example.com/edge-delta-lab/hubclient	6.308s
+ok  	example.com/edge-delta-lab/internal/admin	5.078s
+ok  	example.com/edge-delta-lab/internal/clientconf	13.663s
+ok  	example.com/edge-delta-lab/internal/exporter	7.888s
+?   	example.com/edge-delta-lab/internal/httptransport	[no test files]
+ok  	example.com/edge-delta-lab/internal/hub	8.496s
+ok  	example.com/edge-delta-lab/internal/lab	104.463s
+ok  	example.com/edge-delta-lab/internal/notify	4.085s
+ok  	example.com/edge-delta-lab/internal/push	19.841s
+?   	example.com/edge-delta-lab/internal/receiverloop	[no test files]
+ok  	example.com/edge-delta-lab/internal/registry	14.652s
+?   	example.com/edge-delta-lab/internal/testtls	[no test files]
+?   	example.com/edge-delta-lab/publisher	[no test files]
+?   	example.com/edge-delta-lab/receiver	[no test files]
