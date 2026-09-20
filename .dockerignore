@@ -2,6 +2,7 @@
 *
 !cmd/
 !internal/
+!hubclient/
 !go.mod
 !go.sum
 !deploy/docker/state/
