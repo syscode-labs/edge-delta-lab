@@ -11,66 +11,71 @@ Small changes inside a large image layer can mean another large download. Edge D
 3. **Rebuild and verify:** reconstruct the complete archive and check it against the signed release.
 4. **Optionally load into Docker:** import the verified image when explicitly enabled. Loading does not start or replace containers.
 
-This is a runnable experiment, **not a production-ready fleet updater**. Start with the local example below: it demonstrates cold and incremental delivery without touching Docker.
+This is a runnable experiment, **not a production-ready fleet updater**. The installation below delivers your real registry images: a persistent publisher signs releases, a hub serves them, and a native client verifies and optionally imports them into Docker. Kubernetes and Grafana are not required.
 
-<a id="quickstart-local-hub-and-persistent-client"></a>
+## Install a publisher and hub
 
-## Try a cold download, then a small update
+On the Docker host, you need Go 1.23+, Python 3, Docker with Compose, and read access to an existing image registry. Run from this source checkout. Builds use this checkout, not an assumed hosted binary or container release.
 
-You need a source checkout, Go 1.23 or newer, `make`, and a Unix-like host. Linux is the primary validated runtime. Run all commands from the repository root, with port 8080 available and a fresh `work/quickstart` directory.
-
-This example uses small **synthetic archives**, not runnable Docker images.
-
-**Terminal 1 — build, publish the first version, and start the hub:**
+Choose **immutable, single-platform image tags** for the receiver's architecture. Multi-platform indexes are unsupported. Start with a narrow tag filter; this watcher is not a semantic-version resolver. Replace the registry and repository below with your own:
 
 ```sh
-make build
-./bin/edgelab keygen --out work/quickstart/keys
-./bin/edgelab fixtures --out work/quickstart/fixtures --size-mib 2
-./bin/edgelab publish \
-  --input work/quickstart/fixtures/app-a-v1.tar \
-  --root work/quickstart/origin --key work/quickstart/keys/publisher.key \
-  --release app-v1 --sequence 1
-./bin/edgelab promote --root work/quickstart/origin --release app-v1
-./bin/edgelab serve --root work/quickstart/origin \
-  --listen 127.0.0.1:8080 --events
+go build -o bin/edgelab ./cmd/edgelab
+python3 deploy/compose/setup.py \
+  --directory "$HOME/edge-delta-install" \
+  --registry https://registry.example.net \
+  --repository team/app --allow '^v'
+docker compose -f "$HOME/edge-delta-install/compose.yaml" up -d --build
+docker compose -f "$HOME/edge-delta-install/compose.yaml" logs -f publisher hub
 ```
 
-Leave the hub running. Its default transfer limit is 5 Mbit/s.
-
-**Terminal 2 — start a client and leave it running:**
+Setup generates the signing keys and persistent state once; it refuses an existing destination. The signing key is mounted **only into the publisher**. The hub mounts published data read-only. Neither service gets the Docker socket. Wait for `release-published`, then check:
 
 ```sh
+curl --fail http://127.0.0.1:8080/releases/desired.json
+```
+
+The listener is intentionally loopback-only: **no built-in TLS or client authentication**. For registry credentials, ownership requirements, backups and uninstall, see the [installation guide](deploy/compose/README.md). Remote Docker contexts are not supported by this bind-mount setup.
+
+## Connect a receiving machine
+
+Build `bin/edgelab` from this checkout on the receiver. Copy only `publisher.pub` over a trusted path, for example to `$HOME/edge-delta-client/publisher.pub`. Never send the private key. The receiver needs a compatible Linux Docker daemon and matching image architecture for import; Docker access is privileged.
+
+For a remote receiver, one simple secure connection is an SSH tunnel. Replace `USER@HUB_HOST` with the publisher/hub host and leave the tunnel running:
+
+```sh
+ssh -N -L 127.0.0.1:8080:127.0.0.1:8080 USER@HUB_HOST
+```
+
+For a same-host receiver, omit the tunnel and copy the public key locally:
+
+```sh
+mkdir -p "$HOME/edge-delta-client"
+cp "$HOME/edge-delta-install/keys/publisher.pub" "$HOME/edge-delta-client/publisher.pub"
+```
+
+Start the persistent native client in another terminal. **This command explicitly enables Docker import.** Omit `--docker-load` for verification/staging only.
+
+```sh
+docker version
 ./bin/edgelab watch \
   --manifest http://127.0.0.1:8080/releases/desired.json \
   --base http://127.0.0.1:8080 \
-  --state work/quickstart/client --pub work/quickstart/keys/publisher.pub \
-  --allow-http --events-url ws://127.0.0.1:8080/events
+  --pub "$HOME/edge-delta-client/publisher.pub" \
+  --state "$HOME/edge-delta-client/state" \
+  --allow-http --events-url ws://127.0.0.1:8080/events --poll 30s \
+  --docker-load
 ```
 
-Wait for the JSON summary containing `"release": "app-v1"` and `"phase": "staged"`. In the **first** summary, `reused_chunks` is zero: this client has no cached content yet. Note `downloaded_chunks` and `chunk_response_body_bytes`.
+`loaded` means verified image import, **not container startup, replacement or health**. Manage running containers separately. Push a new eligible version tag to your registry; the same publisher and client handle it without new keys or manual publish/promote commands. The first completed summary for each release reports downloaded and reused chunks; later summaries are repeat checks. Chunk-body bytes are not total network traffic.
 
-**Terminal 3 — publish the changed version:**
+Stop the client with Ctrl-C and rerun the same command to resume from its existing state. Restart the server pair with `docker compose -f "$HOME/edge-delta-install/compose.yaml" restart`. `down` removes containers but preserves installation files; `up -d` resumes them. Do not rerun setup or erase keys, sequence counters or receiver state as a restart procedure. Keep one publisher and one client per state directory.
 
-```sh
-./bin/edgelab publish \
-  --input work/quickstart/fixtures/app-a-v2.tar \
-  --root work/quickstart/origin --key work/quickstart/keys/publisher.key \
-  --release app-v2 --sequence 2
-./bin/edgelab promote --root work/quickstart/origin --release app-v2
-```
+**Real installation proof:** [retained results](evidence/intended-install/README.md) cover a real registry, two runnable images, the generated publisher/hub installation, persistent native client import, offline payload checks, delta reuse and restart. This is same-daemon Linux Docker integration, not a remote-site or production-readiness claim.
 
-Return to Terminal 2. In the **first** `"app-v2"` summary, look for reused chunks and fewer downloaded bytes than the cold download. The second fixture changes 32 KiB inside the application payload; the same running client rebuilds and verifies the complete archive without downloading all of it again.
+<a id="quickstart-local-hub-and-persistent-client"></a>
 
-Later summaries describe repeated checks, not the original transfer. `chunk_response_body_bytes` measures chunk response bodies, not total network traffic.
-
-Stop the hub and client with Ctrl-C. Keep `work/quickstart/client` to reuse downloaded content after restarting. To discard this example instead, remove `work/quickstart` after both processes stop. Release names must be unique and sequence numbers must increase; never share client state between concurrent clients.
-
-Plain HTTP is allowed here only for isolated local testing. The client receives the pinned public key, never the signing key.
-
-## Use your own Docker images
-
-Follow [registry publication and client loading](docs/DOCKER_RUN.md#registry-publication-and-client-loading) to publish actual images and explicitly enable Docker import. Do not add `--docker-load` to the synthetic quickstart: importing requires a signed Docker-archive release with expected image IDs. By default the client only stages a verified archive.
+The [synthetic transport demonstration](docs/SYNTHETIC_DEMO.md) and root Compose simulation remain developer tools, not this installation path. For native-only server commands or Helm, see the [runtime guide](docs/DOCKER_RUN.md).
 
 ## Verification and recovery
 
@@ -85,7 +90,7 @@ See [architecture and integrity boundaries](docs/ARCHITECTURE.md) for the trust 
 
 See the [Grafana guide and latest public-safe screenshot](docs/GRAFANA.md) for optional setup, panel meanings, and cold-versus-incremental delivery results.
 
-`make build` also builds `edgelab-exporter`. To enable monitoring, stop the quickstart daemons and rerun their commands with `--admin-socket work/quickstart/hub/admin.sock` added to `serve` and `--admin-socket work/quickstart/client/admin.sock` added to `watch`. Keep their existing state directories. Then start each exporter in its own terminal:
+`make build` also builds `edgelab-exporter`. The following optional native-process example uses the paths from the [synthetic demonstration](docs/SYNTHETIC_DEMO.md), not the Compose installation. To enable it, stop those demonstration daemons and rerun their commands with `--admin-socket work/quickstart/hub/admin.sock` added to `serve` and `--admin-socket work/quickstart/client/admin.sock` added to `watch`. Keep their existing state directories. Then start each exporter in its own terminal:
 
 ```sh
 ./bin/edgelab-exporter --socket work/quickstart/hub/admin.sock \
@@ -175,8 +180,8 @@ Both images receive `latest` only for stable versions, never prereleases.
 `latest` tracks the last successful stable publication, not a semver-sorted
 maximum. Publication jobs run independently after validation; a failure can leave
 partial publication. A rerun replaces assets and image tags for the same version.
-This local checkout still has no remote: the workflow is source-ready but has
-**not been remotely executed**, and no hosted release or GHCR image is claimed.
+The public source repository is available, but this installation builds locally.
+No hosted release or GHCR image is required or claimed by the instructions above.
 
 ## Developer demonstrations
 

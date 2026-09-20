@@ -14,6 +14,7 @@ build:
 test:
 	$(GO) test -count=1 ./...
 	$(PYTHON) -m unittest discover -s scripts -p '*_test.py' -v
+	$(PYTHON) deploy/compose/test_setup.py -v
 
 race:
 	$(GO) test -race -count=1 ./...

@@ -1,0 +1,623 @@
+$ docker info --format {{.OSType}}/{{.Architecture}}
+linux/x86_64
+$ go build -o <checkout>/work/install-proof-5/edgelab ./cmd/edgelab
+$ python3 deploy/compose/setup.py --directory <checkout>/work/install-proof-5/installation --binary <checkout>/work/install-proof-5/edgelab --registry http://registry:5000 --repository proof/app --allow ^v[12]$ --port 60412
+WARNING: hub uses unauthenticated HTTP, bound to loopback only. Do not expose it publicly.
+WARNING: registry HTTP is unencrypted; use a trusted isolated network only.
+Created <checkout>/work/install-proof-5/installation; containers run as UID 100, host GID 20.
+Start: docker compose -f <checkout>/work/install-proof-5/installation/compose.yaml up -d --build
+Logs:  docker compose -f <checkout>/work/install-proof-5/installation/compose.yaml logs -f publisher hub
+Stop:  docker compose -f <checkout>/work/install-proof-5/installation/compose.yaml down   # preserves all host state and keys
+Trust: distribute only <checkout>/work/install-proof-5/installation/keys/publisher.pub to receivers
+$ docker compose -p edinstall-7be1022f84 -f <checkout>/work/install-proof-5/installation/compose.yaml -f <checkout>/work/install-proof-5/registry.yaml up -d --build
+ Image edinstall-7be1022f84-publisher Building 
+ Image edinstall-7be1022f84-hub Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.09kB done
+#1 DONE 0.0s
+
+#2 [hub internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.29kB done
+#2 DONE 0.0s
+
+#3 [hub] resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.7s
+
+#4 [publisher] docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#4 resolve docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32 0.1s done
+#4 CACHED
+
+#4 [hub] docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#4 CACHED
+
+#5 [publisher internal] load metadata for docker.io/library/alpine:3.20
+#5 DONE 0.5s
+
+#6 [publisher internal] load metadata for docker.io/library/golang:1.25
+#6 DONE 0.6s
+
+#7 [publisher internal] load .dockerignore
+#7 transferring context: 171B done
+#7 DONE 0.0s
+
+#8 [hub build 1/9] FROM docker.io/library/golang:1.25@sha256:699337d620559a59b4a2bb298ad59611e535d2ee755a34cf2d2a98f37578dc80
+#8 resolve docker.io/library/golang:1.25@sha256:699337d620559a59b4a2bb298ad59611e535d2ee755a34cf2d2a98f37578dc80 0.1s done
+#8 DONE 0.1s
+
+#9 [hub daemon 1/6] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#9 resolve docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc 0.1s done
+#9 DONE 0.1s
+
+#10 [hub internal] load build context
+#10 transferring context: 2.43kB done
+#10 DONE 0.0s
+
+#11 [hub daemon 2/6] RUN addgroup -S edgelab && adduser -S -G edgelab edgelab     && mkdir -p /state && chown edgelab:edgelab /state
+#11 CACHED
+
+#12 [hub build 4/9] RUN go mod download
+#12 CACHED
+
+#13 [hub build 2/9] WORKDIR /src
+#13 CACHED
+
+#14 [hub build 5/9] COPY cmd/ cmd/
+#14 CACHED
+
+#15 [hub build 7/9] RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64     go build -trimpath -ldflags "-s -w" -o /out/edgelab ./cmd/edgelab
+#15 CACHED
+
+#16 [hub build 9/9] RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64     go build -trimpath -ldflags "-s -w" -o /out/edgelab-exporter ./cmd/edgelab-exporter
+#16 CACHED
+
+#17 [hub daemon 5/6] COPY --from=build /out/edgelab-exporter /usr/local/bin/edgelab-exporter
+#17 CACHED
+
+#18 [hub build 3/9] COPY go.mod go.sum ./
+#18 CACHED
+
+#19 [hub build 6/9] COPY internal/ internal/
+#19 CACHED
+
+#20 [hub build 8/9] RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64     go build -trimpath -ldflags "-s -w" -o /out/edgelab-tui ./cmd/edgelab-tui
+#20 CACHED
+
+#21 [hub daemon 4/6] COPY --from=build /out/edgelab-tui /usr/local/bin/edgelab-tui
+#21 CACHED
+
+#22 [hub daemon 3/6] COPY --from=build /out/edgelab /usr/local/bin/edgelab
+#22 CACHED
+
+#23 [hub daemon 6/6] WORKDIR /state
+#23 CACHED
+
+#24 [publisher] exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:7bf5ef01479374bf2dcb150d4bedb951d7d632f13a4f970c46ec1ee76dc77914 0.0s done
+#24 exporting config sha256:d20707f4f22139ac536971a643ebd8bc51d7d5b175ac9019f0f0d989b700d9ab 0.0s done
+#24 exporting attestation manifest sha256:e8712cf192df40734240b4ed605627bc565036682b124bf134be7963a459cb3b 0.1s done
+#24 exporting manifest list sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6
+#24 exporting manifest list sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6 0.0s done
+#24 naming to docker.io/library/edinstall-7be1022f84-publisher:latest 0.0s done
+#24 unpacking to docker.io/library/edinstall-7be1022f84-publisher:latest
+#24 unpacking to docker.io/library/edinstall-7be1022f84-publisher:latest 0.4s done
+#24 DONE 0.7s
+
+#25 [hub] exporting to image
+#25 exporting layers done
+#25 exporting manifest sha256:28dc886a25ec12a3563c36c180fd2d1c3f1922e0e5b78c06907124d54f3a0dca 0.0s done
+#25 exporting config sha256:7e9f2a8b33f3e12bd8daef2c16677e6aed2d4d9b0d0a08816bb0950cfd45d8cc 0.0s done
+#25 exporting attestation manifest sha256:c1d18042d77dbadb7cb9c3bc017a22674b3bab533f9a39f2b83ec0a455179309 0.1s done
+#25 exporting manifest list sha256:043256fdfd4de5a80d6df217eaa931c44095030a0496ad16cda21b16cbd4da31 0.0s done
+#25 naming to docker.io/library/edinstall-7be1022f84-hub:latest done
+#25 unpacking to docker.io/library/edinstall-7be1022f84-hub:latest 0.4s done
+#25 DONE 0.6s
+
+#26 [hub] resolving provenance for metadata file
+#26 DONE 0.0s
+
+#27 [publisher] resolving provenance for metadata file
+#27 DONE 0.0s
+ Image edinstall-7be1022f84-hub Built 
+ Image edinstall-7be1022f84-publisher Built 
+ Network edinstall-7be1022f84_default Creating 
+ Network edinstall-7be1022f84_default Created 
+ Container edinstall-7be1022f84-hub-1 Creating 
+ Container edinstall-7be1022f84-registry-1 Creating 
+ Container edinstall-7be1022f84-publisher-1 Creating 
+ Container edinstall-7be1022f84-publisher-1 Created 
+ Container edinstall-7be1022f84-hub-1 Created 
+ Container edinstall-7be1022f84-registry-1 Created 
+ Container edinstall-7be1022f84-registry-1 Starting 
+ Container edinstall-7be1022f84-publisher-1 Starting 
+ Container edinstall-7be1022f84-hub-1 Starting 
+ Container edinstall-7be1022f84-publisher-1 Started 
+ Container edinstall-7be1022f84-registry-1 Started 
+ Container edinstall-7be1022f84-hub-1 Started 
+$ docker image ls -aq --no-trunc
+sha256:0026c434e6abe74d43eaebd3e6ce6f6164a0889f42926fd302c2d6eb07cea8e1
+sha256:a593970bcc242e65fd4a8142b3dac67f1b20755e21253614f554c73fc4dacc7b
+sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6
+sha256:043256fdfd4de5a80d6df217eaa931c44095030a0496ad16cda21b16cbd4da31
+sha256:b1578b5a17b8b73dc3337a5199030332c28a8c0b3a2870d29158e13581df85c5
+sha256:3eb20af33df342758843aeddaeb7b817a79061c6a3e36ab78575077b8adbbca4
+sha256:02f79a9a92b41b56561b2eaac3abdd20c36d5b83f473ae888f79da43bccc2275
+sha256:e607adbdf450b7bc4f218b0e8cfa297cbf34e0ee50e9cc4b3cdf94552d94e684
+sha256:b8ec653c44235fbe910879145dac3597d66b0aaecf60bcbbe82580767771a839
+sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
+sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+sha256:9e0a9ffab08c8b23ec562acbb2eba081669fba8b92528791c7ee137de7d281bc
+sha256:80011606509f170e5fbedcc192c7fc4ea59e53cdd030509e50f0d3c0ec3c165b
+sha256:9eadb50c6a099f8d90fc0fd3cbdf35aad4ca80af2b2dbdd9f434d090e9a1a943
+sha256:4a3091106791975d85c4f8b64148bd32f299f06ee0b15ac7bfadf2919d004195
+sha256:053808a2a2b72d9f097c48f4291a59cd90d126902c0ab6821677e6c3239f1166
+sha256:7939d176753d45de736ee3cf9b9a82673fb2be944eb5dd1c2e647536fa5f22d7
+sha256:7947445bcce5d7776b6d7ac06d4ccdd390fda49d5e0aa9e0d47fd3a7877df2c4
+sha256:9d9d74c363e18788ac22cc9bcfcefc7e84b0f0fda7109b4b6bdf94e60b49f7e1
+sha256:0ee2321aee9d615e3925abe02cb5c865c49e5a4608b5b12537cd3210227da00f
+sha256:a4dc91617fe86395ba116006780835b53527fae26309605fb0eeaa43407872cf
+sha256:9c09595589371fdd134348fe9c4462aef1cded2de47e93ba0f1c1d9af22c4030
+sha256:e63e773071eddd432cc22988f3292ac12a700d0e96492785fc4daca26c341b93
+sha256:08450f76abffed49e1b6fe42157ecc548ed7b2e0d03a84d7a795276671f7ae78
+sha256:6a8687c9713dcbeba06a633b7331a47f79d5686d6253c7259c2c10222fc15253
+sha256:9e4344788f8a0ac6cf900e15dd62b21bf1563fb35bec95af492288a5fafdd7e0
+sha256:177634f6d092e8a9ff5160f0c4386b2d71d35efa6c14cb130bcf16184601249f
+sha256:8f2db868a67a47514935ba14e241ee2fb3a464021dae9764584658a52e73f738
+sha256:7ea4562cd6d8de09f81a3047898b5d07b1f2c0beeb18e65214b8b9d53a768a84
+sha256:ae2ba51eb231d10155d49e51ee53a872e1b24e5baa7c5685b58dd56f4f27da44
+sha256:3e34b97ae158eb995e6063cb0de6f8c87dfc5b643666bcc7754d534b7bf8eed3
+sha256:14959025bb8db0c4c893dcf1668da7d8a0a71fd7d858ce5f0f7c62dd24538878
+sha256:a636442d5e0270b44030706efdc2a4c3e340f28926cefa885a7b40b30cbe6632
+sha256:300c7c201915a3b9c12c963890918f076c6e119025401cc8b68d27c386a14b11
+sha256:1129c581f2cc736266aee3dcae621b6f38bdc416ade0f8cffc9177bcfaa7235f
+sha256:ed45d3457994943dfd63bf33554a9f23ea4c6238d26d220cc83db5e5673cc2fd
+sha256:b64963eb2b4d92a5d4f7f02e252554d9512a029459d667587af11caf2a6b9c32
+sha256:0187af6bd6530863054c9d8978a9108e864e221ca84095bba80a36fefec6c6a0
+sha256:b9400e5253c3df1a228e8dd9cb85a155a9a1c216b41b9d1108d52df66873444d
+sha256:a66913b6b9bc7af14da677e8bcc746ccb03be5e3a2634796c73368c6a8e08133
+sha256:c4e6fe1dc3dbdba92b87fbb4fde8359b33899461f3deded8af3719e2162cbd9a
+sha256:f571dd6cac90b6c05c60863501896a134ba3a7063101a079e9b3da790e950ebb
+sha256:4f5f6180d3241f4bf29aabdd9acd8206d7b687f1f499ce44dd4c913ca40b1a11
+sha256:8bdaad05eb3d16fcd1183b27d36f8aaab471f00686af793dee90d6a48f81fc84
+sha256:4de0285b66799dfa09e7372a75860c8eee9d248d8d5fb0b8e1508cb79a34470b
+sha256:a9437e0b3a81ec2ee2c81cabe5c37dd1d20916fb2453888df02617d0024b8e2b
+sha256:f5ce02e5c9398b276df8ad27686fed392c82ca78773dba0765467e450992e662
+sha256:24e6b932758173465a783e09ccfaef771ea64171f6cd03f56a7ff48468352e86
+sha256:3e6a3e0d8a3158e7cbc85d76c866f6172ea8a45319cc1dcef29c1b4f80ac71d5
+sha256:bc58cbde82ea2a04eb0b2e712b14d69e8f4340124b2cad68ef28f3e65ae4dc14
+sha256:59d378ce8e1f1011820a812b5019eaca7564792cefe2f849458ef4084f2d6a41
+sha256:cc9f2e1645cce83bad92d5069a15ae77c575fb94dcd62c7fb11482791e61e08d
+sha256:404b0adf7a20fc8bf57dfc1e18b8d474d28308c67676982ef859e907cea8b21d
+sha256:86aac3af96beb3d69063d400549b1e6b0cfb47dc86514eeab68b2179ed7e4469
+sha256:5122b5ab9410af39ae91fbd0a8e8357752bdaa6b1e9897d18ae835f1feb2ddcf
+sha256:0df8b2e80dcab1c10f866f8342f82ce4c1209539198696eff185f3fc5db5f9f9
+$ docker build --provenance=false --platform linux/amd64 --no-cache -t 127.0.0.1:60413/proof/app:v1 <checkout>/work/install-proof-5/image
+#0 building with "orbstack" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 202B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:3.20
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#4 resolve docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc 0.1s done
+#4 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 4.20MB 0.1s done
+#5 DONE 0.1s
+
+#6 [2/2] COPY payload.bin release.txt /
+#6 DONE 0.1s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 0.4s done
+#7 exporting manifest sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee 0.0s done
+#7 exporting config sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156 0.0s done
+#7 naming to 127.0.0.1:60413/proof/app:v1 done
+#7 unpacking to 127.0.0.1:60413/proof/app:v1 0.1s done
+#7 DONE 0.5s
+$ docker image inspect 127.0.0.1:60413/proof/app:v1 --format {{.Id}}
+sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+$ docker push 127.0.0.1:60413/proof/app:v1
+The push refers to repository [127.0.0.1:60413/proof/app]
+bab25b477bc5: Pushed
+25f1d6b1951a: Pushed
+v1: digest: sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee size: 701
+$ docker image rm 127.0.0.1:60413/proof/app:v1
+Untagged: 127.0.0.1:60413/proof/app:v1
+Deleted: sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+$ docker image inspect sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+[]
+Error response from daemon: No such image: sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+$ docker image ls -aq --no-trunc
+sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+sha256:0026c434e6abe74d43eaebd3e6ce6f6164a0889f42926fd302c2d6eb07cea8e1
+sha256:a593970bcc242e65fd4a8142b3dac67f1b20755e21253614f554c73fc4dacc7b
+sha256:043256fdfd4de5a80d6df217eaa931c44095030a0496ad16cda21b16cbd4da31
+sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6
+sha256:3eb20af33df342758843aeddaeb7b817a79061c6a3e36ab78575077b8adbbca4
+sha256:b1578b5a17b8b73dc3337a5199030332c28a8c0b3a2870d29158e13581df85c5
+sha256:02f79a9a92b41b56561b2eaac3abdd20c36d5b83f473ae888f79da43bccc2275
+sha256:e607adbdf450b7bc4f218b0e8cfa297cbf34e0ee50e9cc4b3cdf94552d94e684
+sha256:b8ec653c44235fbe910879145dac3597d66b0aaecf60bcbbe82580767771a839
+sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
+sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+sha256:4de0285b66799dfa09e7372a75860c8eee9d248d8d5fb0b8e1508cb79a34470b
+sha256:5122b5ab9410af39ae91fbd0a8e8357752bdaa6b1e9897d18ae835f1feb2ddcf
+sha256:e63e773071eddd432cc22988f3292ac12a700d0e96492785fc4daca26c341b93
+sha256:9c09595589371fdd134348fe9c4462aef1cded2de47e93ba0f1c1d9af22c4030
+sha256:300c7c201915a3b9c12c963890918f076c6e119025401cc8b68d27c386a14b11
+sha256:177634f6d092e8a9ff5160f0c4386b2d71d35efa6c14cb130bcf16184601249f
+sha256:08450f76abffed49e1b6fe42157ecc548ed7b2e0d03a84d7a795276671f7ae78
+sha256:6a8687c9713dcbeba06a633b7331a47f79d5686d6253c7259c2c10222fc15253
+sha256:f5ce02e5c9398b276df8ad27686fed392c82ca78773dba0765467e450992e662
+sha256:9e4344788f8a0ac6cf900e15dd62b21bf1563fb35bec95af492288a5fafdd7e0
+sha256:a9437e0b3a81ec2ee2c81cabe5c37dd1d20916fb2453888df02617d0024b8e2b
+sha256:0187af6bd6530863054c9d8978a9108e864e221ca84095bba80a36fefec6c6a0
+sha256:a4dc91617fe86395ba116006780835b53527fae26309605fb0eeaa43407872cf
+sha256:3e34b97ae158eb995e6063cb0de6f8c87dfc5b643666bcc7754d534b7bf8eed3
+sha256:053808a2a2b72d9f097c48f4291a59cd90d126902c0ab6821677e6c3239f1166
+sha256:7939d176753d45de736ee3cf9b9a82673fb2be944eb5dd1c2e647536fa5f22d7
+sha256:f571dd6cac90b6c05c60863501896a134ba3a7063101a079e9b3da790e950ebb
+sha256:14959025bb8db0c4c893dcf1668da7d8a0a71fd7d858ce5f0f7c62dd24538878
+sha256:1129c581f2cc736266aee3dcae621b6f38bdc416ade0f8cffc9177bcfaa7235f
+sha256:0df8b2e80dcab1c10f866f8342f82ce4c1209539198696eff185f3fc5db5f9f9
+sha256:8bdaad05eb3d16fcd1183b27d36f8aaab471f00686af793dee90d6a48f81fc84
+sha256:cc9f2e1645cce83bad92d5069a15ae77c575fb94dcd62c7fb11482791e61e08d
+sha256:9d9d74c363e18788ac22cc9bcfcefc7e84b0f0fda7109b4b6bdf94e60b49f7e1
+sha256:c4e6fe1dc3dbdba92b87fbb4fde8359b33899461f3deded8af3719e2162cbd9a
+sha256:9e0a9ffab08c8b23ec562acbb2eba081669fba8b92528791c7ee137de7d281bc
+sha256:8f2db868a67a47514935ba14e241ee2fb3a464021dae9764584658a52e73f738
+sha256:b64963eb2b4d92a5d4f7f02e252554d9512a029459d667587af11caf2a6b9c32
+sha256:7947445bcce5d7776b6d7ac06d4ccdd390fda49d5e0aa9e0d47fd3a7877df2c4
+sha256:b9400e5253c3df1a228e8dd9cb85a155a9a1c216b41b9d1108d52df66873444d
+sha256:4f5f6180d3241f4bf29aabdd9acd8206d7b687f1f499ce44dd4c913ca40b1a11
+sha256:4a3091106791975d85c4f8b64148bd32f299f06ee0b15ac7bfadf2919d004195
+sha256:404b0adf7a20fc8bf57dfc1e18b8d474d28308c67676982ef859e907cea8b21d
+sha256:86aac3af96beb3d69063d400549b1e6b0cfb47dc86514eeab68b2179ed7e4469
+sha256:80011606509f170e5fbedcc192c7fc4ea59e53cdd030509e50f0d3c0ec3c165b
+sha256:a66913b6b9bc7af14da677e8bcc746ccb03be5e3a2634796c73368c6a8e08133
+sha256:0ee2321aee9d615e3925abe02cb5c865c49e5a4608b5b12537cd3210227da00f
+sha256:ae2ba51eb231d10155d49e51ee53a872e1b24e5baa7c5685b58dd56f4f27da44
+sha256:3e6a3e0d8a3158e7cbc85d76c866f6172ea8a45319cc1dcef29c1b4f80ac71d5
+sha256:a636442d5e0270b44030706efdc2a4c3e340f28926cefa885a7b40b30cbe6632
+sha256:59d378ce8e1f1011820a812b5019eaca7564792cefe2f849458ef4084f2d6a41
+sha256:24e6b932758173465a783e09ccfaef771ea64171f6cd03f56a7ff48468352e86
+sha256:7ea4562cd6d8de09f81a3047898b5d07b1f2c0beeb18e65214b8b9d53a768a84
+sha256:bc58cbde82ea2a04eb0b2e712b14d69e8f4340124b2cad68ef28f3e65ae4dc14
+sha256:9eadb50c6a099f8d90fc0fd3cbdf35aad4ca80af2b2dbdd9f434d090e9a1a943
+sha256:ed45d3457994943dfd63bf33554a9f23ea4c6238d26d220cc83db5e5673cc2fd
+$ docker image save -o <checkout>/work/install-proof-5/stored.tar sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+$ docker run --rm --pull never --network none sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+v1
+cac66e2bac950ab6f88f27a02751f76d7adad68f628c192a3f2f552f0e0339d4  /payload.bin
+$ docker compose -p edinstall-7be1022f84 -f <checkout>/work/install-proof-5/installation/compose.yaml -f <checkout>/work/install-proof-5/registry.yaml restart publisher hub
+ Container edinstall-7be1022f84-publisher-1 Restarting 
+ Container edinstall-7be1022f84-hub-1 Restarting 
+ Container edinstall-7be1022f84-hub-1 Started 
+ Container edinstall-7be1022f84-publisher-1 Started 
+$ docker image ls -aq --no-trunc
+sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+sha256:0026c434e6abe74d43eaebd3e6ce6f6164a0889f42926fd302c2d6eb07cea8e1
+sha256:a593970bcc242e65fd4a8142b3dac67f1b20755e21253614f554c73fc4dacc7b
+sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6
+sha256:043256fdfd4de5a80d6df217eaa931c44095030a0496ad16cda21b16cbd4da31
+sha256:b1578b5a17b8b73dc3337a5199030332c28a8c0b3a2870d29158e13581df85c5
+sha256:3eb20af33df342758843aeddaeb7b817a79061c6a3e36ab78575077b8adbbca4
+sha256:02f79a9a92b41b56561b2eaac3abdd20c36d5b83f473ae888f79da43bccc2275
+sha256:e607adbdf450b7bc4f218b0e8cfa297cbf34e0ee50e9cc4b3cdf94552d94e684
+sha256:b8ec653c44235fbe910879145dac3597d66b0aaecf60bcbbe82580767771a839
+sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
+sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+sha256:4f5f6180d3241f4bf29aabdd9acd8206d7b687f1f499ce44dd4c913ca40b1a11
+sha256:9c09595589371fdd134348fe9c4462aef1cded2de47e93ba0f1c1d9af22c4030
+sha256:cc9f2e1645cce83bad92d5069a15ae77c575fb94dcd62c7fb11482791e61e08d
+sha256:404b0adf7a20fc8bf57dfc1e18b8d474d28308c67676982ef859e907cea8b21d
+sha256:300c7c201915a3b9c12c963890918f076c6e119025401cc8b68d27c386a14b11
+sha256:0187af6bd6530863054c9d8978a9108e864e221ca84095bba80a36fefec6c6a0
+sha256:7939d176753d45de736ee3cf9b9a82673fb2be944eb5dd1c2e647536fa5f22d7
+sha256:0ee2321aee9d615e3925abe02cb5c865c49e5a4608b5b12537cd3210227da00f
+sha256:a4dc91617fe86395ba116006780835b53527fae26309605fb0eeaa43407872cf
+sha256:053808a2a2b72d9f097c48f4291a59cd90d126902c0ab6821677e6c3239f1166
+sha256:9e0a9ffab08c8b23ec562acbb2eba081669fba8b92528791c7ee137de7d281bc
+sha256:6a8687c9713dcbeba06a633b7331a47f79d5686d6253c7259c2c10222fc15253
+sha256:1129c581f2cc736266aee3dcae621b6f38bdc416ade0f8cffc9177bcfaa7235f
+sha256:24e6b932758173465a783e09ccfaef771ea64171f6cd03f56a7ff48468352e86
+sha256:7947445bcce5d7776b6d7ac06d4ccdd390fda49d5e0aa9e0d47fd3a7877df2c4
+sha256:f571dd6cac90b6c05c60863501896a134ba3a7063101a079e9b3da790e950ebb
+sha256:a636442d5e0270b44030706efdc2a4c3e340f28926cefa885a7b40b30cbe6632
+sha256:a9437e0b3a81ec2ee2c81cabe5c37dd1d20916fb2453888df02617d0024b8e2b
+sha256:86aac3af96beb3d69063d400549b1e6b0cfb47dc86514eeab68b2179ed7e4469
+sha256:b9400e5253c3df1a228e8dd9cb85a155a9a1c216b41b9d1108d52df66873444d
+sha256:14959025bb8db0c4c893dcf1668da7d8a0a71fd7d858ce5f0f7c62dd24538878
+sha256:4de0285b66799dfa09e7372a75860c8eee9d248d8d5fb0b8e1508cb79a34470b
+sha256:f5ce02e5c9398b276df8ad27686fed392c82ca78773dba0765467e450992e662
+sha256:7ea4562cd6d8de09f81a3047898b5d07b1f2c0beeb18e65214b8b9d53a768a84
+sha256:9d9d74c363e18788ac22cc9bcfcefc7e84b0f0fda7109b4b6bdf94e60b49f7e1
+sha256:ae2ba51eb231d10155d49e51ee53a872e1b24e5baa7c5685b58dd56f4f27da44
+sha256:4a3091106791975d85c4f8b64148bd32f299f06ee0b15ac7bfadf2919d004195
+sha256:9eadb50c6a099f8d90fc0fd3cbdf35aad4ca80af2b2dbdd9f434d090e9a1a943
+sha256:08450f76abffed49e1b6fe42157ecc548ed7b2e0d03a84d7a795276671f7ae78
+sha256:177634f6d092e8a9ff5160f0c4386b2d71d35efa6c14cb130bcf16184601249f
+sha256:8f2db868a67a47514935ba14e241ee2fb3a464021dae9764584658a52e73f738
+sha256:3e34b97ae158eb995e6063cb0de6f8c87dfc5b643666bcc7754d534b7bf8eed3
+sha256:3e6a3e0d8a3158e7cbc85d76c866f6172ea8a45319cc1dcef29c1b4f80ac71d5
+sha256:bc58cbde82ea2a04eb0b2e712b14d69e8f4340124b2cad68ef28f3e65ae4dc14
+sha256:59d378ce8e1f1011820a812b5019eaca7564792cefe2f849458ef4084f2d6a41
+sha256:8bdaad05eb3d16fcd1183b27d36f8aaab471f00686af793dee90d6a48f81fc84
+sha256:ed45d3457994943dfd63bf33554a9f23ea4c6238d26d220cc83db5e5673cc2fd
+sha256:e63e773071eddd432cc22988f3292ac12a700d0e96492785fc4daca26c341b93
+sha256:b64963eb2b4d92a5d4f7f02e252554d9512a029459d667587af11caf2a6b9c32
+sha256:a66913b6b9bc7af14da677e8bcc746ccb03be5e3a2634796c73368c6a8e08133
+sha256:80011606509f170e5fbedcc192c7fc4ea59e53cdd030509e50f0d3c0ec3c165b
+sha256:c4e6fe1dc3dbdba92b87fbb4fde8359b33899461f3deded8af3719e2162cbd9a
+sha256:9e4344788f8a0ac6cf900e15dd62b21bf1563fb35bec95af492288a5fafdd7e0
+sha256:5122b5ab9410af39ae91fbd0a8e8357752bdaa6b1e9897d18ae835f1feb2ddcf
+sha256:0df8b2e80dcab1c10f866f8342f82ce4c1209539198696eff185f3fc5db5f9f9
+$ docker build --provenance=false --platform linux/amd64 --no-cache -t 127.0.0.1:60413/proof/app:v2 <checkout>/work/install-proof-5/image
+#0 building with "orbstack" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 202B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/alpine:3.20
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+#4 resolve docker.io/library/alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc 0.1s done
+#4 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 4.20MB 0.1s done
+#5 DONE 0.1s
+
+#6 [2/2] COPY payload.bin release.txt /
+#6 DONE 0.1s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 0.3s done
+#7 exporting manifest sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+#7 exporting manifest sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248 0.0s done
+#7 exporting config sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f 0.0s done
+#7 naming to 127.0.0.1:60413/proof/app:v2 done
+#7 unpacking to 127.0.0.1:60413/proof/app:v2 0.1s done
+#7 DONE 0.5s
+$ docker image inspect 127.0.0.1:60413/proof/app:v2 --format {{.Id}}
+sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+$ docker push 127.0.0.1:60413/proof/app:v2
+The push refers to repository [127.0.0.1:60413/proof/app]
+a9669e371cda: Pushed
+25f1d6b1951a: Layer already exists
+v2: digest: sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248 size: 701
+$ docker image rm 127.0.0.1:60413/proof/app:v2
+Untagged: 127.0.0.1:60413/proof/app:v2
+Deleted: sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+$ docker image inspect sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+[]
+Error response from daemon: No such image: sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+$ docker image ls -aq --no-trunc
+sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102
+sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+sha256:0026c434e6abe74d43eaebd3e6ce6f6164a0889f42926fd302c2d6eb07cea8e1
+sha256:a593970bcc242e65fd4a8142b3dac67f1b20755e21253614f554c73fc4dacc7b
+sha256:451fb786a04d13e6ceb2554dd26861af4131690c605fd71e5232700abe2587b6
+sha256:043256fdfd4de5a80d6df217eaa931c44095030a0496ad16cda21b16cbd4da31
+sha256:3eb20af33df342758843aeddaeb7b817a79061c6a3e36ab78575077b8adbbca4
+sha256:b1578b5a17b8b73dc3337a5199030332c28a8c0b3a2870d29158e13581df85c5
+sha256:02f79a9a92b41b56561b2eaac3abdd20c36d5b83f473ae888f79da43bccc2275
+sha256:e607adbdf450b7bc4f218b0e8cfa297cbf34e0ee50e9cc4b3cdf94552d94e684
+sha256:b8ec653c44235fbe910879145dac3597d66b0aaecf60bcbbe82580767771a839
+sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
+sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+sha256:300c7c201915a3b9c12c963890918f076c6e119025401cc8b68d27c386a14b11
+sha256:a9437e0b3a81ec2ee2c81cabe5c37dd1d20916fb2453888df02617d0024b8e2b
+sha256:8bdaad05eb3d16fcd1183b27d36f8aaab471f00686af793dee90d6a48f81fc84
+sha256:ed45d3457994943dfd63bf33554a9f23ea4c6238d26d220cc83db5e5673cc2fd
+sha256:8f2db868a67a47514935ba14e241ee2fb3a464021dae9764584658a52e73f738
+sha256:14959025bb8db0c4c893dcf1668da7d8a0a71fd7d858ce5f0f7c62dd24538878
+sha256:5122b5ab9410af39ae91fbd0a8e8357752bdaa6b1e9897d18ae835f1feb2ddcf
+sha256:a4dc91617fe86395ba116006780835b53527fae26309605fb0eeaa43407872cf
+sha256:7ea4562cd6d8de09f81a3047898b5d07b1f2c0beeb18e65214b8b9d53a768a84
+sha256:a636442d5e0270b44030706efdc2a4c3e340f28926cefa885a7b40b30cbe6632
+sha256:053808a2a2b72d9f097c48f4291a59cd90d126902c0ab6821677e6c3239f1166
+sha256:4f5f6180d3241f4bf29aabdd9acd8206d7b687f1f499ce44dd4c913ca40b1a11
+sha256:e63e773071eddd432cc22988f3292ac12a700d0e96492785fc4daca26c341b93
+sha256:9c09595589371fdd134348fe9c4462aef1cded2de47e93ba0f1c1d9af22c4030
+sha256:4de0285b66799dfa09e7372a75860c8eee9d248d8d5fb0b8e1508cb79a34470b
+sha256:24e6b932758173465a783e09ccfaef771ea64171f6cd03f56a7ff48468352e86
+sha256:80011606509f170e5fbedcc192c7fc4ea59e53cdd030509e50f0d3c0ec3c165b
+sha256:b64963eb2b4d92a5d4f7f02e252554d9512a029459d667587af11caf2a6b9c32
+sha256:bc58cbde82ea2a04eb0b2e712b14d69e8f4340124b2cad68ef28f3e65ae4dc14
+sha256:9e4344788f8a0ac6cf900e15dd62b21bf1563fb35bec95af492288a5fafdd7e0
+sha256:404b0adf7a20fc8bf57dfc1e18b8d474d28308c67676982ef859e907cea8b21d
+sha256:3e6a3e0d8a3158e7cbc85d76c866f6172ea8a45319cc1dcef29c1b4f80ac71d5
+sha256:1129c581f2cc736266aee3dcae621b6f38bdc416ade0f8cffc9177bcfaa7235f
+sha256:0df8b2e80dcab1c10f866f8342f82ce4c1209539198696eff185f3fc5db5f9f9
+sha256:7939d176753d45de736ee3cf9b9a82673fb2be944eb5dd1c2e647536fa5f22d7
+sha256:9d9d74c363e18788ac22cc9bcfcefc7e84b0f0fda7109b4b6bdf94e60b49f7e1
+sha256:c4e6fe1dc3dbdba92b87fbb4fde8359b33899461f3deded8af3719e2162cbd9a
+sha256:7947445bcce5d7776b6d7ac06d4ccdd390fda49d5e0aa9e0d47fd3a7877df2c4
+sha256:f571dd6cac90b6c05c60863501896a134ba3a7063101a079e9b3da790e950ebb
+sha256:0ee2321aee9d615e3925abe02cb5c865c49e5a4608b5b12537cd3210227da00f
+sha256:59d378ce8e1f1011820a812b5019eaca7564792cefe2f849458ef4084f2d6a41
+sha256:9eadb50c6a099f8d90fc0fd3cbdf35aad4ca80af2b2dbdd9f434d090e9a1a943
+sha256:6a8687c9713dcbeba06a633b7331a47f79d5686d6253c7259c2c10222fc15253
+sha256:a66913b6b9bc7af14da677e8bcc746ccb03be5e3a2634796c73368c6a8e08133
+sha256:cc9f2e1645cce83bad92d5069a15ae77c575fb94dcd62c7fb11482791e61e08d
+sha256:9e0a9ffab08c8b23ec562acbb2eba081669fba8b92528791c7ee137de7d281bc
+sha256:3e34b97ae158eb995e6063cb0de6f8c87dfc5b643666bcc7754d534b7bf8eed3
+sha256:f5ce02e5c9398b276df8ad27686fed392c82ca78773dba0765467e450992e662
+sha256:4a3091106791975d85c4f8b64148bd32f299f06ee0b15ac7bfadf2919d004195
+sha256:86aac3af96beb3d69063d400549b1e6b0cfb47dc86514eeab68b2179ed7e4469
+sha256:b9400e5253c3df1a228e8dd9cb85a155a9a1c216b41b9d1108d52df66873444d
+sha256:177634f6d092e8a9ff5160f0c4386b2d71d35efa6c14cb130bcf16184601249f
+sha256:ae2ba51eb231d10155d49e51ee53a872e1b24e5baa7c5685b58dd56f4f27da44
+sha256:08450f76abffed49e1b6fe42157ecc548ed7b2e0d03a84d7a795276671f7ae78
+sha256:0187af6bd6530863054c9d8978a9108e864e221ca84095bba80a36fefec6c6a0
+$ docker image save -o <checkout>/work/install-proof-5/stored.tar sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102
+$ docker run --rm --pull never --network none sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102
+v2
+d90223bc1a6f199e904796f9227e7099c0da64a8cf3476e54ba0d9101bf0cc12  /payload.bin
+$ docker compose -p edinstall-7be1022f84 -f <checkout>/work/install-proof-5/installation/compose.yaml -f <checkout>/work/install-proof-5/registry.yaml restart publisher hub
+ Container edinstall-7be1022f84-publisher-1 Restarting 
+ Container edinstall-7be1022f84-hub-1 Restarting 
+ Container edinstall-7be1022f84-publisher-1 Started 
+ Container edinstall-7be1022f84-hub-1 Started 
+$ docker compose -p edinstall-7be1022f84 -f <checkout>/work/install-proof-5/installation/compose.yaml -f <checkout>/work/install-proof-5/registry.yaml logs --no-color
+hub-1  | hub mode: announces active; hub cache 128 MiB
+hub-1  | admin socket at /state/admin.sock (event log /state/events.jsonl)
+hub-1  | origin listening at 0.0.0.0:8080
+hub-1  | {"component":"announce-trigger","detail":"kind=promote release=proof-app-v1 sequence=1 file=desired.json","event":"announce"}
+hub-1  | {"component":"announce-trigger","detail":"kind=publish release=proof-app-v1 sequence=1 file=proof-app-v1.json","event":"announce"}
+hub-1  | hub mode: announces active; hub cache 128 MiB
+hub-1  | admin socket at /state/admin.sock (event log /state/events.jsonl)
+hub-1  | origin listening at 0.0.0.0:8080
+hub-1  | {"component":"announce-trigger","detail":"kind=promote release=proof-app-v2 sequence=2 file=desired.json cache_invalidated=1","event":"announce"}
+hub-1  | {"component":"announce-trigger","detail":"kind=publish release=proof-app-v2 sequence=2 file=proof-app-v2.json","event":"announce"}
+hub-1  | hub mode: announces active; hub cache 128 MiB
+hub-1  | admin socket at /state/admin.sock (event log /state/events.jsonl)
+registry-1  | time="2026-09-20T00:37:57.385408471Z" level=warning msg="No HTTP secret provided - generated random secret. This may cause problems with uploads if multiple registries are behind a load-balancer. To provide a shared secret, fill in http.secret in the configuration file or set the REGISTRY_HTTP_SECRET environment variable." go.version=go1.20.8 instance.id=3458722f-316d-41ba-92e2-2ba294241a70 service=registry version=2.8.3 
+registry-1  | time="2026-09-20T00:37:57.385683498Z" level=info msg="Starting upload purge in 6m0s" go.version=go1.20.8 instance.id=3458722f-316d-41ba-92e2-2ba294241a70 service=registry version=2.8.3 
+registry-1  | time="2026-09-20T00:37:57.385761092Z" level=info msg="redis not configured" go.version=go1.20.8 instance.id=3458722f-316d-41ba-92e2-2ba294241a70 service=registry version=2.8.3 
+registry-1  | time="2026-09-20T00:37:57.386272437Z" level=info msg="using inmemory blob descriptor cache" go.version=go1.20.8 instance.id=3458722f-316d-41ba-92e2-2ba294241a70 service=registry version=2.8.3 
+registry-1  | time="2026-09-20T00:37:57.38661784Z" level=info msg="listening on [::]:5000" go.version=go1.20.8 instance.id=3458722f-316d-41ba-92e2-2ba294241a70 service=registry version=2.8.3 
+hub-1       | origin listening at 0.0.0.0:8080
+registry-1  | 192.168.107.1 - - [20/Sep/2026:00:37:57 +0000] "GET /v2/ HTTP/1.1" 200 2 "" "Python-urllib/3.11"
+registry-1  | time="2026-09-20T00:37:57.408243423Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=3ec20e49-6106-4594-aba2-671298375961 http.request.method=GET http.request.remoteaddr="192.168.107.1:34900" http.request.uri="/v2/" http.request.useragent="Python-urllib/3.11" http.response.contenttype="application/json; charset=utf-8" http.response.duration=3.187626ms http.response.status=200 http.response.written=2 
+registry-1  | time="2026-09-20T00:37:59.495665822Z" level=error msg="response completed with error" err.code="blob unknown" err.detail=sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156 err.message="blob unknown to registry" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=272b3c03-f8af-494e-a9ed-cadb6ee54322 http.request.method=HEAD http.request.remoteaddr="192.168.107.1:57284" http.request.uri="/v2/proof/app/blobs/sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.992805ms http.response.status=404 http.response.written=157 vars.digest="sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156" vars.name="proof/app" 
+publisher-1  | watch-registry: polling http://registry:5000 for 1 repo(s)
+publisher-1  | {"detail":"tags/list proof/app: Get \"http://registry:5000/v2/proof/app/tags/list\": dial tcp 192.168.107.3:5000: connect: connection refused","event":"watcher-error"}
+publisher-1  | {"detail":"proof/app:v1@sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee","event":"release-detected"}
+publisher-1  | {"detail":"release=proof-app-v1 repo=proof/app tag=v1 digest=sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee sequence=1","event":"release-published"}
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "HEAD /v2/proof/app/blobs/sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156 HTTP/1.1" 404 157 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+publisher-1  | watch-registry: polling http://registry:5000 for 1 repo(s)
+publisher-1  | {"detail":"proof/app:v2@sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248","event":"release-detected"}
+publisher-1  | {"detail":"release=proof-app-v2 repo=proof/app tag=v2 digest=sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248 sequence=2","event":"release-published"}
+publisher-1  | watch-registry: polling http://registry:5000 for 1 repo(s)
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "HEAD /v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 HTTP/1.1" 404 157 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.495765124Z" level=error msg="response completed with error" err.code="blob unknown" err.detail=sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 err.message="blob unknown to registry" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=d5bc8d1d-7134-4fe7-8604-bd772acd9220 http.request.method=HEAD http.request.remoteaddr="192.168.107.1:57280" http.request.uri="/v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=3.367904ms http.response.status=404 http.response.written=157 vars.digest="sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" vars.name="proof/app" 
+registry-1   | time="2026-09-20T00:37:59.498050203Z" level=error msg="response completed with error" err.code="blob unknown" err.detail=sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925 err.message="blob unknown to registry" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=10eb914e-9e35-4d49-abbc-43805719b6f0 http.request.method=HEAD http.request.remoteaddr="192.168.107.1:57264" http.request.uri="/v2/proof/app/blobs/sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=6.117679ms http.response.status=404 http.response.written=157 vars.digest="sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925" vars.name="proof/app" 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "HEAD /v2/proof/app/blobs/sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925 HTTP/1.1" 404 157 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "POST /v2/proof/app/blobs/uploads/ HTTP/1.1" 202 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.509633321Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=0cd73d37-77db-44e7-8fe7-51d5bbd193ef http.request.method=POST http.request.remoteaddr="192.168.107.1:57280" http.request.uri="/v2/proof/app/blobs/uploads/" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=12.139034ms http.response.status=202 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "POST /v2/proof/app/blobs/uploads/ HTTP/1.1" 202 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.512591946Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=8b23286d-d045-4fb8-ab6b-caee74418ac6 http.request.method=POST http.request.remoteaddr="192.168.107.1:57284" http.request.uri="/v2/proof/app/blobs/uploads/" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=15.052714ms http.response.status=202 http.response.written=0 
+registry-1   | time="2026-09-20T00:37:59.513939086Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=16a42450-da43-43f7-8dbd-940ea5e6ab24 http.request.method=POST http.request.remoteaddr="192.168.107.1:57264" http.request.uri="/v2/proof/app/blobs/uploads/" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=15.194178ms http.response.status=202 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "POST /v2/proof/app/blobs/uploads/ HTTP/1.1" 202 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.524558974Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/octet-stream" http.request.host="127.0.0.1:60413" http.request.id=106f56a4-9af3-4b5e-873a-c9c61737bbd9 http.request.method=PUT http.request.remoteaddr="192.168.107.1:57280" http.request.uri="/v2/proof/app/blobs/uploads/630cff70-249f-4cfe-aaf3-03b3b67431ae?_state=ZsZdEHsCTRL6vdT942JAj5dyTNkhOyo0xh5m-NjdyyJ7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiNjMwY2ZmNzAtMjQ5Zi00Y2ZlLWFhZjMtMDNiM2I2NzQzMWFlIiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjQ5OTI4NzM2NFoifQ%3D%3D&digest=sha256%3Ac0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=14.153201ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "PUT /v2/proof/app/blobs/uploads/630cff70-249f-4cfe-aaf3-03b3b67431ae?_state=ZsZdEHsCTRL6vdT942JAj5dyTNkhOyo0xh5m-NjdyyJ7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiNjMwY2ZmNzAtMjQ5Zi00Y2ZlLWFhZjMtMDNiM2I2NzQzMWFlIiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjQ5OTI4NzM2NFoifQ%3D%3D&digest=sha256%3Ac0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156 HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.585901225Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/octet-stream" http.request.host="127.0.0.1:60413" http.request.id=f2719559-ab6d-47e1-8a94-19c7453cefc7 http.request.method=PUT http.request.remoteaddr="192.168.107.1:57264" http.request.uri="/v2/proof/app/blobs/uploads/72fb69da-c264-439a-a56c-148e0cef7f1c?_state=6uSzvg7BJTby9UTJxHtRciMCsTh9dqQzWHx69Y36rBZ7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiNzJmYjY5ZGEtYzI2NC00MzlhLWE1NmMtMTQ4ZTBjZWY3ZjFjIiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjUwMjM2MjQ2OVoifQ%3D%3D&digest=sha256%3Abab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=71.083879ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "PUT /v2/proof/app/blobs/uploads/72fb69da-c264-439a-a56c-148e0cef7f1c?_state=6uSzvg7BJTby9UTJxHtRciMCsTh9dqQzWHx69Y36rBZ7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiNzJmYjY5ZGEtYzI2NC00MzlhLWE1NmMtMTQ4ZTBjZWY3ZjFjIiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjUwMjM2MjQ2OVoifQ%3D%3D&digest=sha256%3Abab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925 HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.594230947Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/octet-stream" http.request.host="127.0.0.1:60413" http.request.id=f7c1da74-b78f-421b-9c35-782d0e9b9007 http.request.method=PUT http.request.remoteaddr="192.168.107.1:57284" http.request.uri="/v2/proof/app/blobs/uploads/e6fb6d39-3676-43e9-82bc-8cf86c93c986?_state=OEuzLQBQV0Yh8WiTxVOZbCkOSyQ_Lr14PkXSEAtLg8p7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiZTZmYjZkMzktMzY3Ni00M2U5LTgyYmMtOGNmODZjOTNjOTg2IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjQ5OTY5MDUwN1oifQ%3D%3D&digest=sha256%3A25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=80.832365ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "PUT /v2/proof/app/blobs/uploads/e6fb6d39-3676-43e9-82bc-8cf86c93c986?_state=OEuzLQBQV0Yh8WiTxVOZbCkOSyQ_Lr14PkXSEAtLg8p7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiZTZmYjZkMzktMzY3Ni00M2U5LTgyYmMtOGNmODZjOTNjOTg2IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM3OjU5LjQ5OTY5MDUwN1oifQ%3D%3D&digest=sha256%3A25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.596749045Z" level=error msg="response completed with error" err.code="manifest unknown" err.detail="unknown tag=v1" err.message="manifest unknown" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=09db9542-b15c-4613-bd47-1a3bb4577c5b http.request.method=HEAD http.request.remoteaddr="192.168.107.1:57264" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.735007ms http.response.status=404 http.response.written=92 vars.name="proof/app" vars.reference=v1 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "HEAD /v2/proof/app/manifests/v1 HTTP/1.1" 404 92 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:37:59 +0000] "PUT /v2/proof/app/manifests/v1 HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:37:59.611009204Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.request.host="127.0.0.1:60413" http.request.id=fe1db636-d197-451f-b2a1-ad7ef3a886ff http.request.method=PUT http.request.remoteaddr="192.168.107.1:57264" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=13.583867ms http.response.status=201 http.response.written=0 
+registry-1   | time="2026-09-20T00:38:26.719388516Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=7d2bf452-42ec-4cf6-a366-cea95e56f328 http.request.method=GET http.request.remoteaddr="192.168.107.2:36728" http.request.uri="/v2/proof/app/tags/list" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.296962ms http.response.status=200 http.response.written=35 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/tags/list HTTP/1.1" 200 35 "" "Go-http-client/1.1"
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/manifests/v1 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:38:26.721181804Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=f09aac26-220c-45d3-b4e8-1d12a5c4c499 http.request.method=GET http.request.remoteaddr="192.168.107.2:36728" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.277442ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/ HTTP/1.1" 200 2 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:38:26.727966563Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=76e65189-5343-4e8e-8c7c-86513992f16d http.request.method=GET http.request.remoteaddr="192.168.107.2:36740" http.request.uri="/v2/" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration="959.275µs" http.response.status=200 http.response.written=2 
+registry-1   | time="2026-09-20T00:38:26.730949239Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=f0e5ad20-40e6-4aec-9de9-7143a189a638 http.request.method=GET http.request.remoteaddr="192.168.107.2:36740" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=2.48698ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/manifests/v1 HTTP/1.1" 200 701 "" "go-containerregistry/v0.20.2"
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/blobs/sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156 HTTP/1.1" 200 1311 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:38:26.734580556Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=820ce188-f09f-4b1c-be7a-ee5bd5e4d19e http.request.method=GET http.request.remoteaddr="192.168.107.2:36740" http.request.uri="/v2/proof/app/blobs/sha256:c0532b26b2bfe56c219410d553947c7f6154c0e14a254869bffed7396bd8a156" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=1.549214ms http.response.status=200 http.response.written=1311 
+registry-1   | time="2026-09-20T00:38:26.7556797Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=011b58a8-5422-4cb6-8ed4-f2166891f8d2 http.request.method=GET http.request.remoteaddr="192.168.107.2:36740" http.request.uri="/v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=19.693061ms http.response.status=200 http.response.written=3630321 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 HTTP/1.1" 200 3630321 "" "go-containerregistry/v0.20.2"
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:38:26 +0000] "GET /v2/proof/app/blobs/sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925 HTTP/1.1" 200 4195813 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:38:26.799726032Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=ac43ffae-6201-471c-aad6-c00907743740 http.request.method=GET http.request.remoteaddr="192.168.107.2:36740" http.request.uri="/v2/proof/app/blobs/sha256:bab25b477bc55eb358fd5a8e63fbfd007d6e4bb0d37ddeb8d973a47ed1f23925" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=21.661493ms http.response.status=200 http.response.written=4195813 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:38:45 +0000] "GET /v2/proof/app/tags/list HTTP/1.1" 200 35 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:38:45.870475652Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=cf88a50c-ce6e-452f-acd4-001a8df8b47d http.request.method=GET http.request.remoteaddr="192.168.107.4:34540" http.request.uri="/v2/proof/app/tags/list" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.22989ms http.response.status=200 http.response.written=35 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:38:45 +0000] "GET /v2/proof/app/manifests/v1 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:38:45.872265387Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=c2f7ebf3-202d-4b94-85c8-13cc329b1435 http.request.method=GET http.request.remoteaddr="192.168.107.4:34540" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.35776ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "HEAD /v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 HTTP/1.1" 200 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:47.972519884Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=83a08165-b67b-43fc-bffe-c7dfd30da12e http.request.method=HEAD http.request.remoteaddr="192.168.107.1:52012" http.request.uri="/v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/octet-stream" http.response.duration=1.542803ms http.response.status=200 http.response.written=0 
+registry-1   | time="2026-09-20T00:38:47.973228155Z" level=error msg="response completed with error" err.code="blob unknown" err.detail=sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b err.message="blob unknown to registry" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=d81870f3-9c92-4e52-8ea3-4827b8ff14ed http.request.method=HEAD http.request.remoteaddr="192.168.107.1:51998" http.request.uri="/v2/proof/app/blobs/sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=2.39741ms http.response.status=404 http.response.written=157 vars.digest="sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b" vars.name="proof/app" 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "HEAD /v2/proof/app/blobs/sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b HTTP/1.1" 404 157 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "HEAD /v2/proof/app/blobs/sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f HTTP/1.1" 404 157 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:47.977473586Z" level=error msg="response completed with error" err.code="blob unknown" err.detail=sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f err.message="blob unknown to registry" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=e50fc4a1-f474-4662-bc52-b5decc7367cd http.request.method=HEAD http.request.remoteaddr="192.168.107.1:52022" http.request.uri="/v2/proof/app/blobs/sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=5.461316ms http.response.status=404 http.response.written=157 vars.digest="sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f" vars.name="proof/app" 
+registry-1   | time="2026-09-20T00:38:47.984009075Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=c1742d1e-1a07-4de4-a780-44629a0e346a http.request.method=POST http.request.remoteaddr="192.168.107.1:51998" http.request.uri="/v2/proof/app/blobs/uploads/" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=10.158924ms http.response.status=202 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "POST /v2/proof/app/blobs/uploads/ HTTP/1.1" 202 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:47.98888293Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=a3d27c39-1405-48a5-ba15-c380c2479d2f http.request.method=POST http.request.remoteaddr="192.168.107.1:52022" http.request.uri="/v2/proof/app/blobs/uploads/" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=10.789121ms http.response.status=202 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "POST /v2/proof/app/blobs/uploads/ HTTP/1.1" 202 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:48.011941106Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/octet-stream" http.request.host="127.0.0.1:60413" http.request.id=10c03b8c-a1a0-445f-a3b3-be64fb468b95 http.request.method=PUT http.request.remoteaddr="192.168.107.1:52022" http.request.uri="/v2/proof/app/blobs/uploads/24476fcf-c04b-4d1a-b1c5-8d0ed5667039?_state=L9bZQtt4Y2AQsGY3k4hfFcht8pqgIQqH7-m8Mc6qJPp7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiMjQ0NzZmY2YtYzA0Yi00ZDFhLWIxYzUtOGQwZWQ1NjY3MDM5IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM4OjQ3Ljk3OTA3NTM1MloifQ%3D%3D&digest=sha256%3Aceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=13.267665ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "PUT /v2/proof/app/blobs/uploads/24476fcf-c04b-4d1a-b1c5-8d0ed5667039?_state=L9bZQtt4Y2AQsGY3k4hfFcht8pqgIQqH7-m8Mc6qJPp7Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiMjQ0NzZmY2YtYzA0Yi00ZDFhLWIxYzUtOGQwZWQ1NjY3MDM5IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM4OjQ3Ljk3OTA3NTM1MloifQ%3D%3D&digest=sha256%3Aceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:48.041281562Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/octet-stream" http.request.host="127.0.0.1:60413" http.request.id=970b994f-e542-4e82-afea-075b80841ec2 http.request.method=PUT http.request.remoteaddr="192.168.107.1:51998" http.request.uri="/v2/proof/app/blobs/uploads/2e4a5874-a4ad-4cd3-8f8c-b1da4f15eef9?_state=pVI_JRMrOx3BIUQJO3hfbIPBkRTJ5UkxPP7bFFvn7B17Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiMmU0YTU4NzQtYTRhZC00Y2QzLThmOGMtYjFkYTRmMTVlZWY5IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM4OjQ3Ljk3NDU4MDZaIn0%3D&digest=sha256%3Aa9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=56.594035ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:47 +0000] "PUT /v2/proof/app/blobs/uploads/2e4a5874-a4ad-4cd3-8f8c-b1da4f15eef9?_state=pVI_JRMrOx3BIUQJO3hfbIPBkRTJ5UkxPP7bFFvn7B17Ik5hbWUiOiJwcm9vZi9hcHAiLCJVVUlEIjoiMmU0YTU4NzQtYTRhZC00Y2QzLThmOGMtYjFkYTRmMTVlZWY5IiwiT2Zmc2V0IjowLCJTdGFydGVkQXQiOiIyMDI2LTA5LTIwVDAwOjM4OjQ3Ljk3NDU4MDZaIn0%3D&digest=sha256%3Aa9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:48.04327066Z" level=error msg="response completed with error" err.code="manifest unknown" err.detail="unknown tag=v2" err.message="manifest unknown" go.version=go1.20.8 http.request.host="127.0.0.1:60413" http.request.id=1726778b-9cd3-4f4b-a5e0-9cc22c69a40a http.request.method=HEAD http.request.remoteaddr="192.168.107.1:52022" http.request.uri="/v2/proof/app/manifests/v2" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.066784ms http.response.status=404 http.response.written=92 vars.name="proof/app" vars.reference=v2 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:48 +0000] "HEAD /v2/proof/app/manifests/v2 HTTP/1.1" 404 92 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:38:48.054107651Z" level=info msg="response completed" go.version=go1.20.8 http.request.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.request.host="127.0.0.1:60413" http.request.id=53c7675e-4110-467b-8de6-0f29be45d9fd http.request.method=PUT http.request.remoteaddr="192.168.107.1:52022" http.request.uri="/v2/proof/app/manifests/v2" http.request.useragent="docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \(darwin\))" http.response.duration=9.910435ms http.response.status=201 http.response.written=0 
+registry-1   | 192.168.107.1 - - [20/Sep/2026:00:38:48 +0000] "PUT /v2/proof/app/manifests/v2 HTTP/1.1" 201 0 "" "docker/29.4.0 go/go1.26.1 git-commit/daa0cb7f kernel/7.0.14-orbstack-00380-ga7e0a2dc9535 os/linux arch/amd64 containerd-client/2.2.2+unknown storage-driver/overlayfs UpstreamClient(Docker-Client/29.4.0 \\(darwin\\))"
+registry-1   | time="2026-09-20T00:39:15.909540472Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=e98dbf39-4a50-4a35-8c3d-ce7ed9b30fa5 http.request.method=GET http.request.remoteaddr="192.168.107.4:34540" http.request.uri="/v2/proof/app/tags/list" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration=6.55983ms http.response.status=200 http.response.written=40 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/tags/list HTTP/1.1" 200 40 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:39:15.911656506Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=ea48fd11-9e4c-4861-9667-0e2943c2464d http.request.method=GET http.request.remoteaddr="192.168.107.4:34540" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.548276ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/manifests/v1 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/manifests/v2 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:39:15.914325963Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=2f799c2d-9ce0-4194-8de4-66ff77e59496 http.request.method=GET http.request.remoteaddr="192.168.107.4:34540" http.request.uri="/v2/proof/app/manifests/v2" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=2.260397ms http.response.status=200 http.response.written=701 
+registry-1   | time="2026-09-20T00:39:15.965415423Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=2aba348f-3ae6-4d6c-941b-410fed4a071f http.request.method=GET http.request.remoteaddr="192.168.107.4:51610" http.request.uri="/v2/" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration=3.137447ms http.response.status=200 http.response.written=2 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/ HTTP/1.1" 200 2 "" "Go-http-client/1.1"
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/manifests/v2 HTTP/1.1" 200 701 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:39:15.96730777Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=cfb6d42b-8349-40e8-a4e7-f1325bafd8b7 http.request.method=GET http.request.remoteaddr="192.168.107.4:51610" http.request.uri="/v2/proof/app/manifests/v2" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.234765ms http.response.status=200 http.response.written=701 
+registry-1   | time="2026-09-20T00:39:15.978978014Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=bde41865-3a7c-481f-96bf-213c08c0b143 http.request.method=GET http.request.remoteaddr="192.168.107.4:51610" http.request.uri="/v2/proof/app/blobs/sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=10.329891ms http.response.status=200 http.response.written=1311 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/blobs/sha256:ceb8224fbb73323ea77f970b6d78096e21802274f9ccfc2024ed0ca64773429f HTTP/1.1" 200 1311 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:39:16.010206161Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=17eee4e1-10b1-477d-a285-649b15b622fd http.request.method=GET http.request.remoteaddr="192.168.107.4:51610" http.request.uri="/v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=29.939338ms http.response.status=200 http.response.written=3630321 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:15 +0000] "GET /v2/proof/app/blobs/sha256:25f1d6b1951ac8eb3740558fe94cb83d377bdadf95fd9f98b50d2e1b96130471 HTTP/1.1" 200 3630321 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:39:16.072855901Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=8e2d0364-b38a-4bb5-ba5c-7e2a863fbd7b http.request.method=GET http.request.remoteaddr="192.168.107.4:51610" http.request.uri="/v2/proof/app/blobs/sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b" http.request.useragent="go-containerregistry/v0.20.2" http.response.contenttype="application/octet-stream" http.response.duration=34.303124ms http.response.status=200 http.response.written=4163253 
+registry-1   | 192.168.107.4 - - [20/Sep/2026:00:39:16 +0000] "GET /v2/proof/app/blobs/sha256:a9669e371cda7d1816b8649034915754d9031b282607e73449a402604fee3d3b HTTP/1.1" 200 4163253 "" "go-containerregistry/v0.20.2"
+registry-1   | time="2026-09-20T00:39:25.18069869Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=483a01d6-9f82-4eac-afc6-9fd3e2cb9bad http.request.method=GET http.request.remoteaddr="192.168.107.2:39568" http.request.uri="/v2/proof/app/tags/list" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/json; charset=utf-8" http.response.duration=1.361586ms http.response.status=200 http.response.written=40 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:39:25 +0000] "GET /v2/proof/app/tags/list HTTP/1.1" 200 40 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:39:25.182152833Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=dfd49ba6-cb77-4afc-ba91-d1dda93a47f1 http.request.method=GET http.request.remoteaddr="192.168.107.2:39568" http.request.uri="/v2/proof/app/manifests/v1" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.002761ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:39:25 +0000] "GET /v2/proof/app/manifests/v1 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+registry-1   | time="2026-09-20T00:39:25.183842121Z" level=info msg="response completed" go.version=go1.20.8 http.request.host="registry:5000" http.request.id=0f523dc8-3e35-48bf-aec2-0e4f132eb5e2 http.request.method=GET http.request.remoteaddr="192.168.107.2:39568" http.request.uri="/v2/proof/app/manifests/v2" http.request.useragent="Go-http-client/1.1" http.response.contenttype="application/vnd.docker.distribution.manifest.v2+json" http.response.duration=1.098309ms http.response.status=200 http.response.written=701 
+registry-1   | 192.168.107.2 - - [20/Sep/2026:00:39:25 +0000] "GET /v2/proof/app/manifests/v2 HTTP/1.1" 200 701 "" "Go-http-client/1.1"
+$ docker compose -p edinstall-7be1022f84 -f <checkout>/work/install-proof-5/installation/compose.yaml -f <checkout>/work/install-proof-5/registry.yaml down --volumes --rmi local
+ Container edinstall-7be1022f84-publisher-1 Stopping 
+ Container edinstall-7be1022f84-registry-1 Stopping 
+ Container edinstall-7be1022f84-hub-1 Stopping 
+ Container edinstall-7be1022f84-publisher-1 Stopped 
+ Container edinstall-7be1022f84-publisher-1 Removing 
+ Container edinstall-7be1022f84-registry-1 Stopped 
+ Container edinstall-7be1022f84-registry-1 Removing 
+ Container edinstall-7be1022f84-publisher-1 Removed 
+ Container edinstall-7be1022f84-hub-1 Stopped 
+ Container edinstall-7be1022f84-hub-1 Removing 
+ Container edinstall-7be1022f84-registry-1 Removed 
+ Container edinstall-7be1022f84-hub-1 Removed 
+ Image edinstall-7be1022f84-publisher:latest Removing 
+ Image edinstall-7be1022f84-hub:latest Removing 
+ Network edinstall-7be1022f84_default Removing 
+ Image edinstall-7be1022f84-publisher:latest Removed 
+ Network edinstall-7be1022f84_default Removed 
+ Image edinstall-7be1022f84-hub:latest Removed 
+$ docker image rm 127.0.0.1:60413/proof/app:v1
+Error response from daemon: No such image: 127.0.0.1:60413/proof/app:v1
+$ docker image rm 127.0.0.1:60413/proof/app:v2
+Error response from daemon: No such image: 127.0.0.1:60413/proof/app:v2
+$ docker image rm sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+Error response from daemon: No such image: sha256:13768030752fae06d6c487bbd19d79d3e81596b6dba9729ae642ee1e81c402ee
+$ docker image rm sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+Deleted: sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+$ docker image rm sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+Error response from daemon: No such image: sha256:bb676db8df1cdf3248e2a1814f3aa996bf03e96ee8f7e8b167ebb50839a1c248
+$ docker image rm sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102
+Deleted: sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102

@@ -1,0 +1,602 @@
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:37:57.488282Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:37:59.491829Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:01.494408Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:03.497506Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:05.501078Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:07.504695Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:09.508316Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:11.511893Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:13.514573Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:15.518613Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:17.522091Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:19.525208Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:21.528105Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:23.532745Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:25.536082Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"failed","time":"2026-09-20T00:38:27.538835Z"}
+{"error":"HTTP 404 from http://127.0.0.1:60412/releases/desired.json","event":"reconcile_failed"}
+{"event":"announce_accepted","release":"proof-app-v1","sequence":1}
+{"event":"announce_accepted","release":"proof-app-v1","sequence":1}
+{"event":"plan","missing_chunks":102,"missing_raw_bytes":7831552,"release":"proof-app-v1","reused_chunks":0,"time":"2026-09-20T00:38:27.789612Z","unique_chunks":102}
+{"chunk":"fee1a43b12fe044e57f1d1cf5a3922e63c3dbf0aa2a6176b2c1e4e1cc029178f","encoded_bytes":20590,"event":"chunk_committed","raw_bytes":20562,"time":"2026-09-20T00:38:27.993039Z"}
+{"chunk":"64e29aa6ac39681bf1af400bea0c19837ec9768254d79c2d2180ea7934ba901f","encoded_bytes":98162,"event":"chunk_committed","raw_bytes":98129,"time":"2026-09-20T00:38:28.12137Z"}
+{"chunk":"1f773a456095721e7d495e126d1339c7c4b3f05e85e6b19665daf928a24b6e70","encoded_bytes":68778,"event":"chunk_committed","raw_bytes":68745,"time":"2026-09-20T00:38:28.23594Z"}
+{"chunk":"b375d7c234c032f1683b3210d63fc50b7727588429d6766d64c354343e358d8c","encoded_bytes":50894,"event":"chunk_committed","raw_bytes":50866,"time":"2026-09-20T00:38:28.515629Z"}
+{"chunk":"40709fbaaae598ad495f38435e95a5a6f8466bb860b95af94309a3444acee83b","encoded_bytes":121734,"event":"chunk_committed","raw_bytes":121701,"time":"2026-09-20T00:38:28.536615Z"}
+{"chunk":"a4f4e9b5e13d2b722e49f3a1c57da97dafaf03ad302ec9941b2e678ff3d30223","encoded_bytes":86129,"event":"chunk_committed","raw_bytes":86096,"time":"2026-09-20T00:38:28.879464Z"}
+{"chunk":"542cc69b9b94b9233e3acacfab1241b19151dc24b778eb35985627e0c1b0aef8","encoded_bytes":262192,"event":"chunk_committed","raw_bytes":262144,"time":"2026-09-20T00:38:29.371435Z"}
+{"chunk":"77b8b90af9930638fdf3d18e621526d9a8d82792e6e530b3ddb389861a81cc79","encoded_bytes":182105,"event":"chunk_committed","raw_bytes":182067,"time":"2026-09-20T00:38:29.438783Z"}
+{"chunk":"c10f527a459f0ed3021bba1361e0e996fc765b6ee37598c04782a68f3c79f69c","encoded_bytes":49604,"event":"chunk_committed","raw_bytes":49576,"time":"2026-09-20T00:38:29.56564Z"}
+{"chunk":"4c2f251ee005c23c1b04f52f1bbbb15cc8163c83338fa4e8f57c412d713bf8b6","encoded_bytes":40889,"event":"chunk_committed","raw_bytes":40861,"time":"2026-09-20T00:38:29.607492Z"}
+{"chunk":"b850830bea1ba791c30ac09ae48b7e8293cfbec94ffd7405fa2b5ae39a0b374c","encoded_bytes":33021,"event":"chunk_committed","raw_bytes":32993,"time":"2026-09-20T00:38:29.699589Z"}
+{"chunk":"f9ecc201f278f1a9a6bee01301aa7d2553edb68564d0da57e81311f25056403e","encoded_bytes":40284,"event":"chunk_committed","raw_bytes":40256,"time":"2026-09-20T00:38:29.762318Z"}
+{"chunk":"c9f09ab9dc953f35cd6ded17b7b2aa3e9ac3e79db92f5f2e55f15972b38078ea","encoded_bytes":20231,"event":"chunk_committed","raw_bytes":20203,"time":"2026-09-20T00:38:29.892659Z"}
+{"chunk":"f12db2cfd7684d8d87dbcdd380b93078b3f5a5407834363fb951bd3d47effcd0","encoded_bytes":44549,"event":"chunk_committed","raw_bytes":44521,"time":"2026-09-20T00:38:30.11658Z"}
+{"chunk":"4474a1db4f6bf5e38a51bc0efa8a54abdb592bc9a84f4b87a245341a20dd42d4","encoded_bytes":164114,"event":"chunk_committed","raw_bytes":164076,"time":"2026-09-20T00:38:30.180532Z"}
+{"chunk":"284e42c887e1b9ab8bbf36b2087638b1e2d957c9d073abd1edc7866103265b89","encoded_bytes":49328,"event":"chunk_committed","raw_bytes":49300,"time":"2026-09-20T00:38:30.289628Z"}
+{"chunk":"8aba07da3d22c5274f5ba64928ee0c86ad08e99e0f5c2fa132056a2c29f9473d","encoded_bytes":57144,"event":"chunk_committed","raw_bytes":57116,"time":"2026-09-20T00:38:30.36087Z"}
+{"chunk":"b2023e74c142392d4a00ce754e5f8ebbfe0ac9cceeccff8dbc8c11e9508187bd","encoded_bytes":54503,"event":"chunk_committed","raw_bytes":54475,"time":"2026-09-20T00:38:30.461724Z"}
+{"chunk":"f6d35cb13efb313f22f4a2ecdab42a87323479217dce0dcbbdc23fc85cfd8711","encoded_bytes":75834,"event":"chunk_committed","raw_bytes":75801,"time":"2026-09-20T00:38:30.771445Z"}
+{"chunk":"6fca6dc6e21a0bb5428c154697bbd29cbf500b6fd20ff172f46f59e224e9b99d","encoded_bytes":262192,"event":"chunk_committed","raw_bytes":262144,"time":"2026-09-20T00:38:31.160937Z"}
+{"chunk":"8ca3561bd994ac9c835be588364d03b982b30c8d717e1d5137649a00a517cf83","encoded_bytes":151411,"event":"chunk_committed","raw_bytes":151373,"time":"2026-09-20T00:38:31.255357Z"}
+{"chunk":"1b5c604401a939e3d1c9e9546036253a11d799bf7ad79500814cf68bcbdf9d83","encoded_bytes":77833,"event":"chunk_committed","raw_bytes":77800,"time":"2026-09-20T00:38:31.441858Z"}
+{"chunk":"b7a39cf88c6f5ef6e313ade040f5b79ba8ae7f24057ab66dbd1858e4e7f87165","encoded_bytes":41416,"event":"chunk_committed","raw_bytes":41388,"time":"2026-09-20T00:38:31.483753Z"}
+{"chunk":"b989911e5719e48e8520c217dda9fc0601de467258467befc6da694dda54ef22","encoded_bytes":25897,"event":"chunk_committed","raw_bytes":25869,"time":"2026-09-20T00:38:31.642477Z"}
+{"chunk":"3dba4b296d87771d9bc1b392d6e88f89b7af4b2d1f576916ad9539b86acbab22","encoded_bytes":116789,"event":"chunk_committed","raw_bytes":116756,"time":"2026-09-20T00:38:31.837568Z"}
+{"chunk":"3ca52d381b5108e8e471d8cb0a556b8d94beacc2f78abc667a1b196f060f4f34","encoded_bytes":30601,"event":"chunk_committed","raw_bytes":30573,"time":"2026-09-20T00:38:31.858409Z"}
+{"chunk":"12adf7eeb12d15ba87ed72c3602275b3af29a88834d8620d59fa1a2f267c8a27","encoded_bytes":26223,"event":"chunk_committed","raw_bytes":26195,"time":"2026-09-20T00:38:32.054487Z"}
+{"chunk":"2da6e6b6ab77518a1d22f3b52e0bafc357941f2953e9758f196608ba69e58c8b","encoded_bytes":43682,"event":"chunk_committed","raw_bytes":43654,"time":"2026-09-20T00:38:32.07557Z"}
+{"chunk":"72a9b2f63e43708ca1fd6071272708fbb5d3dd9c83ea3a543b43b578b25a07d7","encoded_bytes":65551,"event":"chunk_committed","raw_bytes":65523,"time":"2026-09-20T00:38:32.357567Z"}
+{"chunk":"f97f0bc046b4067b5cc03f5665b1a308a2dce23db7e8195e45a72ea2f66a1086","encoded_bytes":42652,"event":"chunk_committed","raw_bytes":42624,"time":"2026-09-20T00:38:32.575627Z"}
+{"chunk":"4fcfe90f4e7eb6f89cbaf243e8544c82ad999addb908eaa535d23985198c983b","encoded_bytes":160376,"event":"chunk_committed","raw_bytes":160338,"time":"2026-09-20T00:38:32.596564Z"}
+{"chunk":"897d3410f37dd7290005d8b18bcecb25dbc85165e0435fa3bc940b277fee813f","encoded_bytes":49548,"event":"chunk_committed","raw_bytes":49520,"time":"2026-09-20T00:38:32.827236Z"}
+{"chunk":"f533bb0427b59d500a48a595683d24aba8c99f732b96c4a0b850b8c89e3a969d","encoded_bytes":47092,"event":"chunk_committed","raw_bytes":47064,"time":"2026-09-20T00:38:32.847664Z"}
+{"chunk":"61436773879b65c6389ad2779a27fd49249599b63dafe4b8822941e547c00c10","encoded_bytes":60503,"event":"chunk_committed","raw_bytes":60475,"time":"2026-09-20T00:38:33.106451Z"}
+{"chunk":"7e8df398aa0c052108bee511744debd2e10da57783a93c492db40f307fe87cab","encoded_bytes":70635,"event":"chunk_committed","raw_bytes":70602,"time":"2026-09-20T00:38:33.148755Z"}
+{"chunk":"2e2737c51240406143cc58e0a51b8f43c9b3cb380ec69086b2c4c2389e0f3a96","encoded_bytes":47856,"event":"chunk_committed","raw_bytes":47828,"time":"2026-09-20T00:38:33.277341Z"}
+{"chunk":"2d996833a3778ecda02ae5245a6fc2a1a165097f33a9f5aaf5646b3242c81a3c","encoded_bytes":56139,"event":"chunk_committed","raw_bytes":56111,"time":"2026-09-20T00:38:33.323569Z"}
+{"chunk":"4b9179ee0ef210239b095aee5e7b4497a4f8dc99471dde65f939933070b71603","encoded_bytes":28204,"event":"chunk_committed","raw_bytes":28176,"time":"2026-09-20T00:38:33.391444Z"}
+{"chunk":"602b0e192e797acc0f1ffd41d91e3658b32213235ac80faf5e83908f70145ebb","encoded_bytes":81040,"event":"chunk_committed","raw_bytes":81007,"time":"2026-09-20T00:38:33.708536Z"}
+{"chunk":"2ad15494efe52ebda39b8f4d5cb795bfc512fff9b7087c50eb397b60e56b9abb","encoded_bytes":262192,"event":"chunk_committed","raw_bytes":262144,"time":"2026-09-20T00:38:34.174693Z"}
+{"chunk":"399bbf143e90fccb6a5b0e7ac7dafd0b2c34bdae5f2e2c90c554ba4facc19c2b","encoded_bytes":119904,"event":"chunk_committed","raw_bytes":119871,"time":"2026-09-20T00:38:34.195594Z"}
+{"chunk":"6282ea4223ba9dd0e5ded13fc7682ab55612e6d3c7861ba1917a22c02885d5d6","encoded_bytes":45326,"event":"chunk_committed","raw_bytes":45298,"time":"2026-09-20T00:38:34.368548Z"}
+{"chunk":"75a8f1dd7236ae642f7bdaa2535fa8dc7c2ec7f83fca7c3ec43a0df779f28b90","encoded_bytes":21288,"event":"chunk_committed","raw_bytes":21260,"time":"2026-09-20T00:38:34.495349Z"}
+{"chunk":"5b09b6b1c26056ddf2651926bccbb6c4b63cda42cc71a05186ba5cb952837bf2","encoded_bytes":46560,"event":"chunk_committed","raw_bytes":46532,"time":"2026-09-20T00:38:34.706895Z"}
+{"chunk":"38189cee1e12f16c8ba55ffbece38dc9eb795e8cb33e298b7defd1878880b3d7","encoded_bytes":38208,"event":"chunk_committed","raw_bytes":38180,"time":"2026-09-20T00:38:34.886601Z"}
+{"chunk":"d52d541c451b1951873c4df8c62dea5f025389960d41df1501fd302de1785279","encoded_bytes":262192,"event":"chunk_committed","raw_bytes":262144,"time":"2026-09-20T00:38:34.951447Z"}
+{"chunk":"3cb12a52562419f23cb8cefb10f9537266fd0ed760017f3b212d1b2dff24ac30","encoded_bytes":73933,"event":"chunk_committed","raw_bytes":73900,"time":"2026-09-20T00:38:35.235581Z"}
+{"chunk":"bf207ffa0ee479f7570d135506605d35b178676ad7aab2b157f4a11dd142cefc","encoded_bytes":63620,"event":"chunk_committed","raw_bytes":63592,"time":"2026-09-20T00:38:35.526575Z"}
+{"chunk":"26b78d7e22764747cd758f5d1d1d9ef3333f388b55478a873e81bd37042bf5c2","encoded_bytes":224330,"event":"chunk_committed","raw_bytes":224287,"time":"2026-09-20T00:38:35.568869Z"}
+{"chunk":"a970307bb331f96e999455ebc8fcce4d3ae4d6aaf7d31e9cacbbc7609b209e6f","encoded_bytes":46575,"event":"chunk_committed","raw_bytes":46547,"time":"2026-09-20T00:38:35.786579Z"}
+{"chunk":"cc9346fd64cf41793c8aa394fdf25181156781138ff8d7f899221b68ab7098ee","encoded_bytes":105252,"event":"chunk_committed","raw_bytes":105219,"time":"2026-09-20T00:38:35.872447Z"}
+{"chunk":"e6209bb4968e4bffc414f788609ff8ae3b17b7be0d82b9f19d166d88ff9d2579","encoded_bytes":18903,"event":"chunk_committed","raw_bytes":18875,"time":"2026-09-20T00:38:35.914636Z"}
+{"chunk":"2cc4eaf3496976050984987371614b7e8f80426839aeb8db7c6c5dccb87d7214","encoded_bytes":45798,"event":"chunk_committed","raw_bytes":45770,"time":"2026-09-20T00:38:36.039444Z"}
+{"chunk":"c99faa027fa6a95fea4730324d94178df944a93656031ae5eacbf4c5f244b650","encoded_bytes":58192,"event":"chunk_committed","raw_bytes":58164,"time":"2026-09-20T00:38:36.142636Z"}
+{"chunk":"1f9e23fd0bb85838e6c87034e6e952b86bfe42d82961247633e5f9192a4bf7c5","encoded_bytes":50157,"event":"chunk_committed","raw_bytes":50129,"time":"2026-09-20T00:38:36.235552Z"}
+{"chunk":"f9cc6109b568142967d442f381b1866e80eb0fc6b53efb866f7937fe7c994841","encoded_bytes":38660,"event":"chunk_committed","raw_bytes":38632,"time":"2026-09-20T00:38:36.40561Z"}
+{"chunk":"ca7ae497fd6f6f42fe0c72db4f11e45ca06c1143050d1c89b7b9a3e61010d323","encoded_bytes":84547,"event":"chunk_committed","raw_bytes":84514,"time":"2026-09-20T00:38:36.469451Z"}
+{"chunk":"69c3b22a63a91dbc0d83705bd5a7f00a7c5626a5951233775b7a0b43399682e7","encoded_bytes":25029,"event":"chunk_committed","raw_bytes":25001,"time":"2026-09-20T00:38:36.534713Z"}
+{"chunk":"a3b8d2ee19bd549bb4e231e9de6a894298a858ca34981dc3bb940d844d8c813f","encoded_bytes":50578,"event":"chunk_committed","raw_bytes":50550,"time":"2026-09-20T00:38:36.644391Z"}
+{"chunk":"68bf2e842cd2007d5eb9f44147831f15a084a777f66de26015d2e9d78ef19564","encoded_bytes":25832,"event":"chunk_committed","raw_bytes":25804,"time":"2026-09-20T00:38:36.793706Z"}
+{"chunk":"d902c002d04f7e358fab46db57d491e9e7b0dacd46f53012ba46b2f792603f59","encoded_bytes":146504,"event":"chunk_committed","raw_bytes":146466,"time":"2026-09-20T00:38:36.976675Z"}
+{"chunk":"7c58ef9851434f909f3e3b6f00dbfde184c6647d428477c381b78732c47e1cc0","encoded_bytes":41610,"event":"chunk_committed","raw_bytes":41582,"time":"2026-09-20T00:38:37.018621Z"}
+{"chunk":"31bf1d5cfa1d45dd09a0d03860d0e6df1e7f689734018f56da7b1deca8d04f0b","encoded_bytes":35634,"event":"chunk_committed","raw_bytes":35606,"time":"2026-09-20T00:38:37.11362Z"}
+{"chunk":"63794beb819c8f7464f84686580f61e25608f7742470844febe8cb313218ee9e","encoded_bytes":42949,"event":"chunk_committed","raw_bytes":42921,"time":"2026-09-20T00:38:37.176538Z"}
+{"chunk":"79cec159009060534584ae42bcdd108da4c793b1c042169948dedc8dc0b9c548","encoded_bytes":19456,"event":"chunk_committed","raw_bytes":19428,"time":"2026-09-20T00:38:37.304538Z"}
+{"chunk":"293b51a864485ba19d90699849dc2128f5efad00319f949cbc73f930f787e6e1","encoded_bytes":86954,"event":"chunk_committed","raw_bytes":86921,"time":"2026-09-20T00:38:37.368052Z"}
+{"chunk":"f27d66ee8066222b0951243ec4dc82d1c34fc7e76c8b9bacc70a6a3441d99f09","encoded_bytes":68660,"event":"chunk_committed","raw_bytes":68627,"time":"2026-09-20T00:38:37.557373Z"}
+{"chunk":"3b906f454a8ef31eb77b8a60b5629a9647af1b45478329a68db019a0ab31c305","encoded_bytes":53151,"event":"chunk_committed","raw_bytes":53123,"time":"2026-09-20T00:38:37.600131Z"}
+{"chunk":"ab43625cec5276c4e4c7e62ea7d3ca1252543f3e5e514a7c42ab834568857217","encoded_bytes":88022,"event":"chunk_committed","raw_bytes":87989,"time":"2026-09-20T00:38:37.951447Z"}
+{"chunk":"ab0b70b1924bc1a8fc6daf6e39c4bbcdfd2653435573a37f6fd6972bf4f62ecc","encoded_bytes":157542,"event":"chunk_committed","raw_bytes":157504,"time":"2026-09-20T00:38:38.01391Z"}
+{"chunk":"7200e0e4e29d2ecd8851e4f2c8bfe2233a8792773294500a17cb5c89d45c42cf","encoded_bytes":28833,"event":"chunk_committed","raw_bytes":28805,"time":"2026-09-20T00:38:38.05653Z"}
+{"chunk":"deb2aa2c1d6f4904cb243b79f93a693fb36002fd5739b7269ce44d789b8768a8","encoded_bytes":32901,"event":"chunk_committed","raw_bytes":32873,"time":"2026-09-20T00:38:38.14658Z"}
+{"chunk":"2c8f897c68cfadb39c8f8391313304853d96526146ff29c7c3916065f744ec5d","encoded_bytes":27985,"event":"chunk_committed","raw_bytes":27957,"time":"2026-09-20T00:38:38.298465Z"}
+{"chunk":"6b9b128dfed27dd642ee1d55ccaea4fe0007f02ea1fce956a0c40416748b9f5a","encoded_bytes":77331,"event":"chunk_committed","raw_bytes":77298,"time":"2026-09-20T00:38:38.340747Z"}
+{"chunk":"20b9f6ddbf559a76d172fc1e8c7ffbe8fe263d6de84e58d6a499294c896cbf76","encoded_bytes":39164,"event":"chunk_committed","raw_bytes":39136,"time":"2026-09-20T00:38:38.537204Z"}
+{"chunk":"64a72b4173b5734698d1ca20d085f4cc5ee0af5e3496f6bc819fcce70480fa37","encoded_bytes":83196,"event":"chunk_committed","raw_bytes":83163,"time":"2026-09-20T00:38:38.578655Z"}
+{"chunk":"4ed1758f11176acab862cc86c8842c0cd9a51b3d3988e22a1e344f36e3af8fb6","encoded_bytes":38177,"event":"chunk_committed","raw_bytes":38149,"time":"2026-09-20T00:38:38.679119Z"}
+{"chunk":"29c9e7a7e5f2824caa4e77f3499413f53146a3b0c9312a7e909ae192a4a82ca5","encoded_bytes":68343,"event":"chunk_committed","raw_bytes":68310,"time":"2026-09-20T00:38:38.796582Z"}
+{"chunk":"3460ef724efbba6e5b7500cf2e105409066d7dfa5e8dccc5df4cdaaad49a9774","encoded_bytes":54889,"event":"chunk_committed","raw_bytes":54861,"time":"2026-09-20T00:38:38.867532Z"}
+{"chunk":"3862ae5e2738c767ea2d75cf80ccc9359e209b647840710ac589d5539698bc8c","encoded_bytes":45373,"event":"chunk_committed","raw_bytes":45345,"time":"2026-09-20T00:38:38.919685Z"}
+{"chunk":"e71c10519219aef85aa790aeb5f3e17942abb8b61bc507051bd88f92ce5dcbf6","encoded_bytes":97483,"event":"chunk_committed","raw_bytes":97450,"time":"2026-09-20T00:38:39.296591Z"}
+{"chunk":"6b460771e68ca3f8010d4d42eee01a8bbf45a207dc6760c08b8e1fc4e87b59cf","encoded_bytes":174315,"event":"chunk_committed","raw_bytes":174277,"time":"2026-09-20T00:38:39.372594Z"}
+{"chunk":"c6ebff4aeb4b4dbd0da9e3f8d1a37fbae9bf468a6df9b6861a2a2be6baa871a7","encoded_bytes":69572,"event":"chunk_committed","raw_bytes":69539,"time":"2026-09-20T00:38:39.544706Z"}
+{"chunk":"902c60e716e4097846744b8797555ad82379fdaabccb955e180ecd7062e72e97","encoded_bytes":122520,"event":"chunk_committed","raw_bytes":122487,"time":"2026-09-20T00:38:39.770734Z"}
+{"chunk":"d41c1fa55c27b6b7ee0bb2f4dd238f8ff7ab2050c585c6c19213acf904ce13d9","encoded_bytes":43772,"event":"chunk_committed","raw_bytes":43744,"time":"2026-09-20T00:38:39.973576Z"}
+{"chunk":"dbe7d172be5ad53e9020be24210e5d00c3c019b0ca0a679342887d7cc0303f8c","encoded_bytes":24901,"event":"chunk_committed","raw_bytes":24873,"time":"2026-09-20T00:38:40.163724Z"}
+{"chunk":"cffc5c44fcd7eefd6b4cae34497b579c67f85a788bc171c9d8961e5d38bcc4a2","encoded_bytes":203510,"event":"chunk_committed","raw_bytes":203467,"time":"2026-09-20T00:38:40.18457Z"}
+{"chunk":"8b84c6abd0856b92e992f109798ea23b969f86723f1d934351341cd300b16bd1","encoded_bytes":17088,"event":"chunk_committed","raw_bytes":17060,"time":"2026-09-20T00:38:40.270592Z"}
+{"chunk":"de1eb933065504a2a34243d1b8b32770fb2cc6ab4bee68e45770a443559512e7","encoded_bytes":44123,"event":"chunk_committed","raw_bytes":44095,"time":"2026-09-20T00:38:40.454602Z"}
+{"chunk":"38fb5c640e9752054e8321f42204c01e2429af6cd4c5c2beb45b0f92c4811268","encoded_bytes":134438,"event":"chunk_committed","raw_bytes":134400,"time":"2026-09-20T00:38:40.554481Z"}
+{"chunk":"329804830d13f1bff58061ffc4c227fa2af8caa1b1162eb0f8d169321881bef6","encoded_bytes":35130,"event":"chunk_committed","raw_bytes":35102,"time":"2026-09-20T00:38:40.618633Z"}
+{"chunk":"287a7014a7de34e38fea9375809f4f62aac162e509ebe11689413e9143cd381b","encoded_bytes":45373,"event":"chunk_committed","raw_bytes":45345,"time":"2026-09-20T00:38:40.808386Z"}
+{"chunk":"1c97a80079c266042e5ab7204ccb619fdb9bb6bca42e87af9f5ce36ee1beee59","encoded_bytes":35183,"event":"chunk_committed","raw_bytes":35155,"time":"2026-09-20T00:38:40.988631Z"}
+{"chunk":"fa1235bf285c678e22b5b13f0e2a619720ce307799b53e6b057b75925681afcf","encoded_bytes":176467,"event":"chunk_committed","raw_bytes":176429,"time":"2026-09-20T00:38:41.05151Z"}
+{"chunk":"6daf64e11229c86c7882906c91edd65b726cdc2c118af11ac57f838472fd9597","encoded_bytes":62361,"event":"chunk_committed","raw_bytes":62333,"time":"2026-09-20T00:38:41.19659Z"}
+{"chunk":"64580b41191649376d3c2246d54d8210237e4f003ac41df7dc80ff24a0b4919a","encoded_bytes":55029,"event":"chunk_committed","raw_bytes":55001,"time":"2026-09-20T00:38:41.238618Z"}
+{"chunk":"d16716fe61103529ce282b4ebaefafcb394aa50f08476ec4400f88e1e3598cf9","encoded_bytes":16842,"event":"chunk_committed","raw_bytes":16814,"time":"2026-09-20T00:38:41.407668Z"}
+{"chunk":"96c1bfa2281adddbfc30159f0ffd994a8925d4e103e16f970d68217afbf0379c","encoded_bytes":72109,"event":"chunk_committed","raw_bytes":72076,"time":"2026-09-20T00:38:41.503075Z"}
+{"chunk":"00ac41401438909eed08c6d2ab0c5aea996ebe56c5aba9eac3b70e594e4982e4","encoded_bytes":37775,"event":"chunk_committed","raw_bytes":37747,"time":"2026-09-20T00:38:41.693781Z"}
+{"chunk":"1d1bd0ee35af15be562d7d898da6f1864ccf3c725fa08623b8126e0dbfddbee2","encoded_bytes":29196,"event":"chunk_committed","raw_bytes":29168,"time":"2026-09-20T00:38:41.869748Z"}
+{"chunk":"83debdc19e800aa9f39f0f475113124497fb5449e58382d58b2a48459d67eab9","encoded_bytes":167668,"event":"chunk_committed","raw_bytes":167630,"time":"2026-09-20T00:38:41.911655Z"}
+{"chunk":"9d31ca40e1fe6824685a23e8014ce7b16bda8312020dc2836451cfd439228649","encoded_bytes":220418,"event":"chunk_committed","raw_bytes":220375,"time":"2026-09-20T00:38:42.30867Z"}
+Loaded image ID: sha256:e1c924e1049782646e5feb0fa9603516ca2564d2a8e5ad3fc846b88f272bd661
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:43.563717Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 0,
+  "reused_raw_bytes": 0,
+  "downloaded_chunks": 102,
+  "downloaded_raw_bytes": 7831552,
+  "chunk_response_body_bytes": 7834748,
+  "metadata_response_body_bytes": 27513,
+  "useful_encoded_bytes": 7834748,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 102,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 15.934094594
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:43.782261Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:43.940729Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.292154454
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:46.170897Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:46.333563Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.303583121
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:48.571095Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:48.742806Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.32181161
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:50.9565Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:51.113779Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.285817299
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:53.329239Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:53.485042Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.286803662
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:55.702084Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:55.859328Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.289348159
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:38:58.092191Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:38:58.249832Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.306436966
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:00.483665Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:00.642374Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.308061605
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:02.856767Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:03.014872Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.288984771
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:05.233152Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:05.391039Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.290658045
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:07.604241Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:07.759491Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.284403214
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:10.026713Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:10.182343Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.338492297
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:12.396802Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:12.553592Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.285815341
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v1","reused_chunks":102,"time":"2026-09-20T00:39:14.77194Z","unique_chunks":102}
+{"artifact_sha256":"e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a","event":"release_ready","phase":"loaded","release":"proof-app-v1","time":"2026-09-20T00:39:14.928866Z"}
+{
+  "release": "proof-app-v1",
+  "sequence": 1,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a.tar",
+  "artifact_sha256": "e6da05aeeeb3ce354bb2db41670342034a931aab7ae998280107edfc52cc425a",
+  "artifact_bytes": 7831552,
+  "unique_chunks": 102,
+  "reused_chunks": 102,
+  "reused_raw_bytes": 7831552,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.290554295
+}
+{"event":"announce_accepted","release":"proof-app-v2","sequence":2}
+{"event":"announce_accepted","release":"proof-app-v2","sequence":2}
+{"event":"plan","missing_chunks":27,"missing_raw_bytes":2458385,"release":"proof-app-v2","reused_chunks":73,"time":"2026-09-20T00:39:17.001675Z","unique_chunks":100}
+{"chunk":"489ce2e533c1a0f41bae1b10c41b5fcab9885f036537243d809b283d5de48c59","encoded_bytes":98162,"event":"chunk_committed","raw_bytes":98129,"time":"2026-09-20T00:39:17.411832Z"}
+{"chunk":"2e65954bba813b1ee5afdade84d3b25140fc6d0997a58f50843557ef613f63d0","encoded_bytes":113060,"event":"chunk_committed","raw_bytes":113027,"time":"2026-09-20T00:39:17.811536Z"}
+{"chunk":"cd256d48e48bd269d28fdde3044f6f87cf62ca15ba5ca3763bd848a425af8266","encoded_bytes":262192,"event":"chunk_committed","raw_bytes":262144,"time":"2026-09-20T00:39:17.875364Z"}
+{"chunk":"1ac662697910f0d5b8f162d5855046c3f1d23e3a15b4083a2d0e049ca6c3745e","encoded_bytes":54889,"event":"chunk_committed","raw_bytes":54861,"time":"2026-09-20T00:39:17.99345Z"}
+{"chunk":"46a3659ea9b4c32f08c62c53b5b127fce02e13e572c11a0b164b4d4802e19ab9","encoded_bytes":45373,"event":"chunk_committed","raw_bytes":45345,"time":"2026-09-20T00:39:18.056509Z"}
+{"chunk":"7575d2108b5befcc0601ab291927316d5681616b39956bbccf6cd501c4386e1e","encoded_bytes":97483,"event":"chunk_committed","raw_bytes":97450,"time":"2026-09-20T00:39:18.422594Z"}
+{"chunk":"f2b63bdfe9c991af1b316fd10504a39fd815cbf2cfb96bfdb926a58ace1df93d","encoded_bytes":174315,"event":"chunk_committed","raw_bytes":174277,"time":"2026-09-20T00:39:18.510708Z"}
+{"chunk":"0bf47b391c9445a47fcc234d8d96977be7ccdb5c79f695b525f3df6751e915bd","encoded_bytes":69572,"event":"chunk_committed","raw_bytes":69539,"time":"2026-09-20T00:39:18.65413Z"}
+{"chunk":"57d8ea95698efa747525a4be8679605a57195d0ba970d3523d6c721f64466951","encoded_bytes":122520,"event":"chunk_committed","raw_bytes":122487,"time":"2026-09-20T00:39:18.904372Z"}
+{"chunk":"53a553e53f6b5577be083eda1e36250420dd982bbe77787b025e2b561d8cabe5","encoded_bytes":43772,"event":"chunk_committed","raw_bytes":43744,"time":"2026-09-20T00:39:19.107616Z"}
+{"chunk":"851b16b0924fe5a98d04191afd864bf2e5914cddbc12565a3f7441672a2c77ba","encoded_bytes":24901,"event":"chunk_committed","raw_bytes":24873,"time":"2026-09-20T00:39:19.272545Z"}
+{"chunk":"e9a31e4937765c44c319f57cbdfb259ea9d20f7d618f1cb440e3cfc95053154c","encoded_bytes":203510,"event":"chunk_committed","raw_bytes":203467,"time":"2026-09-20T00:39:19.314149Z"}
+{"chunk":"d4c9f8e30a4bd84af4eae20edce93a90db5bbdde555186dfa8e1ea6c3d39b628","encoded_bytes":17088,"event":"chunk_committed","raw_bytes":17060,"time":"2026-09-20T00:39:19.354795Z"}
+{"chunk":"5d763c8f42403951ef32bf8777b8e28cc03ba0b7b478d0ed1f73ee210b7719bc","encoded_bytes":44123,"event":"chunk_committed","raw_bytes":44095,"time":"2026-09-20T00:39:19.556697Z"}
+{"chunk":"4e64b9bcbb61f71f41f4bff6f0fc28b4bf3ba3d4c51a4f1c6a08c8c1ba33b638","encoded_bytes":134438,"event":"chunk_committed","raw_bytes":134400,"time":"2026-09-20T00:39:19.70102Z"}
+{"chunk":"ca17a888289192b97f83e8498b9cbce2b2a782c6777ed285dc8beffd0a81ed8b","encoded_bytes":35130,"event":"chunk_committed","raw_bytes":35102,"time":"2026-09-20T00:39:19.781463Z"}
+{"chunk":"688f29b32e0c0606e3386c937e5c5386123fe29f9d2ae5653de93b07ce8dacd1","encoded_bytes":45373,"event":"chunk_committed","raw_bytes":45345,"time":"2026-09-20T00:39:19.976188Z"}
+{"chunk":"ed20aeb4bd677fcdf35bb465e6d19f32aa0e09e36a07575311266cea31565345","encoded_bytes":35183,"event":"chunk_committed","raw_bytes":35155,"time":"2026-09-20T00:39:20.162524Z"}
+{"chunk":"4817b6efbbabd9bc419b969790ab158f4358baefb11ddc03f1d40fc1449cf1a8","encoded_bytes":176467,"event":"chunk_committed","raw_bytes":176429,"time":"2026-09-20T00:39:20.20434Z"}
+{"chunk":"11d070f43681437e41a5cdc741e22d5e6ebb415f6d986bb84c9313360bf5c1e8","encoded_bytes":62361,"event":"chunk_committed","raw_bytes":62333,"time":"2026-09-20T00:39:20.402532Z"}
+{"chunk":"9374b861407c217ea6b25666cf4b45f98ed910684c979745286253335dbcb923","encoded_bytes":55029,"event":"chunk_committed","raw_bytes":55001,"time":"2026-09-20T00:39:20.442577Z"}
+{"chunk":"23e6042ef1187099bd43af94e0f545a64464b9d7ac1d33878a35bfed35389da2","encoded_bytes":16842,"event":"chunk_committed","raw_bytes":16814,"time":"2026-09-20T00:39:20.562361Z"}
+{"chunk":"9cdbe8d9aff5c18ca1c76cd5a397209fa382bc3effe44e23f5268834a3d7d539","encoded_bytes":72109,"event":"chunk_committed","raw_bytes":72076,"time":"2026-09-20T00:39:20.626003Z"}
+{"chunk":"23749eaf0eff538eff6487977558d8911171bf92944fb0a9fe5e8545b0e56eae","encoded_bytes":37775,"event":"chunk_committed","raw_bytes":37747,"time":"2026-09-20T00:39:20.789218Z"}
+{"chunk":"d2cfe5454d0a928d6012bea76199f0a6aca12a0b04c2df1669162d5f2356bef1","encoded_bytes":29196,"event":"chunk_committed","raw_bytes":29168,"time":"2026-09-20T00:39:20.951255Z"}
+{"chunk":"ee6648efedee75b833e5855efdae834038294bcf1a6884ecc1d576327b7afb04","encoded_bytes":167668,"event":"chunk_committed","raw_bytes":167630,"time":"2026-09-20T00:39:21.01527Z"}
+{"chunk":"6411baa6b01c766e4c5febb7940d9c6b329ef5dcf97c5e3decb604af188bdce9","encoded_bytes":220730,"event":"chunk_committed","raw_bytes":220687,"time":"2026-09-20T00:39:21.372827Z"}
+Loaded image ID: sha256:603c7476d09a843b95b8904ffedb469052c445d57f71bfc3e7eaf4daeb393102
+{"artifact_sha256":"7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11","event":"release_ready","phase":"loaded","release":"proof-app-v2","time":"2026-09-20T00:39:22.61647Z"}
+{
+  "release": "proof-app-v2",
+  "sequence": 2,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11.tar",
+  "artifact_sha256": "7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11",
+  "artifact_bytes": 7799296,
+  "unique_chunks": 100,
+  "reused_chunks": 73,
+  "reused_raw_bytes": 5340911,
+  "downloaded_chunks": 27,
+  "downloaded_raw_bytes": 2458385,
+  "chunk_response_body_bytes": 2459261,
+  "metadata_response_body_bytes": 26993,
+  "useful_encoded_bytes": 2459261,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 27,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 5.78083337
+}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v2","reused_chunks":100,"time":"2026-09-20T00:39:22.838807Z","unique_chunks":100}
+{"artifact_sha256":"7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11","event":"release_ready","phase":"loaded","release":"proof-app-v2","time":"2026-09-20T00:39:22.997382Z"}
+{
+  "release": "proof-app-v2",
+  "sequence": 2,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11.tar",
+  "artifact_sha256": "7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11",
+  "artifact_bytes": 7799296,
+  "unique_chunks": 100,
+  "reused_chunks": 100,
+  "reused_raw_bytes": 7799296,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.293468872
+}
+{"attempt":1,"delay_ms":156,"error":"Get \"http://127.0.0.1:60412/releases/desired.json\": dial tcp 127.0.0.1:60412: connect: connection refused","event":"retry","object":"manifest","time":"2026-09-20T00:39:25.095377Z"}
+{"error":"context canceled","event":"failed","time":"2026-09-20T00:39:25.343842Z"}
+{"error":"context canceled","event":"reconcile_failed"}
+{"event":"plan","missing_chunks":0,"missing_raw_bytes":0,"release":"proof-app-v2","reused_chunks":100,"time":"2026-09-20T00:39:25.541189Z","unique_chunks":100}
+{"artifact_sha256":"7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11","event":"release_ready","phase":"loaded","release":"proof-app-v2","time":"2026-09-20T00:39:25.721142Z"}
+{
+  "release": "proof-app-v2",
+  "sequence": 2,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11.tar",
+  "artifact_sha256": "7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11",
+  "artifact_bytes": 7799296,
+  "unique_chunks": 100,
+  "reused_chunks": 100,
+  "reused_raw_bytes": 7799296,
+  "downloaded_chunks": 0,
+  "downloaded_raw_bytes": 0,
+  "chunk_response_body_bytes": 0,
+  "metadata_response_body_bytes": 0,
+  "useful_encoded_bytes": 0,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 0,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 0.315902086
+}

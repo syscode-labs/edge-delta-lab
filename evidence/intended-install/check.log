@@ -1,0 +1,107 @@
+go vet ./...
+go test -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-exporter	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-tui	[no test files]
+ok  	example.com/edge-delta-lab/cmd/v3e2e	27.705s
+ok  	example.com/edge-delta-lab/internal/admin	2.098s
+ok  	example.com/edge-delta-lab/internal/clientconf	9.380s
+ok  	example.com/edge-delta-lab/internal/exporter	1.316s
+ok  	example.com/edge-delta-lab/internal/hub	3.229s
+ok  	example.com/edge-delta-lab/internal/lab	97.043s
+ok  	example.com/edge-delta-lab/internal/notify	4.522s
+ok  	example.com/edge-delta-lab/internal/push	17.171s
+ok  	example.com/edge-delta-lab/internal/registry	8.067s
+python3 -m unittest discover -s scripts -p '*_test.py' -v
+test_classic_config_id_and_raw_layer_identity (docker_identity_test.IdentityTest.test_classic_config_id_and_raw_layer_identity) ... ok
+test_containerd_index_is_provenance_not_signed_config_id (docker_identity_test.IdentityTest.test_containerd_index_is_provenance_not_signed_config_id) ... ok
+test_selected_platform_must_match (docker_identity_test.IdentityTest.test_selected_platform_must_match) ... ok
+test_source_diffids_must_match_saved_config (docker_identity_test.IdentityTest.test_source_diffids_must_match_saved_config) ... ok
+test_unrelated_source_id_is_not_accepted (docker_identity_test.IdentityTest.test_unrelated_source_id_is_not_accepted) ... ok
+test_connection_failure_is_not_image_absence (docker_identity_test.LocalBoundaryTest.test_connection_failure_is_not_image_absence) ... ok
+test_loaded_reference_and_platform_are_still_mandatory (docker_identity_test.LocalBoundaryTest.test_loaded_reference_and_platform_are_still_mandatory) ... ok
+test_present_image_fails_absence_gate (docker_identity_test.LocalBoundaryTest.test_present_image_fails_absence_gate) ... ok
+test_remote_context_rejected_before_daemon_access (docker_identity_test.LocalBoundaryTest.test_remote_context_rejected_before_daemon_access) ... ok
+test_remote_docker_host_rejected_before_daemon_access (docker_identity_test.LocalBoundaryTest.test_remote_docker_host_rejected_before_daemon_access) ... ok
+test_byte_totals_and_rates_are_separate (helm_contract_test.DashboardContractTest.test_byte_totals_and_rates_are_separate) ... ok
+test_chart_contracts (helm_contract_test.HelmContractTest.test_chart_contracts) ... PASS helm lint/render: exporter=False events=True rate=0 (defaults)
+PASS helm lint/render: exporter=False events=False rate=0
+PASS helm lint/render: exporter=False events=False rate=7500
+PASS helm lint/render: exporter=False events=True rate=0
+PASS helm lint/render: exporter=False events=True rate=7500
+PASS helm lint/render: exporter=True events=False rate=0
+PASS helm lint/render: exporter=True events=False rate=7500
+PASS helm lint/render: exporter=True events=True rate=0
+PASS helm lint/render: exporter=True events=True rate=7500
+ok
+test_proof_pod_has_no_ambient_credentials_or_extra_mounts (helm_kind_lifecycle_test.SignedProofTests.test_proof_pod_has_no_ambient_credentials_or_extra_mounts) ... ok
+test_staged_requires_expected_release_sequence_and_safe_artifact (helm_kind_lifecycle_test.SignedProofTests.test_staged_requires_expected_release_sequence_and_safe_artifact) ... ok
+test_duplicate_diffid_does_not_skip_different_corrupt_member (normalize_archive_test.NormalizeTest.test_duplicate_diffid_does_not_skip_different_corrupt_member) ... ok
+test_gzip_layers_preserve_exact_uncompressed_bytes (normalize_archive_test.NormalizeTest.test_gzip_layers_preserve_exact_uncompressed_bytes) ... ok
+test_normalization_is_repeatable (normalize_archive_test.NormalizeTest.test_normalization_is_repeatable) ... ok
+test_raw_layers_preserve_exact_bytes (normalize_archive_test.NormalizeTest.test_raw_layers_preserve_exact_bytes) ... ok
+test_wrong_diffid_is_rejected (normalize_archive_test.NormalizeTest.test_wrong_diffid_is_rejected) ... ok
+test_artifacts_members_and_checksums (release_test.ReleaseTest.test_artifacts_members_and_checksums) ... Successfully packaged chart and saved it to: /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/edgelab-release-5spo0as5/edgelab-hub-0.1.0.tgz
+ok
+test_deterministic_despite_source_mtime_and_stale_outputs (release_test.ReleaseTest.test_deterministic_despite_source_mtime_and_stale_outputs) ... Successfully packaged chart and saved it to: /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/edgelab-release-dcqurgoa/edgelab-hub-0.1.0.tgz
+Successfully packaged chart and saved it to: /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/edgelab-release-yv8japc3/edgelab-hub-0.1.0.tgz
+ok
+test_failed_build_has_no_checksum_manifest (release_test.ReleaseTest.test_failed_build_has_no_checksum_manifest) ... ok
+test_invalid_version_and_epoch (release_test.ReleaseTest.test_invalid_version_and_epoch) ... ok
+test_version_mismatch_fails_before_clear_or_build (release_test.ReleaseTest.test_version_mismatch_fails_before_clear_or_build) ... ok
+test_exact_release_assets (release_workflow_test.ReleaseWorkflowTest.test_exact_release_assets) ... ok
+test_identity_policy_executed (release_workflow_test.ReleaseWorkflowTest.test_identity_policy_executed) ... ok
+test_images_and_stable_only_latest_executed (release_workflow_test.ReleaseWorkflowTest.test_images_and_stable_only_latest_executed) ... ok
+test_least_permissions_and_token_only (release_workflow_test.ReleaseWorkflowTest.test_least_permissions_and_token_only) ... ok
+test_tag_only_trigger (release_workflow_test.ReleaseWorkflowTest.test_tag_only_trigger) ... ok
+test_validation_precedes_publication_and_shared_packaging (release_workflow_test.ReleaseWorkflowTest.test_validation_precedes_publication_and_shared_packaging) ... ok
+test_cli_stale_threshold_is_configurable_and_rejects_invalid_values (sender_test.SenderTests.test_cli_stale_threshold_is_configurable_and_rejects_invalid_values) ... ok
+test_collector_retains_offline_history (sender_test.SenderTests.test_collector_retains_offline_history) ... ok
+test_empty_report_and_no_ack_history_remain_unknown (sender_test.SenderTests.test_empty_report_and_no_ack_history_remain_unknown) ... ok
+test_full_history_exports_survive_reopen_and_preserve_legacy_files (sender_test.SenderTests.test_full_history_exports_survive_reopen_and_preserve_legacy_files) ... ok
+test_higher_sequence_staged_is_not_promoted_by_previous_loaded_release (sender_test.SenderTests.test_higher_sequence_staged_is_not_promoted_by_previous_loaded_release) ... ok
+test_loaded_wins_both_receipt_orders_and_delayed_staged (sender_test.SenderTests.test_loaded_wins_both_receipt_orders_and_delayed_staged) ... ok
+test_no_samples_and_never_successful_are_unknown_not_zero_counters (sender_test.SenderTests.test_no_samples_and_never_successful_are_unknown_not_zero_counters) ... ok
+test_origin_identity_and_receipt_histories_are_isolated (sender_test.SenderTests.test_origin_identity_and_receipt_histories_are_isolated) ... ok
+test_rate_is_reset_aware (sender_test.SenderTests.test_rate_is_reset_aware) ... ok
+test_rate_rejects_counter_regression_and_zero_time_window (sender_test.SenderTests.test_rate_rejects_counter_regression_and_zero_time_window) ... ok
+test_rate_with_recent_end_but_old_start_is_historical (sender_test.SenderTests.test_rate_with_recent_end_but_old_start_is_historical) ... ok
+test_receipt_freshness_uses_first_observation_and_reported_event_age (sender_test.SenderTests.test_receipt_freshness_uses_first_observation_and_reported_event_age) ... ok
+test_receipt_poll_error_is_persistent_without_discarding_stats (sender_test.SenderTests.test_receipt_poll_error_is_persistent_without_discarding_stats) ... ok
+test_receipt_unknown_and_recent_freshness_are_not_health_or_identity_trust (sender_test.SenderTests.test_receipt_unknown_and_recent_freshness_are_not_health_or_identity_trust) ... ok
+test_recent_failure_does_not_make_old_counters_or_rate_current (sender_test.SenderTests.test_recent_failure_does_not_make_old_counters_or_rate_current) ... ok
+test_release_history_survives_newer_sequence_and_reopen (sender_test.SenderTests.test_release_history_survives_newer_sequence_and_reopen) ... ok
+test_same_phase_event_selection_does_not_depend_on_poll_order (sender_test.SenderTests.test_same_phase_event_selection_does_not_depend_on_poll_order) ... ok
+test_same_sequence_conflicts_do_not_claim_a_winning_identity (sender_test.SenderTests.test_same_sequence_conflicts_do_not_claim_a_winning_identity) ... ok
+test_sender_bytes_do_not_claim_delivery (sender_test.SenderTests.test_sender_bytes_do_not_claim_delivery) ... ok
+test_stale_samples_keep_history_but_not_current_reachability_or_rate (sender_test.SenderTests.test_stale_samples_keep_history_but_not_current_reachability_or_rate) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 4.539s
+
+OK
+Release v0.1.0 written to /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/tmprlya4kqu/dist
+Release v0.1.0 written to /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/tmpzzn8ggy9/dist
+Release v0.1.0 written to /var/folders/73/wt6xfhxx07b42b2yp3wbznfm0000gn/T/tmpzzn8ggy9/dist
+python3 deploy/compose/test_setup.py -v
+test_auth_only_publisher (__main__.InstallTest.test_auth_only_publisher) ... ok
+test_install_and_refuse_overwrite (__main__.InstallTest.test_install_and_refuse_overwrite) ... ok
+test_invalid_input_does_not_create_directory (__main__.InstallTest.test_invalid_input_does_not_create_directory) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.431s
+
+OK
+go test -race -count=1 ./...
+?   	example.com/edge-delta-lab/cmd/edgelab	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-exporter	[no test files]
+?   	example.com/edge-delta-lab/cmd/edgelab-tui	[no test files]
+ok  	example.com/edge-delta-lab/cmd/v3e2e	27.114s
+ok  	example.com/edge-delta-lab/internal/admin	4.224s
+ok  	example.com/edge-delta-lab/internal/clientconf	10.701s
+ok  	example.com/edge-delta-lab/internal/exporter	5.298s
+ok  	example.com/edge-delta-lab/internal/hub	1.933s
+ok  	example.com/edge-delta-lab/internal/lab	102.274s
+ok  	example.com/edge-delta-lab/internal/notify	7.403s
+ok  	example.com/edge-delta-lab/internal/push	10.527s
+ok  	example.com/edge-delta-lab/internal/registry	10.244s

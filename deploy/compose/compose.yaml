@@ -1,0 +1,34 @@
+{
+  "services": {
+    "publisher": {
+      "build": {"context": "../..", "dockerfile": "Dockerfile", "target": "daemon"},
+      "user": "100:100",
+      "command": ["watch-registry", "--config", "/config/watcher.yaml"],
+      "restart": "unless-stopped",
+      "environment": {"TMPDIR": "/state/tmp"},
+      "volumes": [
+        {"type": "bind", "source": "./origin", "target": "/origin", "bind": {"create_host_path": false}},
+        {"type": "bind", "source": "./watcher-state", "target": "/state", "bind": {"create_host_path": false}},
+        {"type": "bind", "source": "./watcher.yaml", "target": "/config/watcher.yaml", "read_only": true, "bind": {"create_host_path": false}},
+        {"type": "bind", "source": "./keys/publisher.key", "target": "/keys/publisher.key", "read_only": true, "bind": {"create_host_path": false}}
+      ],
+      "read_only": true,
+      "security_opt": ["no-new-privileges:true"],
+      "cap_drop": ["ALL"]
+    },
+    "hub": {
+      "build": {"context": "../..", "dockerfile": "Dockerfile", "target": "daemon"},
+      "user": "100:100",
+      "command": ["serve", "--root", "/origin", "--listen", "0.0.0.0:8080", "--hub", "--events", "--admin-socket", "/state/admin.sock", "--event-log", "/state/events.jsonl"],
+      "restart": "unless-stopped",
+      "ports": ["127.0.0.1:8080:8080"],
+      "volumes": [
+        {"type": "bind", "source": "./origin", "target": "/origin", "read_only": true, "bind": {"create_host_path": false}},
+        {"type": "bind", "source": "./hub-state", "target": "/state", "bind": {"create_host_path": false}}
+      ],
+      "read_only": true,
+      "security_opt": ["no-new-privileges:true"],
+      "cap_drop": ["ALL"]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "release": "proof-app-v2",
+  "sequence": 2,
+  "phase": "loaded",
+  "artifact": "<checkout>/work/install-proof-5/client/staged/7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11.tar",
+  "artifact_sha256": "7daff468bc1fc3ca8aa5e2db14ba0f478f3ce2a736a65ee92abd8573087a2f11",
+  "artifact_bytes": 7799296,
+  "unique_chunks": 100,
+  "reused_chunks": 73,
+  "reused_raw_bytes": 5340911,
+  "downloaded_chunks": 27,
+  "downloaded_raw_bytes": 2458385,
+  "chunk_response_body_bytes": 2459261,
+  "metadata_response_body_bytes": 26993,
+  "useful_encoded_bytes": 2459261,
+  "retry_overhead_body_bytes": 0,
+  "chunk_requests": 27,
+  "metadata_requests": 1,
+  "retries": 0,
+  "integrity_failures": 0,
+  "elapsed_seconds": 5.78083337
+}

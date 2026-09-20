@@ -112,7 +112,7 @@ func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (stri
 // remoteImage resolves the image referenced by req using the v2 client's HTTP
 // transport (auth included) via go-containerregistry.
 func remoteImage(ctx context.Context, c *Client, req PublishRequest) (v1.Image, error) {
-	ref, err := name.ParseReference(fmt.Sprintf("%s/%s:%s", hostForRef(c), req.Repo, req.Tag))
+	ref, err := imageReference(c, req)
 	if err != nil {
 		return nil, fmt.Errorf("parse reference: %w", err)
 	}
@@ -136,6 +136,16 @@ func remoteImage(ctx context.Context, c *Client, req PublishRequest) (v1.Image, 
 		return nil, fmt.Errorf("digest drift: watcher saw %s, export fetched %s", req.Digest, dg.String())
 	}
 	return img, nil
+}
+
+func imageReference(c *Client, req PublishRequest) (name.Reference, error) {
+	var opts []name.Option
+	// References contain no URL scheme, so preserve explicitly configured HTTP.
+	// Without this option, non-loopback registries default to HTTPS.
+	if c.Base.Scheme == "http" {
+		opts = append(opts, name.Insecure)
+	}
+	return name.ParseReference(fmt.Sprintf("%s/%s:%s", hostForRef(c), req.Repo, req.Tag), opts...)
 }
 
 func hostForRef(c *Client) string {

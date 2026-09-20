@@ -1,5 +1,7 @@
 # Deliver images with a persistent hub and client
 
+**Start with the [publisher + hub installation](../README.md#install-a-publisher-and-hub).** It packages the registry watcher and hub together with persistent data and real keys. This page documents lower-level native commands and optional container/Helm alternatives, not additional prerequisites for the main install.
+
 Use this guide to publish images from a registry, keep a hub serving them, and run a client that checks for updates. The client downloads and verifies an archive first; loading it into Docker is a separate, optional step. Later sections show how to run the hub in Docker or Kubernetes.
 
 Edge Delta is a runnable experiment, not a production-ready updater. A **publisher** signs release data with a private key. The **hub** serves that data and the image pieces from an **origin directory**. Each client receives only the publisher's public key and uses it to verify downloads independently.
@@ -153,7 +155,7 @@ make container-multi
 
 This builds `edge-delta-lab:local` for the hub and `edge-delta-lab:client` for clients. It does not build host binaries; that is what `make build` does. Both images use `/state` for writable data.
 
-These commands use local images, not an assumed public download. The repository's release workflow is source-ready, but remote publication has not been executed because this checkout has no remote; no hosted release or GHCR image is claimed.
+These commands build local images from the public source checkout; they do not require or claim a hosted binary release or GHCR image.
 
 Stop the native hub with Ctrl-C to free port 8080, then run:
 
@@ -173,7 +175,7 @@ No Docker socket is mounted into the hub. The client image has no Docker CLI and
 
 ## 7. Deploy the hub with Helm instead
 
-Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. Its install, upgrade, pod restart, rollback and uninstall lifecycle has been [verified on disposable Kind with local-path storage](../evidence/helm-kind-lifecycle/README.md). This is not proof of production storage portability or signed delivery through Kubernetes.
+Helm installs Kubernetes resources from the supplied [chart](../deploy/helm/edgelab-hub/). The chart installs **only the hub**, not the publisher or clients. Its install, upgrade, pod restart, rollback and uninstall lifecycle has been [verified on disposable Kind with local-path storage](../evidence/helm-kind-lifecycle/README.md). The same test also verifies signed synthetic delivery through Kubernetes; it does not prove production storage portability or Docker image loading.
 
 Before installing, arrange:
 
