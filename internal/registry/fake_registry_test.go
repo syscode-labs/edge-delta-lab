@@ -310,6 +310,11 @@ func TestWatcherFirstSeenDigestChangeAndFilters(t *testing.T) {
 	if len(reqs) != 2 {
 		t.Fatalf("want v1+v2 first-seen, got %+v", reqs)
 	}
+	for _, req := range reqs {
+		if err := w.Acknowledge(req); err != nil {
+			t.Fatal(err)
+		}
+	}
 	// Unchanged poll: nothing new.
 	reqs, err = w.PollOnce(context.Background())
 	if err != nil || len(reqs) != 0 {
@@ -350,6 +355,8 @@ func TestWatcherRestartPersistsState(t *testing.T) {
 	}
 	if reqs, _ := w.PollOnce(context.Background()); len(reqs) != 1 {
 		t.Fatalf("first-seen: %+v", reqs)
+	} else if err := w.Acknowledge(reqs[0]); err != nil {
+		t.Fatal(err)
 	}
 	// A fresh watcher on the same state file must not re-emit.
 	w2, err := NewWatcher(mustClient(t, srv.URL), cfg)

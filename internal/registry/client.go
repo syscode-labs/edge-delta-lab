@@ -28,7 +28,7 @@ const (
 
 var manifestMediaTypes = []string{mtManifestV2, mtManifestList, mtOCIManifest, mtOCIIndex}
 
-// Client is a minimal Docker Registry v2 client with bearer-token auth.
+// Client is a minimal Docker Registry v2 client with Basic and bearer-token auth.
 type Client struct {
 	Base *url.URL
 	HTTP *http.Client
@@ -39,7 +39,7 @@ type Client struct {
 	limit int // pagination page size; 0 = server default
 }
 
-// AuthConfig describes optional basic credentials for the token exchange.
+// AuthConfig describes optional credentials for Basic auth and token exchange.
 type AuthConfig struct {
 	Username string
 	Password string
@@ -72,7 +72,7 @@ func (c *Client) Ping(ctx context.Context) (ch challenge, needToken bool, err er
 	if c.auth.Username != "" || c.auth.Password != "" {
 		req.SetBasicAuth(c.auth.Username, c.auth.Password)
 	}
-	resp, err := c.HTTP.Do(req)
+	resp, err := c.send(req)
 	if err != nil {
 		return challenge{}, false, err
 	}
@@ -172,7 +172,7 @@ func (c *Client) fetchToken(ctx context.Context, ch challenge, scope string) (st
 	if c.auth.Username != "" || c.auth.Password != "" {
 		req.SetBasicAuth(c.auth.Username, c.auth.Password)
 	}
-	resp, err := c.HTTP.Do(req)
+	resp, err := c.send(req)
 	if err != nil {
 		return "", time.Time{}, err
 	}
@@ -222,7 +222,27 @@ func (c *Client) tokenFor(ctx context.Context, ch challenge, scope string) (stri
 	return tok, nil
 }
 
-// do performs a request with bearer-auth retry: on 401 it parses the
+// send follows only same-origin redirects. Go's default policy permits auth
+// headers across ports and to subdomains, which can expose registry credentials.
+// Token realms are separate explicit requests, not redirects.
+func (c *Client) send(req *http.Request) (*http.Response, error) {
+	client := *c.HTTP
+	client.CheckRedirect = func(next *http.Request, via []*http.Request) error {
+		if next.URL.Scheme != req.URL.Scheme || !strings.EqualFold(next.URL.Host, req.URL.Host) {
+			return fmt.Errorf("cross-origin registry redirect refused")
+		}
+		if c.HTTP.CheckRedirect != nil {
+			return c.HTTP.CheckRedirect(next, via)
+		}
+		if len(via) >= 10 {
+			return fmt.Errorf("stopped after 10 redirects")
+		}
+		return nil
+	}
+	return client.Do(req)
+}
+
+// do sends configured Basic credentials, with bearer-auth retry: on 401 it parses the
 // WWW-Authenticate challenge, fetches a token for the request's scope and
 // retries once with the Authorization header.
 func (c *Client) do(ctx context.Context, method, path string, headers map[string]string) (*http.Response, error) {
@@ -234,7 +254,10 @@ func (c *Client) do(ctx context.Context, method, path string, headers map[string
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
-	resp, err := c.HTTP.Do(req)
+	if c.auth.Username != "" || c.auth.Password != "" {
+		req.SetBasicAuth(c.auth.Username, c.auth.Password)
+	}
+	resp, err := c.send(req)
 	if err != nil {
 		return nil, err
 	}
@@ -261,7 +284,7 @@ func (c *Client) do(ctx context.Context, method, path string, headers map[string
 		req2.Header.Set(k, v)
 	}
 	req2.Header.Set("Authorization", "Bearer "+tok)
-	return c.HTTP.Do(req2)
+	return c.send(req2)
 }
 
 // scopeForPath derives repository:<name>:pull from /v2/<name>/tags/list or

@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 )
 
-// WatchStatusEntry is one repo:tag with its last-seen digest, reported by
-// Watcher.Status for the admin socket's watch-status method.
+// WatchStatusEntry describes the last successfully published digest for a tag.
 type WatchStatusEntry struct {
 	Repo   string `json:"repo"`
 	Tag    string `json:"tag"`
@@ -29,12 +29,11 @@ type PublishRequest struct {
 type Watcher struct {
 	client   *Client
 	cfg      Config
-	now      func() time.Time // injectable clock
-	onEvent  func(kind, detail string) // watcher-error / lifecycle events
+	now      func() time.Time
+	onEvent  func(kind, detail string)
 	onNotice func(msg string)
-
-	mu    sync.Mutex
-	state map[string]string // "repo\x00tag" -> digest
+	mu       sync.Mutex
+	state    map[string]string // "repo\x00tag" -> successfully published digest
 }
 
 // WatcherOption customizes a Watcher for tests.
@@ -43,12 +42,12 @@ type WatcherOption func(*Watcher)
 // WithClock overrides the time source.
 func WithClock(f func() time.Time) WatcherOption { return func(w *Watcher) { w.now = f } }
 
-// WithEventSink receives (kind, detail) events, e.g. ("watcher-error", "...").
+// WithEventSink receives (kind, detail) events.
 func WithEventSink(f func(kind, detail string)) WatcherOption {
 	return func(w *Watcher) { w.onEvent = f }
 }
 
-// NewWatcher builds a watcher over cfg, loading persisted digest state.
+// NewWatcher loads persisted, successfully published digest state.
 func NewWatcher(c *Client, cfg Config, opts ...WatcherOption) (*Watcher, error) {
 	w := &Watcher{
 		client:   c,
@@ -71,8 +70,7 @@ func NewWatcher(c *Client, cfg Config, opts ...WatcherOption) (*Watcher, error) 
 
 func stateKey(repo, tag string) string { return repo + "\x00" + tag }
 
-// WatchStatus reports the current digest state as one entry per repo:tag.
-// Digests the watcher has never seen are absent until their first poll.
+// Status reports acknowledged digests; discovery alone does not change status.
 func (w *Watcher) Status() []WatchStatusEntry {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -92,8 +90,11 @@ func (w *Watcher) Status() []WatchStatusEntry {
 
 func (w *Watcher) loadState() error {
 	b, err := readFile(w.cfg.StateFile)
+	if os.IsNotExist(err) {
+		return nil
+	}
 	if err != nil {
-		return nil // first run: no state yet
+		return err
 	}
 	var st struct {
 		Digests map[string]string `json:"digests"`
@@ -101,32 +102,37 @@ func (w *Watcher) loadState() error {
 	if err := json.Unmarshal(b, &st); err != nil {
 		return fmt.Errorf("watcher state %s: %w", w.cfg.StateFile, err)
 	}
-	w.state = st.Digests
-	if w.state == nil {
-		w.state = map[string]string{}
+	if st.Digests != nil {
+		w.state = st.Digests
 	}
 	return nil
 }
 
-// persist writes digest state atomically via lab.AtomicWrite semantics.
-func (w *Watcher) persist() error {
+// Acknowledge commits a digest after export, signing and promotion succeed.
+// Failed writes leave both memory and disk retryable.
+func (w *Watcher) Acknowledge(req PublishRequest) error {
 	w.mu.Lock()
-	digests := make(map[string]string, len(w.state))
+	defer w.mu.Unlock()
+	digests := make(map[string]string, len(w.state)+1)
 	for k, v := range w.state {
 		digests[k] = v
 	}
-	w.mu.Unlock()
+	digests[stateKey(req.Repo, req.Tag)] = req.Digest
 	b, err := json.MarshalIndent(struct {
 		Digests map[string]string `json:"digests"`
-	}{Digests: digests}, "", "  ")
+	}{digests}, "", "  ")
 	if err != nil {
 		return err
 	}
-	return atomicWrite(w.cfg.StateFile, b, 0o600)
+	if err := atomicWrite(w.cfg.StateFile, b, 0o600); err != nil {
+		return err
+	}
+	w.state = digests
+	return nil
 }
 
-// PollOnce scans all repos once, emitting publish requests for new digests.
-// Returns the emitted requests.
+// PollOnce scans all repos and returns unacknowledged publish requests.
+// Discovery alone never consumes a digest. Call Acknowledge after publication.
 func (w *Watcher) PollOnce(ctx context.Context) ([]PublishRequest, error) {
 	var emitted []PublishRequest
 	var firstErr error
@@ -152,12 +158,8 @@ func (w *Watcher) PollOnce(ctx context.Context) ([]PublishRequest, error) {
 				}
 				continue
 			}
-			key := stateKey(repo.Name, tag)
 			w.mu.Lock()
-			prev, seen := w.state[key]
-			if !seen || prev != digest {
-				w.state[key] = digest
-			}
+			prev, seen := w.state[stateKey(repo.Name, tag)]
 			w.mu.Unlock()
 			if seen && prev == digest {
 				continue
@@ -167,19 +169,10 @@ func (w *Watcher) PollOnce(ctx context.Context) ([]PublishRequest, error) {
 			w.onNotice(fmt.Sprintf("publish request %s:%s@%s", req.Repo, req.Tag, req.Digest))
 		}
 	}
-	if len(emitted) > 0 {
-		if err := w.persist(); err != nil {
-			w.emitError(fmt.Sprintf("persist state: %v", err))
-			if firstErr == nil {
-				firstErr = err
-			}
-		}
-	}
 	return emitted, firstErr
 }
 
-// Run polls until ctx is done, sleeping poll between scans, with capped
-// exponential backoff on scan errors.
+// Run polls until cancellation, backing off on scan, publication or state errors.
 func (w *Watcher) Run(ctx context.Context, trigger func(context.Context, PublishRequest) error) error {
 	backoff := time.Duration(0)
 	for {
@@ -187,25 +180,35 @@ func (w *Watcher) Run(ctx context.Context, trigger func(context.Context, Publish
 			return err
 		}
 		reqs, err := w.PollOnce(ctx)
-		if err == nil {
-			backoff = 0
-			for _, req := range reqs {
-				if trigger == nil {
-					continue
-				}
-				if terr := trigger(ctx, req); terr != nil {
-					w.emitError(fmt.Sprintf("trigger %s:%s: %v", req.Repo, req.Tag, terr))
-				}
+		// A partial scan must not discard successfully discovered requests.
+		for _, req := range reqs {
+			if trigger == nil {
+				continue
+			}
+			if terr := trigger(ctx, req); terr != nil {
+				w.emitError(fmt.Sprintf("trigger %s:%s: %v", req.Repo, req.Tag, terr))
+				err = terr
+				break
+			}
+			if aerr := w.Acknowledge(req); aerr != nil {
+				w.emitError(fmt.Sprintf("persist state: %v", aerr))
+				err = aerr
+				break
 			}
 		}
 		sleep := w.cfg.Poll
 		if err != nil {
 			if backoff == 0 {
 				backoff = w.cfg.Poll
-			} else if backoff < 10*time.Minute {
+			} else {
 				backoff *= 2
 			}
+			if backoff > 10*time.Minute {
+				backoff = 10 * time.Minute
+			}
 			sleep = backoff
+		} else {
+			backoff = 0
 		}
 		select {
 		case <-ctx.Done():

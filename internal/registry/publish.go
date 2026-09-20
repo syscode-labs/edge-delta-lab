@@ -3,10 +3,13 @@ package registry
 import (
 	"bytes"
 	"context"
+	"crypto/ed25519"
+	"crypto/sha256"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/google/go-containerregistry/pkg/name"
 	v1 "github.com/google/go-containerregistry/pkg/v1"
@@ -18,6 +21,10 @@ import (
 
 // notifyEvent is the injectable event callback shape shared with cmd wiring.
 type NotifyEvent func(kind, detail string)
+
+// Serialize in-process publishers so sequence allocation and promotion cannot race.
+// As with the sequence file, the publication root requires a single process writer.
+var publicationMu sync.Mutex
 
 // TriggerOptions carries the publish pipeline inputs derived from Config.
 type TriggerOptions struct {
@@ -32,11 +39,44 @@ type TriggerOptions struct {
 // docker-archive tar, and runs it through the unchanged v2 publish pipeline
 // (lab.Publish + channel promote). Returns the release name.
 func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (string, error) {
+	publicationMu.Lock()
+	defer publicationMu.Unlock()
 	cfg := opts.Config
+	release, err := releaseName(cfg.Publish.ReleasePrefix, req)
+	if err != nil {
+		return "", err
+	}
+	source := fmt.Sprintf("registry://%s/%s@%s", cfg.RegistryURL, req.Repo, req.Digest)
+	// A signed release is the durable publication checkpoint. If promotion or
+	// watcher-state persistence failed, reuse these exact bytes and sequence.
+	envelope, err := os.ReadFile(filepath.Join(cfg.Publish.Root, "releases", release+".json"))
+	if err == nil {
+		key, err := lab.ReadKey(cfg.Publish.Key, ed25519.PrivateKeySize)
+		if err != nil {
+			return "", err
+		}
+		m, _, err := lab.Verify(envelope, ed25519.PrivateKey(key).Public().(ed25519.PublicKey), 1<<50)
+		if err != nil {
+			return "", fmt.Errorf("existing release: %w", err)
+		}
+		if m.Release != release || m.Source != source || m.Kind != "docker-archive" {
+			return "", fmt.Errorf("existing release identity mismatch: %s", release)
+		}
+		if err := promote(cfg, envelope); err != nil {
+			return "", err
+		}
+		if opts.Event != nil {
+			opts.Event("release-published", fmt.Sprintf("release=%s repo=%s tag=%s digest=%s sequence=%d", release, req.Repo, req.Tag, req.Digest, m.Sequence))
+		}
+		return release, nil
+	}
+	if !os.IsNotExist(err) {
+		return "", err
+	}
 	c := opts.Client
 	if c == nil {
 		var err error
-		c, err = NewClient(cfg.RegistryURL, AuthConfig{Username: cfg.Username})
+		c, err = NewClient(cfg.RegistryURL, AuthConfig{Username: cfg.Username, Password: os.Getenv(cfg.PasswordEnv)})
 		if err != nil {
 			return "", err
 		}
@@ -60,10 +100,6 @@ func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (stri
 		return "", err
 	}
 
-	release, err := releaseName(cfg.Publish.ReleasePrefix, req)
-	if err != nil {
-		return "", err
-	}
 	seq, err := nextSequence(cfg.Publish.SequenceFile)
 	if err != nil {
 		return "", err
@@ -86,7 +122,7 @@ func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (stri
 		Release:  release,
 		Sequence: seq,
 		Kind:     "docker-archive",
-		Source:   fmt.Sprintf("registry://%s/%s@%s", cfg.RegistryURL, req.Repo, req.Digest),
+		Source:   source,
 		ImageIDs: []string{imgID},
 		Min:      16 << 10,
 		Avg:      64 << 10,
@@ -100,13 +136,47 @@ func Trigger(ctx context.Context, opts TriggerOptions, req PublishRequest) (stri
 	if err != nil {
 		return "", err
 	}
-	if err := lab.AtomicWrite(filepath.Join(cfg.Publish.Root, "releases", cfg.Publish.Channel+".json"), env, 0o644); err != nil {
+	if err := promote(cfg, env); err != nil {
 		return "", err
 	}
 	if opts.Event != nil {
 		opts.Event("release-published", fmt.Sprintf("release=%s repo=%s tag=%s digest=%s sequence=%d", release, req.Repo, req.Tag, req.Digest, seq))
 	}
 	return release, nil
+}
+
+func promote(cfg Config, envelope []byte) error {
+	path := filepath.Join(cfg.Publish.Root, "releases", cfg.Publish.Channel+".json")
+	current, err := os.ReadFile(path)
+	if err == nil {
+		if bytes.Equal(current, envelope) {
+			return nil
+		}
+		key, err := lab.ReadKey(cfg.Publish.Key, ed25519.PrivateKeySize)
+		if err != nil {
+			return err
+		}
+		pub := ed25519.PrivateKey(key).Public().(ed25519.PublicKey)
+		old, _, err := lab.Verify(current, pub, 1<<50)
+		if err != nil {
+			return fmt.Errorf("current channel: %w", err)
+		}
+		next, _, err := lab.Verify(envelope, pub, 1<<50)
+		if err != nil {
+			return err
+		}
+		// A retry of an earlier successful release must never roll the channel
+		// backward after another tag has been published.
+		if old.Sequence > next.Sequence {
+			return nil
+		}
+		if old.Sequence == next.Sequence {
+			return fmt.Errorf("channel sequence %d already used by a different release", next.Sequence)
+		}
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+	return lab.AtomicWrite(path, envelope, 0o644)
 }
 
 // remoteImage resolves the image referenced by req using the v2 client's HTTP
@@ -166,11 +236,20 @@ func exportDockerArchive(img v1.Image, path string) error {
 
 // releaseName derives the immutable release name for a publish request.
 func releaseName(prefix string, req PublishRequest) (string, error) {
+	if _, err := v1.NewHash(req.Digest); err != nil {
+		return "", fmt.Errorf("release digest: %w", err)
+	}
 	name := prefix + sanitize(req.Repo) + "-" + sanitize(req.Tag)
 	if name == "" {
 		return "", fmt.Errorf("empty release name for %v", req)
 	}
-	return name, nil
+	// Tag movement and sanitized-name collisions must not overwrite a release.
+	// Keep the full identity hash within lab's 101-character name limit.
+	identity := sha256.Sum256([]byte(req.Repo + "\x00" + req.Tag + "\x00" + req.Digest))
+	if len(name) > 36 {
+		name = name[:36]
+	}
+	return fmt.Sprintf("%s-%x", name, identity), nil
 }
 
 // sanitize keeps lab safeRelease-compatible characters.
@@ -198,6 +277,9 @@ func nextSequence(path string) (uint64, error) {
 		return 0, err
 	}
 	seq++
+	if seq == 0 {
+		return 0, fmt.Errorf("sequence exhausted")
+	}
 	if err := atomicWrite(path, []byte(fmt.Sprintf("%d\n", seq)), 0o600); err != nil {
 		return 0, err
 	}
