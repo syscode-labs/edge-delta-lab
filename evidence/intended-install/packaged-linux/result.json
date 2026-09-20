@@ -1,0 +1,106 @@
+{
+  "source": "3939fac3d24b3b275401d386fba1985a0e4df02d",
+  "bundle_sha256": "770bb27400239525a00e9f60f1fcfcf59e17d3f0f1c8ee843b9522b3c738e67c",
+  "topology": {
+    "edgelab-proof-hub": {
+      "docker": "991173ba-9bb4-4354-9acd-17c3050cda2f",
+      "kernel": "7.0.14-orbstack-00380-ga7e0a2dc9535",
+      "virtualization": "lxc",
+      "systemd_overrides": ""
+    },
+    "edgelab-proof-receiver": {
+      "docker": "e8df607d-675a-472d-9966-c70f36d9b28f",
+      "kernel": "7.0.14-orbstack-00380-ga7e0a2dc9535",
+      "virtualization": "lxc",
+      "systemd_overrides": "# /etc/systemd/system/edgelab-receiver.service\n[Unit]\nDescription=Edge Delta signed artifact receiver\nWants=network-online.target\nAfter=network-online.target\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nDynamicUser=yes\nUser=edgelab-receiver\nStateDirectory=edgelab-receiver\nStateDirectoryMode=0700\nExecStart=/usr/local/bin/edgelab-manage receiver run\nRestart=always\nRestartSec=10\nEnvironment=PATH=/usr/local/bin:/usr/bin:/bin\nNoNewPrivileges=yes\nProtectSystem=strict\nProtectHome=yes\nPrivateTmp=yes\nProtectKernelTunables=yes\nProtectKernelModules=yes\nProtectControlGroups=yes\nRestrictSUIDSGID=yes\nUMask=0077\nSupplementaryGroups=docker\n\n[Install]\nWantedBy=multi-user.target\n\n# /run/systemd/system/service.d/zzz-lxc-service.conf\n[Service]\nProcSubset=all\nProtectProc=default\nProtectControlGroups=no\nProtectKernelTunables=no\nNoNewPrivileges=no\nLoadCredential=\nPrivateNetwork=no\nProtectHome=no\nProtectSystem=no\nPrivateDevices=no\nPrivateTmp=no\nProtectKernelLogs=no\nProtectKernelModules=no\nReadWritePaths=\nReadOnlyPaths=\nImportCredential=\n"
+    }
+  },
+  "releases": [
+    {
+      "summary": {
+        "release": "proof-app-v1-e262c9a23261d5c07312125fd8c77fe8a79340a3b6e1a773d7b14f4f5fa758f6",
+        "sequence": 1,
+        "phase": "loaded",
+        "artifact": "/var/lib/edgelab-receiver/staged/561baf0d03c51e50eab07029e1c3f238b466c02f026439895aa5106ad388dff8.tar",
+        "artifact_sha256": "561baf0d03c51e50eab07029e1c3f238b466c02f026439895aa5106ad388dff8",
+        "artifact_bytes": 3653120,
+        "unique_chunks": 43,
+        "reused_chunks": 0,
+        "reused_raw_bytes": 0,
+        "downloaded_chunks": 43,
+        "downloaded_raw_bytes": 3653120,
+        "chunk_response_body_bytes": 3635917,
+        "metadata_response_body_bytes": 12161,
+        "useful_encoded_bytes": 3635917,
+        "retry_overhead_body_bytes": 0,
+        "chunk_requests": 43,
+        "metadata_requests": 1,
+        "retries": 0,
+        "integrity_failures": 0,
+        "elapsed_seconds": 9.895284176
+      },
+      "payload_sha256": "369b739ad03d814d6171956ae67114f8e388361be3a8d55cddadf5470aff0451",
+      "loaded_image_id": "sha256:64a77a65249db9887db05bb8aae4090100f81ebb9d7a23929fd0c2251f3fdf97",
+      "offline_run": "passed"
+    },
+    {
+      "summary": {
+        "release": "proof-app-v2-512f67006ad85f6ef5d61a8dd48b652a0043ed7e1d9354a624f183c5045bad3a",
+        "sequence": 2,
+        "phase": "loaded",
+        "artifact": "/var/lib/edgelab-receiver/staged/a4f4a2db321a28a7fa3784bce939e3d5c35856fba94943a07fe57d8a0b2cf6b9.tar",
+        "artifact_sha256": "a4f4a2db321a28a7fa3784bce939e3d5c35856fba94943a07fe57d8a0b2cf6b9",
+        "artifact_bytes": 3653120,
+        "unique_chunks": 43,
+        "reused_chunks": 41,
+        "reused_raw_bytes": 3333692,
+        "downloaded_chunks": 2,
+        "downloaded_raw_bytes": 319428,
+        "chunk_response_body_bytes": 300931,
+        "metadata_response_body_bytes": 12161,
+        "useful_encoded_bytes": 300931,
+        "retry_overhead_body_bytes": 0,
+        "chunk_requests": 2,
+        "metadata_requests": 1,
+        "retries": 0,
+        "integrity_failures": 0,
+        "elapsed_seconds": 2.527155889
+      },
+      "payload_sha256": "55b3e1efd5732255d76158a427abcad3bc4fb24fb63250daaa21c9b1e97226d4",
+      "loaded_image_id": "sha256:7af2e7426345b58b63e5a380b273a4a77d5d7927cc9ff43a27c0a1d3949eca58",
+      "offline_run": "passed"
+    }
+  ],
+  "hub_restart": "NAME                             IMAGE                          COMMAND                  SERVICE     CREATED         STATUS                  PORTS\nedge-delta-install-hub-1         edge-delta-install-hub         \"/usr/local/bin/edge\u2026\"   hub         8 minutes ago   Up Less than a second   127.0.0.1:8080->8080/tcp\nedge-delta-install-publisher-1   edge-delta-install-publisher   \"/usr/local/bin/edge\u2026\"   publisher   8 minutes ago   Up Less than a second   \n",
+  "restart": {
+    "fresh_summary": {
+      "release": "proof-app-v2-512f67006ad85f6ef5d61a8dd48b652a0043ed7e1d9354a624f183c5045bad3a",
+      "sequence": 2,
+      "phase": "loaded",
+      "artifact": "/var/lib/edgelab-receiver/staged/a4f4a2db321a28a7fa3784bce939e3d5c35856fba94943a07fe57d8a0b2cf6b9.tar",
+      "artifact_sha256": "a4f4a2db321a28a7fa3784bce939e3d5c35856fba94943a07fe57d8a0b2cf6b9",
+      "artifact_bytes": 3653120,
+      "unique_chunks": 43,
+      "reused_chunks": 43,
+      "reused_raw_bytes": 3653120,
+      "downloaded_chunks": 0,
+      "downloaded_raw_bytes": 0,
+      "chunk_response_body_bytes": 0,
+      "metadata_response_body_bytes": 0,
+      "useful_encoded_bytes": 0,
+      "retry_overhead_body_bytes": 0,
+      "chunk_requests": 0,
+      "metadata_requests": 1,
+      "retries": 0,
+      "integrity_failures": 0,
+      "elapsed_seconds": 0.715931051
+    },
+    "new_access_requests": 4,
+    "new_chunk_requests": 0
+  },
+  "receiver_status": "\u25cf edgelab-receiver.service - Edge Delta signed artifact receiver\n     Loaded: loaded (/etc/systemd/system/edgelab-receiver.service; enabled; preset: enabled)\n    Drop-In: /run/systemd/system/service.d\n             \u2514\u2500zzz-lxc-service.conf\n     Active: active (running) since Sun 2026-09-20 02:22:10 BST; 1s ago\n   Main PID: 6374 (edgelab)\n      Tasks: 11 (limit: 19272)\n     Memory: 10.5M (peak: 10.7M)\n        CPU: 158ms\n     CGroup: /system.slice/edgelab-receiver.service\n             \u2514\u25006374 /usr/local/bin/edgelab watch --base https://hub.proof.test --manifest https://hub.proof.test/releases/desired.json --receipt-url https://hub.proof.test/receipts --device-id proof-receiver --pub /etc/edgelab/publisher.pub --state /var/lib/edgelab-receiver --docker-load\n\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"chunk_response_body_bytes\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"metadata_response_body_bytes\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"useful_encoded_bytes\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"retry_overhead_body_bytes\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"chunk_requests\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"metadata_requests\": 1,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"retries\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"integrity_failures\": 0,\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]:   \"elapsed_seconds\": 0.715931051\nSep 20 02:22:11 edgelab-proof-receiver edgelab-manage[6374]: }\n",
+  "both_versions_offline_hub_stopped": true,
+  "receiver_uninstall": "Service/binaries removed. Retained /etc/edgelab and /var/lib/edgelab-receiver; remove explicitly to reset trust/state.\n",
+  "hub_uninstall": "Containers removed; keys/config/data retained in /opt/edge-delta-install. Remove that directory explicitly to purge.\n",
+  "lifecycle": "status/restart/stop/start/uninstall passed; trust and state retained"
+}

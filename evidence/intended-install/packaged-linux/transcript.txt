@@ -1,0 +1,2 @@
+Original terminal result excerpt, 2026-09-20 (local transcript clock).
+02:22:22 result   | process ok 0.0s: {"status": "exited", "command": "python3 work/proof-deliver.py", "exit_code": 0, "completion_reason": "exited", "termination_source": "", "output": "PACKAGED_LINUX_PROOF_PASS\n"}

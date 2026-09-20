@@ -6,6 +6,34 @@ Use this guide to publish images from a registry, keep a hub serving them, and r
 
 Edge Delta is a runnable experiment, not a production-ready updater. A **publisher** signs release data with a private key. The **hub** serves that data and the image pieces from an **origin directory**. Each client receives only the publisher's public key and uses it to verify downloads independently.
 
+## Packaged service lifecycle (recommended)
+
+Extract the Linux bundle from the [README](../README.md#get-the-linux-bundle) on both hosts. Public v0.1.0 publication is pending; the same locally packaged archives are usable without Go/source. With Python 3, local Docker/Compose and an existing single-platform Registry v2 repository on the publisher host:
+
+```sh
+./install hub setup --directory "$HOME/edge-delta-install" \
+  --registry https://registry.example.net --repository team/app --allow '^v'
+"$HOME/edge-delta-install/manage" hub status --directory "$HOME/edge-delta-install"
+```
+
+For Basic authentication add `--username YOUR_USER --password-file /path/to/private-password-file`; the manager retains credentials privately and supplies them only to the publisher. Discovery and export both authenticate. A failed publication stays retryable; scan/publication errors back off from the poll interval up to ten minutes. Promotion retry reuses an immutable release; identity includes repository, tag and digest so moved tags get distinct releases. Prefer new version tags, and do not treat returning to an old digest as a rollback command.
+
+The hub remains loopback HTTP. Configure a persistent trusted HTTPS reverse proxy as described in the [installation guide](../deploy/compose/README.md#tls-and-network-boundaries), and securely transfer only `keys/publisher.pub` to the separate receiver. On its Linux systemd/Docker host, from its extracted bundle:
+
+```sh
+sudo ./install receiver setup --hub https://hub.example.net \
+  --public-key /path/to/publisher.pub --device-id receiver-01 --docker-load
+sudo edgelab-manage receiver status
+```
+
+HTTPS is the default policy. HTTP requires explicit receiver `--allow-http`; an explicit registry `http://` URL likewise opts into unencrypted access. Reserve both for isolated or independently secured networks. Docker import is privileged and does not activate containers. Omit `--docker-load` to stage only.
+
+Use `hub status|restart|stop|start|uninstall --directory ...` with the installed `manage`, and `sudo edgelab-manage receiver status|restart|stop|start|uninstall` on the receiver (choose one verb, not literal pipes). Uninstall retains data/trust; receiver setup refuses retained config and is not an upgrade mechanism. Details, backups, logs and purge boundaries are in the [canonical lifecycle guide](../deploy/compose/README.md#lifecycle). Helm/exporter/Grafana below remain optional supported integrations.
+
+## Lower-level source/native alternative
+
+The numbered sections below intentionally use source builds and foreground processes for developers or custom supervisors. They are **not** the packaged install prerequisites and should not be run alongside an installed hub on the same port.
+
 ## 1. Prepare your machine
 
 - Use a source checkout, Go 1.23 or newer, `make`, and a Unix-like host. Run commands below from the repository root.
@@ -30,7 +58,7 @@ The local examples use plain HTTP on loopback. The hub has no integrated TLS or 
 
 ### Publish your own registry image
 
-This is the main path through this guide. `watch-registry` is a long-running publisher that checks selected image tags for changes. Use a new version tag for each release: release names come from the repository and tag, and an existing release cannot be overwritten with changed content. It is separate from the hub and is not installed by the Helm chart.
+This is the main path through this guide. `watch-registry` is a long-running publisher that checks selected image tags for changes. Prefer a new version tag for each release. Release names bind repository, tag and digest: moved tags create new immutable releases, while failed publication retries reuse the exact signed checkpoint. Returning to previously published content does not roll a newer channel backward. It is separate from the hub and is not installed by the Helm chart.
 
 Create the signing keys and working directories once:
 
